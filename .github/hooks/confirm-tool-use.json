@@ -1,0 +1,32 @@
+{
+  "hooks": [
+    {
+      "name": "confirm-tool-use",
+      "description": "Warn before executing potentially state-changing tools and inject user preference context.",
+      "event": "PreToolUse",
+      "conditions": [
+        {
+          "type": "command",
+          "matches": [
+            "npm install",
+            "npm update",
+            "git push",
+            "git reset",
+            "rm",
+            "del",
+            "mv"
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "type": "warn",
+          "message": "This command may change project state. Confirm with the user before proceeding."
+        }
+      ],
+      "injectContext": [
+        "User preference: always ask before running commands that modify project state."
+      ]
+    }
+  ]
+}
