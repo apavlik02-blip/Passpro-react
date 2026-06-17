@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PassPro — 21-p2-gap-modules</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>* { box-sizing: border-box; margin: 0; padding: 0; } body { background: #06060c; } #root { min-height: 100vh; }</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const modules = {
+  mec: {
+    id: "7.A",
+    title: "Modified Endowment Contracts (MECs)",
+    color: "#f59e0b",
+    psiDomain: "Domain 7 — Federal Tax Considerations (5% of exam)",
+    examWeight: "5% of exam",
+    wiStatutes: ["IRC § 7702A", "IRC § 72(e)", "IRC § 72(v)"],
+    priority: "P2",
+    lessons: [
+      {
+        title: "What Is a Modified Endowment Contract?",
+        duration: "10 min",
+        content: `A **Modified Endowment Contract (MEC)** is a life insurance policy that has been overfunded — meaning too much premium has been paid relative to the death benefit. When a policy becomes a MEC, it loses some of the favorable tax treatment that normally applies to life insurance.
+
+**Why MECs Exist**
+In the 1980s, investors discovered they could overfund life insurance policies to exploit the tax-free growth of cash value. Congress responded with the Technical and Miscellaneous Revenue Act of 1988 (TAMRA), which created the MEC rules to prevent this abuse.
+
+**The 7-Pay Test**
+A policy becomes a MEC if cumulative premiums paid during the first 7 years exceed the **7-pay limit** — the amount of premium needed to pay the policy up in 7 level annual payments. The IRS sets this limit based on the policy's death benefit.
+
+**Once a MEC, Always a MEC**
+Once a policy fails the 7-pay test and becomes a MEC, it remains a MEC permanently — even if premiums stop or the cash value decreases. This is irreversible.
+
+**Material Changes Reset the 7-Pay Clock**
+If a policyholder makes a **material change** to the policy — such as increasing the death benefit — the 7-pay test restarts from the date of the change. This means a previously compliant policy could become a MEC after a material change.`,
+        keyTerms: [
+          { term: "Modified Endowment Contract (MEC)", def: "A life insurance policy that has been overfunded beyond the 7-pay limit, losing favorable tax treatment on distributions." },
+          { term: "7-Pay Test", def: "IRS test that compares cumulative premiums paid in the first 7 years to the maximum allowed — failure = MEC." },
+          { term: "7-Pay Limit", def: "Maximum cumulative premium allowed in first 7 years before the policy becomes a MEC." },
+          { term: "Material Change", def: "A policy change that resets the 7-pay clock — typically an increase in death benefit." },
+        ],
+      },
+      {
+        title: "MEC Tax Treatment vs. Regular Life Insurance",
+        duration: "12 min",
+        content: `The distinction between MEC and non-MEC tax treatment is one of the most tested topics in federal tax. Here's exactly how they differ.
+
+**Non-MEC Life Insurance — Favorable Treatment**
+- Cash value grows **tax-deferred**
+- Policy loans are **not taxable** (not considered distributions)
+- Withdrawals up to basis (premiums paid) are **tax-free**
+- Death benefit paid to beneficiaries is **income tax-free**
+
+**MEC Life Insurance — Less Favorable Treatment**
+MECs are subject to the **LIFO (Last In, First Out)** rule for distributions:
+- Any money taken out — loans OR withdrawals — is treated as **income first**, then basis
+- The gain (earnings above basis) is taxed as **ordinary income** when distributed
+- A **10% penalty tax** applies to taxable distributions taken before age 59½
+- Death benefit remains **income tax-free** (this doesn't change)
+
+**The Key Practical Difference — Loans**
+This is the critical exam point: In a regular life insurance policy, a policy loan is NOT a taxable event. In a MEC, a policy loan IS treated as a taxable distribution — meaning gain comes out first, taxed as ordinary income, plus a 10% penalty if under 59½.
+
+**Exceptions to the 10% Penalty**
+The 10% early distribution penalty does NOT apply if:
+- Taxpayer is age 59½ or older
+- Taxpayer is disabled
+- Distribution is part of a series of substantially equal periodic payments (SEPP/72(t))
+- Taxpayer dies (beneficiary receives death benefit)`,
+        keyTerms: [
+          { term: "LIFO Rule", def: "Last In, First Out — MEC distributions are treated as income (gain) first, then basis return." },
+          { term: "10% Penalty", def: "Additional tax on MEC distributions taken before age 59½ — applies to the taxable (gain) portion only." },
+          { term: "Policy Loan in MEC", def: "Treated as a taxable distribution — LIFO rule applies, gain taxed as ordinary income." },
+          { term: "Cost Basis", def: "Total premiums paid into the policy — returned tax-free even from a MEC." },
+        ],
+        wiNote: "The Wisconsin exam tests the MEC 7-pay test and the LIFO tax rule. Remember: the death benefit of a MEC is still income tax-free to the beneficiary. The MEC rules only affect lifetime distributions (loans and withdrawals).",
+      },
+      {
+        title: "Non-Qualified Annuity Taxation & Exclusion Ratio",
+        duration: "10 min",
+        content: `**Non-Qualified Annuities** are annuities purchased with after-tax dollars (not through a qualified retirement plan). Their tax treatment follows specific rules that appear on the PSI exam.
+
+**Tax-Deferred Accumulation**
+Like life insurance, annuity cash value grows **tax-deferred** — no annual taxes on interest, dividends, or capital gains inside the annuity.
+
+**Withdrawals Before Annuitization (Accumulation Phase)**
+Before the annuitization phase:
+- Subject to **LIFO rule** — earnings come out first, taxed as ordinary income
+- **10% early withdrawal penalty** applies before age 59½
+- This is the same treatment as a MEC
+
+**Annuity Payments (Annuitization Phase) — The Exclusion Ratio**
+Once annuitization begins, each payment is part **return of basis** (tax-free) and part **gain** (taxable). The **exclusion ratio** determines the tax-free portion:
+
+**Exclusion Ratio = Investment in Contract ÷ Expected Return**
+
+Example: If you invested $60,000 and your expected total return is $100,000, your exclusion ratio is 60%. Each payment is 60% tax-free, 40% taxable — until the entire basis has been recovered. After that, 100% of payments are taxable.
+
+**Annuity Death Benefit Taxation**
+Unlike life insurance, the gain inside a non-qualified annuity paid to a **non-spouse beneficiary is taxable** as ordinary income. The beneficiary must pay tax on the earnings portion.`,
+        keyTerms: [
+          { term: "Non-Qualified Annuity", def: "Annuity purchased with after-tax dollars — tax-deferred growth, LIFO rule on withdrawals, exclusion ratio at annuitization." },
+          { term: "Exclusion Ratio", def: "Investment in contract ÷ Expected return — determines the tax-free percentage of each annuity payment." },
+          { term: "Expected Return", def: "Total payments expected to be received over the annuitant's lifetime — based on IRS actuarial tables." },
+        ],
+        wiNote: "The exclusion ratio formula is tested on the Wisconsin exam. Also note: annuity death benefits paid to non-spouse beneficiaries ARE taxable on the gain — unlike life insurance death benefits which are generally income-tax free.",
+      },
+    ],
+    questions: [
+      { q: "A life insurance policy becomes a Modified Endowment Contract (MEC) when:", options: ["The policy's cash value exceeds its death benefit", "Cumulative premiums paid in the first 7 years exceed the 7-pay limit", "The policyholder takes out a loan greater than 50% of cash value", "The policy is transferred to a new owner"], correct: 1, exp: "A policy becomes a MEC when cumulative premiums paid during the first 7 policy years exceed the 7-pay limit set by the IRS under IRC § 7702A." },
+      { q: "In a Modified Endowment Contract, a policy loan is:", options: ["Not a taxable event — same as regular life insurance", "Treated as a taxable distribution with gain taxed first (LIFO)", "Taxable only if the loan exceeds the cost basis", "Tax-free if repaid within 60 days"], correct: 1, exp: "Unlike regular life insurance where policy loans are NOT taxable, MEC loans ARE treated as taxable distributions. The LIFO rule applies — gain (earnings) comes out first and is taxed as ordinary income, plus a 10% penalty if the owner is under 59½." },
+      { q: "The exclusion ratio for a non-qualified annuity is calculated as:", options: ["Annual payment ÷ life expectancy", "Investment in contract ÷ expected return", "Cash value ÷ death benefit", "Annual gain ÷ total premiums paid"], correct: 1, exp: "The exclusion ratio = Investment in Contract ÷ Expected Return. This determines what percentage of each annuity payment is a tax-free return of basis versus taxable gain." },
+      { q: "Once a life insurance policy becomes a MEC, it:", options: ["Can be reversed if the excess premium is withdrawn within 60 days", "Remains a MEC permanently — the change is irreversible", "Returns to regular treatment after 7 years", "Only remains a MEC until death benefit is reduced"], correct: 1, exp: "Once a policy fails the 7-pay test and becomes a MEC, it is permanently classified as a MEC. The only exception is if a material change (like a death benefit increase) occurs — which resets the 7-pay clock going forward, but doesn't undo the previous MEC status." },
+    ],
+  },
+
+  security_fund: {
+    id: "1.B",
+    title: "Wisconsin Insurance Security Fund (ch. 646)",
+    color: "#c084fc",
+    psiDomain: "Domain 1 — Insurance Regulation (35% of exam)",
+    examWeight: "Part of 35% domain",
+    wiStatutes: ["ch. 646", "s. 646.01", "s. 646.12", "s. 646.31", "s. 646.35"],
+    priority: "P2",
+    lessons: [
+      {
+        title: "Purpose & Structure of the Security Fund",
+        duration: "10 min",
+        content: `The **Wisconsin Insurance Security Fund (ISF)** was created under Wisconsin Statute Chapter 646 to protect policyowners and claimants if an admitted insurer becomes insolvent. This is distinct from — and broader than — the Wisconsin Life Insurance Guaranty Association (WLGA) covered in Unit 8.
+
+**Critical Distinction for the Exam**
+The Wisconsin Insurance Security Fund (ch. 646) is a **single unified fund** covering all lines of insurance — life, health, property, casualty. The WLGA is the life and health component. Students must understand both:
+- **WLGA:** Specifically covers life insurance and annuity policyholders — $300K death benefit limit, $100K cash value limit
+- **ISF (ch. 646):** The broader statutory framework governing the entire guaranty system in Wisconsin
+
+**Purpose — s. 646.01**
+The purposes of the fund are to maintain public confidence in the promises of insurers by providing a mechanism for protecting insureds from excessive delay and loss in the event of liquidation of insurers, and to provide where appropriate for the continuation of protection under policies of life insurance, disability insurance, and annuities.
+
+**Who Administers the Fund?**
+The board controls the assets of the fund — governed by a board of directors that includes the Attorney General, State Treasurer, and Commissioner of Insurance, plus insurer representatives.
+
+**Who Must Contribute?**
+All admitted (licensed) insurers doing business in Wisconsin must contribute to the fund. This is how the fund is financed — assessments on member insurers proportional to their Wisconsin premium volume.`,
+        keyTerms: [
+          { term: "Wisconsin Insurance Security Fund (ISF)", def: "The unified guaranty fund under ch. 646 that protects policyholders of insolvent Wisconsin-admitted insurers." },
+          { term: "Admitted Insurer", def: "A licensed insurer in Wisconsin — required to contribute to the Security Fund." },
+          { term: "Fund Board", def: "Governed by Attorney General, State Treasurer, Commissioner, plus insurer representatives." },
+          { term: "Assessment", def: "How the fund is financed — member insurers are assessed based on Wisconsin premium volume when needed." },
+        ],
+        wiNote: "Wisconsin ch. 646 is tested separately from the WLGA. Know that the ISF covers ALL lines of insurance through one unified fund — this is different from many other states that have separate funds for life/health vs. property/casualty.",
+      },
+      {
+        title: "Coverage, Limits & Exclusions",
+        duration: "12 min",
+        content: `Understanding what the Wisconsin Security Fund covers — and what it doesn't — is critical for the exam.
+
+**Who Is Covered?**
+The fund is not obligated to pay a claimant an amount in excess of the loss obligation of the insurer in liquidation under the policy or coverage from which the claim arises. Coverage is available to:
+- Wisconsin residents who hold policies with insolvent admitted insurers
+- Certain non-residents with policies issued by domestic (WI-incorporated) insurers
+
+**Key Exclusion — Non-Admitted Insurers**
+The chapter does not apply to nondomestic insurers that have not obtained a certificate of authority to do business in this state. This means surplus lines / non-admitted carriers are NOT covered.
+
+**Other Important Exclusions — s. 646.01(1)(b)**
+The fund does NOT cover:
+- Any portion of a life insurance policy or annuity contract that is not guaranteed by the insurer or under which the risk is borne by the policyholder — this excludes variable products' separate account values
+- Mortgage guaranty, financial guaranty and other forms of insurance offering protection against investment risks
+- Reinsurance contracts (except assumption certificates)
+- Self-funded employer plans
+
+**Continuation of Coverage — s. 646.35**
+One of the fund's most important features: when a life insurer becomes insolvent, the fund can arrange for **continuation of coverage** — transferring policies to a solvent insurer so policyholders don't lose their coverage.
+
+**Collateral Sources Rule**
+The portion of an otherwise eligible loss claim for which indemnification is provided by other benefits or advantages may not be claimed from the fund. The claimant must exhaust such collateral sources before pursuing payment from the fund.`,
+        keyTerms: [
+          { term: "Continuation of Coverage", def: "The fund's power to transfer insolvent insurer's policies to a solvent insurer — protecting policyholders from coverage loss." },
+          { term: "Collateral Sources Rule", def: "Claimant must exhaust other available benefits before the fund pays — fund is the last resort." },
+          { term: "Variable Product Exclusion", def: "Separate account values of variable life/annuity (investment risk borne by policyholder) are NOT covered by the fund." },
+          { term: "Non-Admitted Exclusion", def: "Surplus lines and unauthorized insurers are not covered — a major risk of buying from non-admitted carriers." },
+        ],
+        wiNote: "The exam tests the difference between what IS and is NOT covered. Key points: variable product separate accounts are excluded (policyholder bears investment risk). Non-admitted carriers are excluded. The fund covers continuation of coverage — not just claims payment.",
+      },
+    ],
+    questions: [
+      { q: "The Wisconsin Insurance Security Fund (ch. 646) is funded by:", options: ["State tax revenue collected by the OCI", "Assessments on all admitted (licensed) insurers in Wisconsin", "Premium taxes paid by policyholders", "Federal insurance guaranty funds"], correct: 1, exp: "The Wisconsin Security Fund is funded through assessments on all admitted insurers in Wisconsin, proportional to their Wisconsin premium volume. It is not funded by state taxes or policyholder premiums." },
+      { q: "Which of the following is NOT covered by the Wisconsin Insurance Security Fund?", options: ["A whole life policy with an insolvent admitted insurer", "A term life policy with an insolvent admitted insurer", "The separate account values of a variable annuity", "A disability income policy with an insolvent admitted insurer"], correct: 2, exp: "Variable product separate account values are explicitly excluded from ch. 646 coverage because the investment risk is borne by the policyholder — not the insurer. The fund covers guaranteed benefits only." },
+      { q: "When an admitted life insurer becomes insolvent in Wisconsin, the Security Fund may:", options: ["Only pay death benefit claims already filed", "Arrange for continuation of coverage by transferring policies to a solvent insurer", "Return all premiums paid to policyholders", "Only cover claims up to $10,000"], correct: 1, exp: "Under s. 646.35, one of the fund's most important powers is arranging continuation of coverage — transferring the insolvent insurer's policies to a healthy insurer so policyholders maintain their protection." },
+      { q: "A policyholder files a claim with the Wisconsin Security Fund but also has coverage under another source. Under the collateral sources rule:", options: ["The fund pays first, then seeks reimbursement from other sources", "The policyholder must exhaust other available benefits before the fund pays", "Both sources pay simultaneously up to policy limits", "The fund pays the full claim and waives the collateral source rule"], correct: 1, exp: "The collateral sources rule under s. 646.31(6) requires claimants to exhaust other available benefits before pursuing payment from the Security Fund. The fund is the last resort, not the first." },
+    ],
+  },
+
+  field_underwriting: {
+    id: "3.B",
+    title: "Field Underwriting, MIB & HIV Consent",
+    color: "#38bdf8",
+    psiDomain: "Domain 3 — Life Insurance Basics (10% of exam)",
+    examWeight: "Part of 10% domain",
+    wiStatutes: ["s. 631.90", "s. Ins 3.53", "s. 628.34(3)", "s. Ins 6.56"],
+    priority: "P2",
+    lessons: [
+      {
+        title: "Field Underwriting — Agent's Role",
+        duration: "12 min",
+        content: `**Field underwriting** refers to the agent's responsibilities during the application process — before the application reaches the home office underwriter. Agents are the insurer's first line of defense against adverse selection and fraud.
+
+**Key Agent Responsibilities**
+
+**1. Complete the Application Accurately**
+The agent must complete the application truthfully and completely based on the applicant's answers. The agent must never:
+- Complete blank spaces after the applicant signs
+- Coach the applicant to withhold material information
+- Sign the agent's statement without personally observing the applicant
+
+**2. Collect the Initial Premium (If Applicable)**
+If an initial premium is collected with the application, the agent issues a **conditional receipt** (also called a binding receipt). This provides temporary coverage under specific conditions — typically that the applicant is found to be insurable at the standard rate applied for.
+
+**3. Policy Delivery**
+When the approved policy arrives, the agent's duties include:
+- Deliver the policy **personally** whenever possible
+- Collect any outstanding balance of premium
+- Obtain the **delivery receipt** signed by the policyowner
+- Explain the policy provisions, riders, and exclusions
+- If the applicant's health has changed since application, disclose this to the insurer
+- A policy is not in force until it is **delivered and the premium is paid while the applicant is in good health**
+
+**4. Buyer's Guide**
+Wisconsin requires agents to provide a **Buyer's Guide** before or at the time of application for certain life insurance products — particularly traditional whole life and universal life. The guide explains how to compare policies.`,
+        keyTerms: [
+          { term: "Field Underwriting", def: "The agent's underwriting role during application — completing forms accurately, observing the applicant, flagging health changes." },
+          { term: "Conditional Receipt", def: "Temporary insurance coverage issued when initial premium is collected with application — coverage effective if applicant is insurable." },
+          { term: "Delivery Receipt", def: "Signed document confirming the policyowner received the policy — obtained by agent at delivery." },
+          { term: "Good Health Requirement", def: "Policy is not in force until delivered AND premium is paid while the applicant is in good health." },
+          { term: "Buyer's Guide", def: "Required consumer disclosure explaining how to compare life insurance policies — provided before or at application." },
+        ],
+        wiNote: "Wisconsin's policy delivery requirements and the good health condition at delivery are tested on the WI exam. Agents who know the applicant's health has changed between application and delivery must disclose this to the insurer before delivering the policy.",
+      },
+      {
+        title: "Medical Information Bureau (MIB)",
+        duration: "8 min",
+        content: `The **Medical Information Bureau (MIB)** is a non-profit organization that maintains a database of coded medical information shared among member life and health insurance companies. Understanding the MIB is required for the PSI exam.
+
+**What the MIB Does**
+When an insurer's underwriter reviews an application and finds significant medical information (a condition that influenced the underwriting decision), they report this to the MIB in coded form. Future insurers can check the MIB when a new application is submitted, alerting them to investigate further.
+
+**What the MIB Does NOT Do**
+- The MIB does NOT contain diagnoses or medical records
+- It does NOT store the actual medical information — only codes indicating that a condition was significant in a prior underwriting decision
+- It is NOT a medical database — it's an alert system
+
+**Consumer Rights Under the MIB**
+Under the Fair Credit Reporting Act (FCRA) and MIB's own rules:
+- Applicants must be **disclosed that MIB may be checked** on the application or authorization form
+- Applicants have the right to **request a copy of their MIB file** once per year at no charge
+- Applicants can **dispute inaccurate MIB information**
+- The MIB must investigate and correct errors within a reasonable time
+
+**MIB in Wisconsin**
+MIB checks are a standard part of individual life and health underwriting. Reference: s. 631.90, s. Ins 3.53 — Medical Information Bureau (MIB), medical examinations and lab tests.`,
+        keyTerms: [
+          { term: "Medical Information Bureau (MIB)", def: "Non-profit database of coded medical information shared by member insurers — an underwriting alert system, not a medical records repository." },
+          { term: "MIB Code", def: "A coded notation (not a diagnosis) indicating a condition was significant in a prior underwriting decision." },
+          { term: "MIB Disclosure", def: "Applicants must be told that MIB may be checked — required on application authorization." },
+          { term: "MIB File Request", def: "Consumers can request a free copy of their MIB file once per year and dispute inaccuracies." },
+        ],
+      },
+      {
+        title: "HIV Testing & Consent Requirements (s. Ins 3.53)",
+        duration: "10 min",
+        content: `Wisconsin has specific rules governing HIV testing in insurance underwriting under **s. Ins 3.53** — one of the most Wisconsin-specific topics tested on the state exam.
+
+**When HIV Testing Is Permitted**
+For use in underwriting an individual life, accident or health insurance policy, an insurer may require that the person to be insured be tested, at the insurer's expense, for the presence of HIV, antigen or nonantigenic products of HIV or an antibody to HIV.
+
+**Consent Required — s. Ins 3.53(4)(b)**
+An insurer that requires a test under this section shall, prior to testing, obtain a signed consent form from the person to be tested. The consent form must be in substantially the format specified in Appendix A of Ins 3.53. Special rules apply if the person is under 14 (parent/guardian consent) or adjudged incompetent.
+
+**If the Test Is Positive**
+If a test is positive and affects the issuance or terms of the policy, the insurer must provide written notice to you or the person who signed the consent form that you do not meet the insurer's usual underwriting criteria because of a test result. The insurer must request you to provide informed consent for disclosure of the test result to a health care provider with whom you choose to discuss the test result.
+
+**Confidentiality — s. Ins 3.53(5)**
+An insurer that requires a person to be tested may disclose the test result only as described in the consent form or with written consent for disclosure signed by the person tested.
+
+**Group Policies — Additional Restriction — s. Ins 3.53(7)**
+In underwriting group life, accident or health insurance on an individual basis, an insurer may not use or obtain from any source, including the MIB, the results of a person's test for HIV, or any other information on whether the person has been tested for HIV.`,
+        keyTerms: [
+          { term: "HIV Consent (s. Ins 3.53)", def: "Wisconsin requires signed consent before HIV testing for underwriting — insurer pays for the test." },
+          { term: "Positive Test Notification", def: "If positive and affects policy terms, insurer must notify applicant and provide referral to healthcare provider." },
+          { term: "HIV Confidentiality", def: "Results can only be disclosed as specified in the consent form or with additional written consent." },
+          { term: "Group Policy HIV Restriction", def: "For group underwriting, insurers cannot use HIV test results or even ask about testing history." },
+        ],
+        wiNote: "s. Ins 3.53 is a heavily tested WI-specific rule. Three key points: (1) insurer pays for the test, (2) written consent required before testing, (3) group policies cannot use HIV information at all — even from MIB.",
+      },
+    ],
+    questions: [
+      { q: "When an agent collects the initial premium with a life insurance application, the agent gives the applicant:", options: ["A policy jacket with temporary coverage", "A conditional receipt providing coverage if the applicant is insurable", "A binder providing unconditional coverage immediately", "Nothing — coverage begins only at policy delivery"], correct: 1, exp: "A conditional receipt provides temporary coverage when the initial premium is collected with the application. The condition is typically that the applicant must be insurable at the standard rate applied for. Coverage is retroactive to the application date if the applicant qualifies." },
+      { q: "The Medical Information Bureau (MIB) database contains:", options: ["Complete medical records and diagnoses of insurance applicants", "Coded alerts indicating a condition was significant in a prior underwriting decision", "Criminal background information on insurance applicants", "Credit scores and financial information"], correct: 1, exp: "The MIB stores coded alerts — not medical records or diagnoses. A code indicates that a particular health condition was significant enough to affect a prior underwriting decision, prompting future insurers to investigate further." },
+      { q: "Under Wisconsin's s. Ins 3.53, when an insurer requires an HIV test as part of underwriting, the cost of the test is paid by:", options: ["The applicant", "The agent who submitted the application", "The insurer", "Split equally between insurer and applicant"], correct: 2, exp: "Wisconsin law (s. Ins 3.53) specifically requires that the insurer pay for the HIV test — the cost cannot be passed to the applicant. Written consent must also be obtained before testing." },
+      { q: "For GROUP life insurance underwriting under Wisconsin law, an insurer:", options: ["May require HIV testing with proper consent", "May use MIB information about HIV testing history", "May not use or obtain HIV test results or information about HIV testing", "May require HIV testing only for coverage amounts over $500,000"], correct: 2, exp: "Under s. Ins 3.53(7), Wisconsin imposes additional restrictions on group underwriting — insurers cannot use HIV test results OR any information about whether a person has been tested for HIV, including information from the MIB." },
+    ],
+  },
+
+  illustrations: {
+    id: "1.C",
+    title: "Life Insurance Illustrations (s. Ins 2.14 & 2.17)",
+    color: "#4ade80",
+    psiDomain: "Domain 1 — Insurance Regulation (35% of exam)",
+    examWeight: "Part of 35% domain",
+    wiStatutes: ["s. Ins 2.14", "s. Ins 2.16", "s. Ins 2.17"],
+    priority: "P2",
+    lessons: [
+      {
+        title: "Purpose & Scope of Illustration Rules",
+        duration: "10 min",
+        content: `**Life insurance illustrations** are ledgers or proposals that show how a policy's values are projected to change over time. Because illustrations can show optimistic non-guaranteed projections, Wisconsin has strict rules about how they must be presented.
+
+**Governing Rules**
+Wisconsin regulates life insurance illustrations under two complementary rules:
+- **s. Ins 2.14** — Life insurance solicitation rule (advertising and disclosure)
+- **s. Ins 2.17** — Life insurance illustrations rule (format and content standards)
+
+The purpose of s. Ins 2.17 is to provide rules for life insurance policy illustrations that will protect consumers and foster consumer education. The goals are to ensure that illustrations do not mislead purchasers of life insurance and to make illustrations more understandable.
+
+**Scope — What Policies Are Covered?**
+s. Ins 2.17 applies to all group and individual life insurance policies and certificates EXCEPT:
+- Variable life insurance
+- Individual and group annuity contracts
+- Credit life insurance
+- Life insurance policies with no illustrated death benefits exceeding $10,000
+
+**Two Types of Illustrations**
+- **Basic Illustration:** A ledger or proposal used in the sale of a life insurance policy showing both guaranteed and non-guaranteed elements — the most common type
+- **Supplemental Illustration:** Additional illustration that may accompany a basic illustration, must clearly state it is supplemental`,
+        keyTerms: [
+          { term: "Life Insurance Illustration", def: "A ledger or proposal showing projected policy values — both guaranteed and non-guaranteed elements." },
+          { term: "Basic Illustration", def: "The primary sales illustration showing guaranteed and non-guaranteed elements — most common type." },
+          { term: "Guaranteed Elements", def: "Policy values (premiums, death benefits, cash values) guaranteed by contract — cannot be less favorable." },
+          { term: "Non-Guaranteed Elements", def: "Projected values based on current (not guaranteed) assumptions — can be higher or lower in reality." },
+        ],
+        wiNote: "Variable life insurance, annuities, and credit life are excluded from the illustration rules. This is tested — students sometimes assume all life products require illustrations under Ins 2.17.",
+      },
+      {
+        title: "Required Content & Prohibited Practices",
+        duration: "12 min",
+        content: `Wisconsin's illustration rules specify exactly what must appear in an illustration and what agents are prohibited from doing.
+
+**Required Disclosures in Every Illustration — s. Ins 2.17(5)(a)**
+Every basic illustration must prominently show:
+- Name, age and sex of proposed insured
+- Underwriting or rating classification upon which the illustration is based
+- Generic name of policy, the insurer's product name if different, and form number
+- Initial death benefit
+- Dividend option election or application of non-guaranteed elements, if applicable
+- Both guaranteed values AND non-guaranteed (current assumption) values — clearly labeled
+
+**Prohibited Practices — s. Ins 2.17(5)(b)**
+When using an illustration, an insurer or agent shall NOT:
+- Represent the policy as anything other than a life insurance policy
+- Use or describe non-guaranteed elements in a manner that is misleading or has the capacity or tendency to mislead
+- State or imply that payment of a non-guaranteed amount is guaranteed
+- Use an illustration that shows non-guaranteed values in excess of what the current credited rate would produce
+
+**In-Force Illustration Rule**
+The rule requires that an insurer provide an in-force illustration to a policyowner within 25 calendar days of the policyowner's request. Policyowners can request an updated illustration at any time to see how their policy is actually performing.
+
+**Signed Acknowledgment Required**
+The policyowner and agent must both sign an acknowledgment that the illustration was received and that they understand non-guaranteed values are not guaranteed. A copy must be kept in the file.`,
+        keyTerms: [
+          { term: "In-Force Illustration", def: "Updated illustration showing current policy performance — must be provided within 25 days of policyholder request." },
+          { term: "Signed Acknowledgment", def: "Both agent and policyowner must sign confirming receipt of illustration and understanding of non-guaranteed elements." },
+          { term: "Non-Guaranteed Elements Disclosure", def: "Must be clearly labeled — cannot be represented as guaranteed or shown at values exceeding what the current rate produces." },
+        ],
+        wiNote: "Two Wisconsin-specific numbers to remember: (1) In-force illustrations must be provided within **25 calendar days** of request. (2) The signed illustration acknowledgment must be retained in the file. Both are tested on the WI exam.",
+      },
+    ],
+    questions: [
+      { q: "Under Wisconsin's life insurance illustration rules (s. Ins 2.17), which of the following policies is EXEMPT from the illustration requirements?", options: ["A $500,000 whole life policy", "A universal life policy", "A variable life insurance policy", "A $250,000 term life policy"], correct: 2, exp: "Variable life insurance is specifically exempt from s. Ins 2.17 illustration requirements, along with annuities, credit life, and policies with no illustrated death benefits exceeding $10,000. Variable products have separate prospectus requirements under federal securities law." },
+      { q: "When using a life insurance illustration during a sales presentation, an agent is PROHIBITED from:", options: ["Showing both guaranteed and non-guaranteed values", "Providing the illustration before the sale is complete", "Representing that non-guaranteed values are guaranteed", "Providing an in-force illustration upon request"], correct: 2, exp: "Under s. Ins 2.17(5)(b), agents cannot state or imply that non-guaranteed amounts are guaranteed. This is one of the most serious illustration violations — misleading customers about which policy values are contractually guaranteed." },
+      { q: "A policyowner requests an in-force illustration from their life insurer. Under Wisconsin's illustration rules, the insurer must provide it within:", options: ["10 calendar days", "25 calendar days", "30 calendar days", "60 calendar days"], correct: 1, exp: "Wisconsin's illustration rule (s. Ins 2.17) requires insurers to provide an in-force illustration within 25 calendar days of the policyowner's request. This allows policyowners to see how their policy is actually performing versus original projections." },
+      { q: "A basic life insurance illustration used in Wisconsin must include which of the following?", options: ["The agent's commission on the policy", "The insurer's A.M. Best rating", "The generic name of the policy and form number", "A comparison to three competing policies"], correct: 2, exp: "Under s. Ins 2.17(5)(a), required illustration disclosures include the generic name of the policy, the insurer's product name if different, and the form number. Agent commissions and competitor comparisons are not required illustration elements." },
+    ],
+  },
+};
+
+const ModuleView = ({ mod }) => {
+  const [lessonIdx, setLessonIdx] = useState(0);
+  const [view, setView] = useState("lesson");
+  const [answers, setAnswers] = useState({});
+  const lesson = mod.lessons[lessonIdx];
+
+  const fmt = (text) =>
+    text.replace(/\*\*(.*?)\*\*/g, '<strong style="color:#fff">$1</strong>');
+
+  return (
+    <div>
+      {/* Lesson tabs */}
+      <div style={{ display: "flex", gap: 6, marginBottom: 20, flexWrap: "wrap" }}>
+        {mod.lessons.map((l, i) => (
+          <button key={i} onClick={() => { setLessonIdx(i); setView("lesson"); }} style={{ padding: "7px 14px", borderRadius: 20, fontSize: 12, cursor: "pointer", border: "none", background: view === "lesson" && lessonIdx === i ? `${mod.color}20` : "rgba(255,255,255,0.04)", color: view === "lesson" && lessonIdx === i ? mod.color : "rgba(255,255,255,0.4)", fontFamily: "'DM Sans', sans-serif" }}>
+            {l.title}
+          </button>
+        ))}
+        <button onClick={() => setView("quiz")} style={{ padding: "7px 14px", borderRadius: 20, fontSize: 12, cursor: "pointer", border: "none", background: view === "quiz" ? "rgba(245,158,11,0.15)" : "rgba(255,255,255,0.04)", color: view === "quiz" ? "#f59e0b" : "rgba(255,255,255,0.4)", fontFamily: "'DM Sans', sans-serif" }}>
+          📝 Quiz ({mod.questions.length}Q)
+        </button>
+      </div>
+
+      {view === "lesson" && lesson && (
+        <div>
+          <div style={{ display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap" }}>
+            <span style={{ background: `${mod.color}15`, color: mod.color, padding: "3px 10px", borderRadius: 8, fontSize: 11, fontFamily: "'JetBrains Mono', monospace" }}>{mod.psiDomain}</span>
+            <span style={{ background: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.35)", padding: "3px 10px", borderRadius: 8, fontSize: 11, fontFamily: "'JetBrains Mono', monospace" }}>⏱ {lesson.duration}</span>
+          </div>
+          <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: "clamp(17px,2.5vw,24px)", fontWeight: 800, letterSpacing: -0.5, marginBottom: 18 }}>{lesson.title}</h2>
+          <div style={{ fontSize: 14, color: "rgba(255,255,255,0.65)", lineHeight: 1.85, marginBottom: 24 }} dangerouslySetInnerHTML={{ __html: `<p>${lesson.content.replace(/\n\n/g, '</p><p style="margin-top:13px">').replace(/\*\*(.*?)\*\*/g, '<strong style="color:#fff">$1</strong>')}</p>` }} />
+
+          {lesson.keyTerms && (
+            <div style={{ marginBottom: 20 }}>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "rgba(255,255,255,0.22)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 10 }}>Key Terms</div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 8 }}>
+                {lesson.keyTerms.map((kt, i) => (
+                  <div key={i} style={{ background: "rgba(255,255,255,0.03)", border: `1px solid ${mod.color}18`, borderLeft: `2px solid ${mod.color}60`, borderRadius: 8, padding: "11px 14px" }}>
+                    <div style={{ fontSize: 12, fontWeight: 600, color: mod.color, marginBottom: 3 }}>{kt.term}</div>
+                    <div style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", lineHeight: 1.5 }}>{kt.def}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {lesson.wiNote && (
+            <div style={{ padding: "13px 17px", background: "rgba(192,132,252,0.07)", border: "1px solid rgba(192,132,252,0.2)", borderLeft: "3px solid #c084fc", borderRadius: 9 }}>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: "#c084fc", letterSpacing: 2, marginBottom: 5 }}>🏛 WISCONSIN EXAM NOTE</div>
+              <p style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.7 }}>{lesson.wiNote}</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {view === "quiz" && (
+        <div>
+          <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 20, fontWeight: 800, marginBottom: 20 }}>{mod.title} — Knowledge Check</h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+            {mod.questions.map((q, qi) => (
+              <div key={qi} style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, padding: "18px 20px" }}>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 14, lineHeight: 1.5 }}>Q{qi + 1}. {q.q}</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+                  {q.options.map((opt, oi) => {
+                    const sel = answers[qi] === oi;
+                    const correct = oi === q.correct;
+                    const answered = answers[qi] !== undefined;
+                    let bg = "rgba(255,255,255,0.03)", border = "rgba(255,255,255,0.07)", col = "rgba(255,255,255,0.65)";
+                    if (answered && correct) { bg = "rgba(0,200,150,0.1)"; border = "rgba(0,200,150,0.4)"; col = "#fff"; }
+                    if (answered && sel && !correct) { bg = "rgba(248,113,113,0.1)"; border = "rgba(248,113,113,0.4)"; col = "#fff"; }
+                    return (
+                      <div key={oi} onClick={() => !answered && setAnswers(p => ({ ...p, [qi]: oi }))} style={{ padding: "10px 14px", background: bg, border: `1px solid ${border}`, borderRadius: 8, fontSize: 13, color: col, cursor: answered ? "default" : "pointer", display: "flex", gap: 10, alignItems: "flex-start", transition: "all 0.12s" }}>
+                        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700, color: answered ? (correct ? "#00c896" : sel ? "#f87171" : "rgba(255,255,255,0.2)") : "rgba(255,255,255,0.25)", flexShrink: 0, marginTop: 2 }}>{String.fromCharCode(65 + oi)}</span>
+                        {opt}
+                        {answered && correct && <span style={{ marginLeft: "auto", color: "#00c896", flexShrink: 0 }}>✓</span>}
+                        {answered && sel && !correct && <span style={{ marginLeft: "auto", color: "#f87171", flexShrink: 0 }}>✗</span>}
+                      </div>
+                    );
+                  })}
+                </div>
+                {answers[qi] !== undefined && (
+                  <div style={{ marginTop: 11, padding: "10px 14px", background: answers[qi] === q.correct ? "rgba(0,200,150,0.07)" : "rgba(248,113,113,0.07)", border: `1px solid ${answers[qi] === q.correct ? "rgba(0,200,150,0.2)" : "rgba(248,113,113,0.2)"}`, borderRadius: 8, fontSize: 13, color: "rgba(255,255,255,0.6)", lineHeight: 1.6 }}>
+                    {answers[qi] === q.correct ? "✓ Correct — " : "✗ Incorrect — "}{q.exp}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+function P2GapModules() {
+  const [active, setActive] = useState("mec");
+  const mod = modules[active];
+
+  const coverageAfter = 95;
+
+  return (
+    <div style={{ fontFamily: "'DM Sans', system-ui, sans-serif", background: "#07080d", minHeight: "100vh", color: "#fff" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        .mod-btn { cursor: pointer; border: none; transition: all 0.18s; }
+        .mod-btn:hover { transform: translateY(-2px); }
+        .fade { animation: fadeUp 0.35s ease both; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+      `}</style>
+
+      {/* Header */}
+      <div style={{ padding: "40px 40px 24px", borderBottom: "1px solid rgba(255,255,255,0.06)", background: "linear-gradient(135deg, #07080d, #0c0d18)" }}>
+        <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: "#f59e0b", letterSpacing: 3, textTransform: "uppercase", marginBottom: 10 }}>21 — P2 Gap Modules</div>
+        <h1 style={{ fontFamily: "'Syne'", fontSize: "clamp(26px,4vw,48px)", fontWeight: 800, letterSpacing: -2, marginBottom: 12 }}>
+          Priority 2<br /><span style={{ color: "#f59e0b" }}>Content Modules</span>
+        </h1>
+
+        {/* Coverage progress */}
+        <div style={{ display: "flex", gap: 20, alignItems: "center", marginBottom: 12, flexWrap: "wrap" }}>
+          <div style={{ flex: "1 1 300px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6, fontSize: 12 }}>
+              <span style={{ fontFamily: "'JetBrains Mono'", color: "rgba(255,255,255,0.3)", letterSpacing: 1 }}>PSI OUTLINE COVERAGE</span>
+              <span style={{ fontFamily: "'JetBrains Mono'", color: "#00c896", fontWeight: 700 }}>~{coverageAfter}% after P1+P2</span>
+            </div>
+            <div style={{ height: 8, background: "rgba(255,255,255,0.06)", borderRadius: 4, overflow: "hidden" }}>
+              <div style={{ height: "100%", background: "linear-gradient(to right, #00c896, #38bdf8)", borderRadius: 4, width: `${coverageAfter}%`, transition: "width 1s ease" }} />
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", marginTop: 5, fontSize: 11, color: "rgba(255,255,255,0.25)", fontFamily: "'JetBrains Mono'" }}>
+              <span>68% baseline</span><span>88% after P1</span><span>95% now ✓</span>
+            </div>
+          </div>
+          <div style={{ background: "rgba(0,200,150,0.08)", border: "1px solid rgba(0,200,150,0.2)", borderRadius: 10, padding: "10px 18px", textAlign: "center" }}>
+            <div style={{ fontFamily: "'Syne'", fontSize: 20, fontWeight: 800, color: "#00c896" }}>OCI Ready</div>
+            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", fontFamily: "'JetBrains Mono'" }}>submit application</div>
+          </div>
+        </div>
+
+        <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", maxWidth: 580, lineHeight: 1.7 }}>
+          Four P2 gap modules sourced directly from the PSI Series 22-01 exam outline and Wisconsin statutes. Each includes full lesson content, key terms, Wisconsin-specific exam notes, and a practice quiz.
+        </p>
+      </div>
+
+      {/* Module selector */}
+      <div style={{ padding: "18px 40px", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", gap: 10, flexWrap: "wrap" }}>
+        {Object.entries(modules).map(([key, m]) => (
+          <button key={key} className="mod-btn" onClick={() => setActive(key)} style={{ padding: "10px 18px", borderRadius: 10, background: active === key ? `${m.color}15` : "rgba(255,255,255,0.03)", border: `1px solid ${active === key ? m.color + "40" : "rgba(255,255,255,0.07)"}`, color: active === key ? m.color : "rgba(255,255,255,0.5)", fontSize: 13, fontWeight: active === key ? 600 : 400, display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, opacity: 0.6 }}>{m.id}</span>
+            {m.title}
+            <span style={{ background: "rgba(245,158,11,0.15)", color: "#f59e0b", padding: "1px 7px", borderRadius: 6, fontSize: 9, fontFamily: "'JetBrains Mono'" }}>P2</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Module header bar */}
+      <div style={{ padding: "14px 40px", background: `${mod.color}07`, borderBottom: "1px solid rgba(255,255,255,0.05)", display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+        <span style={{ fontFamily: "'Syne'", fontSize: 15, fontWeight: 800, color: mod.color }}>{mod.title}</span>
+        <span style={{ background: `${mod.color}15`, color: mod.color, padding: "3px 10px", borderRadius: 8, fontSize: 11, fontFamily: "'JetBrains Mono'" }}>{mod.examWeight}</span>
+        <span style={{ background: "rgba(245,158,11,0.1)", color: "#f59e0b", padding: "3px 10px", borderRadius: 8, fontSize: 11, fontFamily: "'JetBrains Mono'" }}>P2 Gap — Fixed ✓</span>
+        <div style={{ display: "flex", gap: 6, marginLeft: 4, flexWrap: "wrap" }}>
+          {mod.wiStatutes.map((s, i) => <span key={i} style={{ background: "rgba(192,132,252,0.08)", color: "#c084fc", padding: "2px 8px", borderRadius: 5, fontSize: 10, fontFamily: "'JetBrains Mono'" }}>{s}</span>)}
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="fade" key={active} style={{ padding: "28px 40px", maxWidth: 880 }}>
+        <ModuleView mod={mod} />
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(P2GapModules));
+</script>
+</body>
+</html>

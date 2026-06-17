@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PassPro — 09-tech-stack</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>* { box-sizing: border-box; margin: 0; padding: 0; } body { background: #06060c; } #root { min-height: 100vh; }</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const stack = [
+  { layer: "Frontend", name: "Next.js 14", icon: "▲", color: "#fff", bg: "#000", reason: "React framework with server-side rendering. Fast, SEO-friendly, and Vercel-native for zero-config deployment. App Router for modern file-based routing.", alt: "Vite + React", why: "SSR is critical for SEO — exam prep searches drive organic growth." },
+  { layer: "Styling", name: "Tailwind CSS", icon: "💨", color: "#38bdf8", bg: "rgba(56,189,248,0.1)", reason: "Utility-first CSS. Fast to build, easy to maintain. Consistent design system out of the box with no style conflicts.", alt: "CSS Modules", why: "Developer velocity — Tailwind lets a small team ship fast." },
+  { layer: "Backend", name: "Node.js + Express", icon: "⬡", color: "#6cc24a", bg: "rgba(108,194,74,0.1)", reason: "Proven, fast API layer with a massive ecosystem. TypeScript for type safety. Easy to find Node developers at any budget.", alt: "Python FastAPI", why: "Same language as frontend = smaller, more flexible dev team." },
+  { layer: "Database", name: "Supabase (Postgres)", icon: "🟢", color: "#00c896", bg: "rgba(0,200,150,0.1)", reason: "Managed PostgreSQL with built-in auth, real-time subscriptions, row-level security, and a generous free tier. Saves months of infra work.", alt: "PlanetScale", why: "Built-in RLS means user data isolation is enforced at the DB level." },
+  { layer: "AI Engine", name: "Claude API", icon: "✦", color: "#a78bfa", bg: "rgba(167,139,250,0.1)", reason: "Best-in-class for educational, nuanced conversation. 200k token context window ideal for maintaining full session history. Excellent at staying in character for roleplay.", alt: "OpenAI GPT-4", why: "Long context + instruction following = critical for the companion and roleplay features." },
+  { layer: "Auth", name: "Clerk", icon: "🔐", color: "#f59e0b", bg: "rgba(245,158,11,0.1)", reason: "Drop-in authentication with social login, MFA, and organization management for agency accounts. Pre-built UI components save 2–3 weeks of build time.", alt: "NextAuth", why: "Agency org management is built-in — no custom code needed." },
+  { layer: "Payments", name: "Stripe", icon: "💳", color: "#635bff", bg: "rgba(99,91,255,0.1)", reason: "Industry standard for SaaS payments. Handles one-time purchases, subscriptions, usage-based billing, and agency invoicing without custom code.", alt: "Paddle", why: "Best developer docs, most integrations, trusted by consumers." },
+  { layer: "Hosting", name: "Vercel + Railway", icon: "☁️", color: "#fff", bg: "rgba(255,255,255,0.05)", reason: "Vercel for Next.js frontend (zero-config, global CDN). Railway for Express API (simple deploys, auto-scaling). Both have free tiers to start.", alt: "AWS EC2", why: "Zero DevOps overhead — critical for a small early-stage team." },
+  { layer: "Email", name: "Resend", icon: "📧", color: "#ff4f4f", bg: "rgba(255,79,79,0.1)", reason: "Modern email API with React email templates. Handles transactional (exam reminders, streak alerts) and marketing emails in one platform.", alt: "SendGrid", why: "React email templates match the codebase — no context switching." },
+  { layer: "CDN / Media", name: "Cloudflare + S3", icon: "🌐", color: "#f6821f", bg: "rgba(246,130,31,0.1)", reason: "Cloudflare for DDoS protection, edge caching, and global CDN. S3 for video storage and static assets. Combined cost is minimal at early scale.", alt: "Bunny CDN", why: "Video content (lesson explainers) requires robust media delivery." },
+];
+
+const phases = [
+  { name: "MVP Phase", color: "#00c896", items: ["Next.js 14", "Supabase", "Claude API", "Clerk", "Stripe", "Vercel"] },
+  { name: "Growth Phase", color: "#a78bfa", items: ["Redis (caching)", "Pinecone (vector DB)", "Railway (API scale)", "Cloudflare", "Resend"] },
+  { name: "Scale Phase", color: "#f59e0b", items: ["React Native (mobile)", "Analytics platform", "Data warehouse", "CDN optimization"] },
+];
+
+function TechStack() {
+  const [selected, setSelected] = useState(null);
+  const [view, setView] = useState("stack");
+
+  const s = stack.find(s => s.name === selected);
+
+  return (
+    <div style={{ fontFamily: "'DM Sans', system-ui, sans-serif", background: "#0a0a0f", minHeight: "100vh", color: "#fff" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        .stack-card { cursor: pointer; transition: all 0.2s; }
+        .stack-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.4); }
+        .tab-btn { cursor: pointer; border: none; transition: all 0.2s; }
+      `}</style>
+
+      <div style={{ padding: "48px 40px 28px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: "#6cc24a", letterSpacing: 3, textTransform: "uppercase", marginBottom: 12 }}>09 — Tech Stack</div>
+        <h1 style={{ fontFamily: "'Syne'", fontSize: "clamp(28px,4vw,52px)", fontWeight: 800, letterSpacing: -2, marginBottom: 12 }}>
+          Every technology<br /><span style={{ color: "#6cc24a" }}>and why</span>
+        </h1>
+        <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 14, maxWidth: 480 }}>Every choice is deliberate. Click any technology to understand the reasoning and the alternative that was considered.</p>
+      </div>
+
+      <div style={{ display: "flex", gap: 4, padding: "0 40px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        {[["stack", "Full Stack"], ["phases", "Build Phases"]].map(([val, label]) => (
+          <button key={val} className="tab-btn" onClick={() => setView(val)} style={{ padding: "12px 18px", fontSize: 13, fontFamily: "'DM Sans'", background: "transparent", color: view === val ? "#6cc24a" : "rgba(255,255,255,0.35)", borderBottom: view === val ? "2px solid #6cc24a" : "2px solid transparent" }}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {view === "stack" && (
+        <div style={{ display: "grid", gridTemplateColumns: selected ? "1fr 380px" : "1fr", minHeight: "calc(100vh - 160px)" }}>
+          <div style={{ padding: "32px 40px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 14 }}>
+              {stack.map((tech, i) => (
+                <div key={i} className="stack-card" onClick={() => setSelected(selected === tech.name ? null : tech.name)} style={{ background: selected === tech.name ? tech.bg : "#111118", border: `1px solid ${selected === tech.name ? tech.color + "40" : "rgba(255,255,255,0.06)"}`, borderRadius: 12, padding: 22 }}>
+                  <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.25)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 10 }}>{tech.layer}</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+                    <div style={{ width: 36, height: 36, borderRadius: 9, background: tech.bg, border: `1px solid ${tech.color}30`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>{tech.icon}</div>
+                    <div style={{ fontFamily: "'Syne'", fontSize: 15, fontWeight: 700, color: selected === tech.name ? tech.color : "#fff" }}>{tech.name}</div>
+                  </div>
+                  <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", lineHeight: 1.5 }}>{tech.reason.substring(0, 80)}...</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {selected && s && (
+            <div style={{ borderLeft: "1px solid rgba(255,255,255,0.06)", padding: "32px 28px", background: "#0d0d16", position: "sticky", top: 0, height: "fit-content" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 24 }}>
+                <div style={{ width: 52, height: 52, borderRadius: 13, background: s.bg, border: `1px solid ${s.color}30`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24 }}>{s.icon}</div>
+                <div>
+                  <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: s.color, letterSpacing: 2, marginBottom: 4 }}>{s.layer}</div>
+                  <div style={{ fontFamily: "'Syne'", fontSize: 20, fontWeight: 800 }}>{s.name}</div>
+                </div>
+              </div>
+              <div style={{ marginBottom: 20 }}>
+                <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "rgba(255,255,255,0.25)", letterSpacing: 2, marginBottom: 8 }}>WHY WE CHOSE THIS</div>
+                <p style={{ fontSize: 14, color: "rgba(255,255,255,0.6)", lineHeight: 1.7 }}>{s.reason}</p>
+              </div>
+              <div style={{ marginBottom: 20, padding: "14px 16px", background: `${s.color}08`, border: `1px solid ${s.color}20`, borderRadius: 8 }}>
+                <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: s.color, letterSpacing: 2, marginBottom: 6 }}>KEY REASON</div>
+                <p style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.6 }}>{s.why}</p>
+              </div>
+              <div style={{ padding: "12px 14px", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 8 }}>
+                <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "rgba(255,255,255,0.25)", letterSpacing: 2, marginBottom: 4 }}>ALTERNATIVE CONSIDERED</div>
+                <div style={{ fontSize: 13, color: "rgba(255,255,255,0.4)" }}>{s.alt}</div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {view === "phases" && (
+        <div style={{ padding: "40px" }}>
+          <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 14, marginBottom: 32 }}>Not everything is built at once. The tech stack is introduced in phases aligned with the product roadmap.</p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
+            {phases.map((phase, i) => (
+              <div key={i} style={{ background: "#111118", border: `1px solid ${phase.color}20`, borderRadius: 14, padding: 28 }}>
+                <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: phase.color, letterSpacing: 2, textTransform: "uppercase", marginBottom: 12 }}>{phase.name}</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  {phase.items.map((item, j) => (
+                    <div key={j} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", background: "rgba(255,255,255,0.03)", borderRadius: 7 }}>
+                      <div style={{ width: 6, height: 6, borderRadius: "50%", background: phase.color, flexShrink: 0 }} />
+                      <span style={{ fontSize: 13, color: "rgba(255,255,255,0.65)" }}>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(TechStack));
+</script>
+</body>
+</html>

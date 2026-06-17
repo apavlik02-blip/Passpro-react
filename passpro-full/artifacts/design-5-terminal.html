@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PassPro — design-5-terminal</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>* { box-sizing: border-box; margin: 0; padding: 0; } body { background: #06060c; } #root { min-height: 100vh; }</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const STUDENT = { name: "Amanda", readiness: 74, streak: 7, xp: 2840, daysLeft: 41, hours: 8.5, weak: ["Annuities", "Tax Treatment", "WI Security Fund"] };
+
+function TerminalPro() {
+  const [typed, setTyped] = useState("");
+  const [showContent, setShowContent] = useState(false);
+  const [activeSection, setActiveSection] = useState("dashboard");
+  const [input, setInput] = useState("");
+  const [cmdHistory, setCmdHistory] = useState([]);
+
+  const bootLines = [
+    "PassPro Terminal v2.0.1 — Wisconsin Life Insurance",
+    "Authenticating: amanda@passpro.io ...",
+    `Loading profile: ${STUDENT.name} | State: WI | Plan: PRO`,
+    `Exam date: Jul 15 2026 [${STUDENT.daysLeft} days] | Readiness: ${STUDENT.readiness}%`,
+    "OCI Compliance: 8.5/20.0h | AI Coach: ONLINE",
+    "Weak areas detected: Annuities, Tax Treatment, WI Security Fund",
+    "─────────────────────────────────────────────",
+    "Type a command or press [ENTER] to open dashboard",
+  ];
+
+  useEffect(() => {
+    let i = 0;
+    const fullText = bootLines.join("\n");
+    const interval = setInterval(() => {
+      setTyped(fullText.slice(0, i));
+      i += 3;
+      if (i > fullText.length) {
+        clearInterval(interval);
+        setTimeout(() => setShowContent(true), 300);
+      }
+    }, 20);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleCmd = (e) => {
+    if (e.key === "Enter") {
+      const cmd = input.trim().toLowerCase();
+      let response = "";
+      if (cmd === "help") response = "Commands: dashboard | study | practice | coach | progress | compliance | clear";
+      else if (cmd === "dashboard") { setActiveSection("dashboard"); response = "→ Opened dashboard"; }
+      else if (cmd === "study") { setActiveSection("study"); response = "→ Opened study modules"; }
+      else if (cmd === "coach") { setActiveSection("coach"); response = "→ AI Coach is ready"; }
+      else if (cmd === "practice") { setActiveSection("practice"); response = "→ Practice modes loaded"; }
+      else if (cmd === "compliance") { setActiveSection("compliance"); response = "→ OCI tracker opened"; }
+      else if (cmd === "clear") { setCmdHistory([]); setInput(""); return; }
+      else if (cmd === "") { setActiveSection("dashboard"); }
+      else response = `Command not found: '${cmd}'. Type 'help' for commands.`;
+      setCmdHistory(prev => [...prev, { cmd: input, response }]);
+      setInput("");
+    }
+  };
+
+  const progressBar = (pct, width = 20) => {
+    const filled = Math.round((pct / 100) * width);
+    return "█".repeat(filled) + "░".repeat(width - filled);
+  };
+
+  return (
+    <div style={{ fontFamily: "'JetBrains Mono', 'Courier New', monospace", background: "#010d03", minHeight: "100vh", color: "#00ff50", position: "relative", overflow: "hidden" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        .blink { animation: blink 1s step-end infinite; }
+        @keyframes blink { 50%{opacity:0} }
+        .scanline { animation: scan 6s linear infinite; }
+        @keyframes scan { 0%{top:-4%} 100%{top:104%} }
+        .term-row { transition: background 0.08s; cursor: default; border-radius: 3px; }
+        .term-row:hover { background: rgba(0,255,80,0.04); }
+        .sect-btn { cursor: pointer; border: 1px solid rgba(0,255,80,0.3); background: transparent; color: rgba(0,255,80,0.6); font-family: 'JetBrains Mono'; font-size: 11px; padding: 5px 12px; transition: all 0.1s; }
+        .sect-btn:hover, .sect-btn.active { background: rgba(0,255,80,0.1); color: #00ff50; border-color: #00ff50; }
+        input.term-input { background: transparent; border: none; outline: none; color: #00ff50; font-family: 'JetBrains Mono'; font-size: 13px; flex: 1; caret-color: #00ff50; }
+        ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: rgba(0,255,80,0.2); }
+      `}</style>
+
+      {/* Scanline */}
+      <div className="scanline" style={{ position: "fixed", left: 0, right: 0, height: "2.5%", background: "linear-gradient(to bottom, transparent, rgba(0,255,80,0.025), transparent)", pointerEvents: "none", zIndex: 50 }} />
+      {/* CRT lines */}
+      <div style={{ position: "fixed", inset: 0, backgroundImage: "repeating-linear-gradient(0deg, rgba(0,0,0,0.12) 0px, rgba(0,0,0,0.12) 1px, transparent 1px, transparent 3px)", pointerEvents: "none", zIndex: 40 }} />
+      {/* Vignette */}
+      <div style={{ position: "fixed", inset: 0, background: "radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.7) 100%)", pointerEvents: "none", zIndex: 40 }} />
+      {/* Green glow */}
+      <div style={{ position: "fixed", inset: 0, background: "radial-gradient(ellipse at 50% 50%, rgba(0,80,20,0.15) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
+
+      <div style={{ position: "relative", zIndex: 10, padding: "0" }}>
+
+        {/* Window chrome */}
+        <div style={{ background: "#040f06", borderBottom: "1px solid rgba(0,255,80,0.15)", padding: "8px 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ display: "flex", gap: 6 }}>
+            {["#f87171", "#f59e0b", "#4ade80"].map((c, i) => <div key={i} style={{ width: 11, height: 11, borderRadius: "50%", background: c, opacity: 0.7 }} />)}
+          </div>
+          <div style={{ fontSize: 11, color: "rgba(0,255,80,0.5)", letterSpacing: 1 }}>passpro@terminal — {STUDENT.name.toLowerCase()}/wi-license</div>
+          <div style={{ fontSize: 11, color: "rgba(0,255,80,0.3)" }}>bash-5.2</div>
+        </div>
+
+        {/* Boot sequence */}
+        {!showContent && (
+          <div style={{ padding: "20px 24px" }}>
+            <pre style={{ fontSize: 12, lineHeight: 1.8, color: "rgba(0,255,80,0.8)", whiteSpace: "pre-wrap" }}>{typed}<span className="blink">█</span></pre>
+          </div>
+        )}
+
+        {/* Main terminal */}
+        {showContent && (
+          <div style={{ padding: "16px 20px 0" }}>
+
+            {/* Status bar */}
+            <div style={{ background: "rgba(0,255,80,0.07)", border: "1px solid rgba(0,255,80,0.15)", borderRadius: 6, padding: "8px 14px", marginBottom: 16, display: "flex", gap: 24, flexWrap: "wrap" }}>
+              {[
+                [`READY`, `${STUDENT.readiness}%`, "#00ff50"],
+                [`STREAK`, `${STUDENT.streak}D`, "#ffcc00"],
+                [`XP`, `${STUDENT.xp}`, "#c084fc"],
+                [`EXAM_IN`, `${STUDENT.daysLeft}D`, "#f59e0b"],
+                [`OCI`, `${STUDENT.hours}/20H`, STUDENT.hours >= 20 ? "#00ff50" : "#f87171"],
+                [`COACH`, `ONLINE`, "#00ff50"],
+              ].map(([k, v, c]) => (
+                <div key={k} style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                  <span style={{ fontSize: 10, color: "rgba(0,255,80,0.35)", letterSpacing: 1 }}>{k}=</span>
+                  <span style={{ fontSize: 11, color: c, fontWeight: 600 }}>{v}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Nav */}
+            <div style={{ display: "flex", gap: 6, marginBottom: 16, flexWrap: "wrap" }}>
+              <span style={{ fontSize: 11, color: "rgba(0,255,80,0.35)", alignSelf: "center", marginRight: 4 }}>// SECTIONS:</span>
+              {["dashboard", "study", "practice", "coach", "compliance"].map(s => (
+                <button key={s} className={`sect-btn${activeSection === s ? " active" : ""}`} onClick={() => setActiveSection(s)}>[{s}]</button>
+              ))}
+            </div>
+
+            {/* Dashboard */}
+            {activeSection === "dashboard" && (
+              <div>
+                <div style={{ color: "rgba(0,255,80,0.5)", fontSize: 11, marginBottom: 12 }}>// STUDENT DASHBOARD — {new Date().toLocaleString()}</div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
+                  {/* Curriculum */}
+                  <div style={{ border: "1px solid rgba(0,255,80,0.15)", borderRadius: 8, overflow: "hidden" }}>
+                    <div style={{ background: "rgba(0,255,80,0.06)", padding: "7px 12px", borderBottom: "1px solid rgba(0,255,80,0.1)", fontSize: 10, color: "#00ff50", letterSpacing: 2 }}>CURRICULUM_STATUS.log</div>
+                    <div style={{ padding: "12px" }}>
+                      <div style={{ fontSize: 10, color: "rgba(0,255,80,0.4)", marginBottom: 8 }}>unit                     progress    status</div>
+                      {[
+                        ["foundations            ", 100, "#00ff50", "COMPLETE"],
+                        ["policy_types           ", 100, "#00ff50", "COMPLETE"],
+                        ["provisions_riders      ", 62, "#ffcc00", "IN_PROGRESS"],
+                        ["annuities              ", 30, "#f87171", "WEAK"],
+                        ["tax_treatment          ", 0, "rgba(0,255,80,0.2)", "NOT_STARTED"],
+                        ["wisconsin_regulations  ", 35, "#c084fc", "IN_PROGRESS"],
+                      ].map(([name, pct, color, status], i) => (
+                        <div key={i} className="term-row" style={{ display: "flex", gap: 8, padding: "4px 4px", marginBottom: 3, alignItems: "center" }}>
+                          <span style={{ fontSize: 11, color: "rgba(0,255,80,0.6)", minWidth: 120 }}>{name}</span>
+                          <span style={{ fontSize: 11, color, letterSpacing: -1, minWidth: 100 }}>{progressBar(pct, 12)}</span>
+                          <span style={{ fontSize: 10, color, minWidth: 30 }}>{pct}%</span>
+                          <span style={{ fontSize: 9, color: pct === 100 ? "#00ff50" : pct >= 50 ? "#ffcc00" : "#f87171", letterSpacing: 0.5 }}>[{status}]</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Weak areas */}
+                  <div style={{ border: "1px solid rgba(248,113,113,0.25)", borderRadius: 8, overflow: "hidden" }}>
+                    <div style={{ background: "rgba(248,113,113,0.06)", padding: "7px 12px", borderBottom: "1px solid rgba(248,113,113,0.15)", fontSize: 10, color: "#f87171", letterSpacing: 2 }}>WEAK_AREAS.alert</div>
+                    <div style={{ padding: "14px 12px" }}>
+                      <div style={{ fontSize: 10, color: "#f87171", marginBottom: 12 }}>⚠ ATTENTION REQUIRED — 3 TOPICS BELOW THRESHOLD</div>
+                      {STUDENT.weak.map((t, i) => (
+                        <div key={i} className="term-row" style={{ padding: "8px 10px", border: "1px solid rgba(248,113,113,0.12)", borderRadius: 4, marginBottom: 8, display: "flex", justifyContent: "space-between" }}>
+                          <span style={{ fontSize: 12, color: "rgba(0,255,80,0.7)" }}>"{t}"</span>
+                          <span style={{ fontSize: 10, color: "#f87171" }}>BELOW_70%</span>
+                        </div>
+                      ))}
+                      <div style={{ marginTop: 10, display: "flex", gap: 8 }}>
+                        <div style={{ border: "1px solid rgba(0,255,80,0.3)", padding: "5px 10px", borderRadius: 4, fontSize: 11, color: "#00ff50", cursor: "pointer" }}>[DRILL_NOW]</div>
+                        <div style={{ border: "1px solid rgba(0,255,80,0.15)", padding: "5px 10px", borderRadius: 4, fontSize: 11, color: "rgba(0,255,80,0.45)", cursor: "pointer" }}>[ASK_COACH]</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* AI coach message */}
+                <div style={{ border: "1px solid rgba(0,255,80,0.2)", borderRadius: 8, overflow: "hidden", marginBottom: 14 }}>
+                  <div style={{ background: "rgba(0,255,80,0.05)", padding: "7px 12px", borderBottom: "1px solid rgba(0,255,80,0.1)", fontSize: 10, color: "#00ff50", letterSpacing: 2 }}>AI_COACH.message</div>
+                  <div style={{ padding: "14px 12px", display: "flex", gap: 14 }}>
+                    <div style={{ fontSize: 22, flexShrink: 0 }}>🎓</div>
+                    <div>
+                      <div style={{ fontSize: 12, color: "rgba(0,255,80,0.8)", lineHeight: 1.7, marginBottom: 10 }}>
+                        <span style={{ color: "#ffcc00" }}>PRIORITY_ALERT:</span> Annuities mastery = 45%. Below passing threshold.{"\n"}
+                        <span style={{ color: "#00ff50" }}>RECOMMENDATION:</span> Execute 15-minute targeted drill session.{"\n"}
+                        <span style={{ color: "#00ff50" }}>PROJECTION:</span> +12-18pts mastery improvement expected.
+                      </div>
+                      <div style={{ display: "flex", gap: 8 }}>
+                        {["[1] DRILL_ANNUITIES", "[2] OPEN_CHAT", "[3] FULL_EXAM_SIM"].map((c, i) => (
+                          <div key={i} style={{ border: "1px solid rgba(0,255,80,0.25)", padding: "5px 10px", borderRadius: 4, fontSize: 11, color: "#00ff50", cursor: "pointer" }}>{c}</div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* OCI compliance */}
+                <div style={{ border: "1px solid rgba(192,132,252,0.2)", borderRadius: 8, padding: "12px 14px", display: "flex", gap: 20, alignItems: "center" }}>
+                  <span style={{ fontSize: 10, color: "#c084fc", letterSpacing: 2 }}>OCI_COMPLIANCE</span>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: "flex", gap: 2, marginBottom: 3, fontSize: 13, letterSpacing: -2, color: "#c084fc" }}>
+                      {"█".repeat(Math.round(STUDENT.hours / 20 * 20))}{"░".repeat(20 - Math.round(STUDENT.hours / 20 * 20))}
+                    </div>
+                  </div>
+                  <span style={{ fontSize: 11, color: "rgba(192,132,252,0.7)" }}>{STUDENT.hours}/20.0h [{((STUDENT.hours / 20) * 100).toFixed(0)}%]</span>
+                  <span style={{ fontSize: 10, color: "#f87171" }}>EXAM_LOCKED</span>
+                </div>
+
+                {/* History */}
+                {cmdHistory.length > 0 && (
+                  <div style={{ marginTop: 14 }}>
+                    {cmdHistory.slice(-5).map((h, i) => (
+                      <div key={i}>
+                        <div style={{ fontSize: 12, color: "rgba(0,255,80,0.5)" }}><span style={{ color: "#00ff50" }}>$</span> {h.cmd}</div>
+                        {h.response && <div style={{ fontSize: 12, color: "rgba(0,255,80,0.7)", paddingLeft: 16 }}>{h.response}</div>}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Command input */}
+            <div style={{ position: "sticky", bottom: 0, background: "#010d03", borderTop: "1px solid rgba(0,255,80,0.12)", padding: "12px 0 16px", marginTop: 16 }}>
+              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <span style={{ color: "#00ff50", fontSize: 14 }}>$</span>
+                <input className="term-input" value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleCmd} placeholder="type a command... (try 'help')" style={{ fontSize: 13 }} autoFocus />
+                <span className="blink" style={{ color: "#00ff50", fontSize: 14 }}>█</span>
+              </div>
+              <div style={{ fontSize: 10, color: "rgba(0,255,80,0.2)", marginTop: 5, letterSpacing: 0.5 }}>HINT: dashboard | study | practice | coach | compliance | clear</div>
+            </div>
+
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(TerminalPro));
+</script>
+</body>
+</html>

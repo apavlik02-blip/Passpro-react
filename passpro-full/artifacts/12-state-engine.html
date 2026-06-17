@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PassPro — 12-state-engine</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>* { box-sizing: border-box; margin: 0; padding: 0; } body { background: #06060c; } #root { min-height: 100vh; }</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const states = {
+  WI: {
+    name: "Wisconsin", abbr: "WI", color: "#c084fc",
+    regulator: "Office of the Commissioner of Insurance (OCI)",
+    regulatorSite: "oci.wi.gov",
+    preLicenseHours: 20,
+    licenseRenewal: "2 years",
+    ceHours: 24,
+    ceEthics: 3,
+    freeLookLife: "10 days",
+    freeLookAnnuity: "30 days",
+    gracePeriod: "31 days",
+    incontestability: "2 years",
+    suicideExclusion: "2 years",
+    guarantyAssociation: "Wisconsin Life Insurance Guaranty Association (WLGA)",
+    guarantyDeathBenefit: "$300,000",
+    guarantyCashValue: "$100,000",
+    replacementForm: "Wisconsin Replacement Notice Form",
+    keyStatutes: ["Wis. Stat. Ch. 600–646 (Insurance Code)", "Wis. Stat. Ch. 628 (Unfair Trade Practices)", "Wis. Admin. Code Ins. 2 (Licensing)"],
+    uniqueRules: [
+      "Wisconsin requires a separate background check for all new applicants",
+      "Rebating is strictly prohibited — no gifts, dividends, or other inducements",
+      "Replacement transactions require the OCI Replacement Notice to be delivered",
+      "Wisconsin does NOT allow waiver of the free look period by the applicant",
+      "Surplus lines must be placed through licensed surplus lines agents",
+    ],
+    examInfo: { provider: "Pearson VUE", questions: 150, passingScore: "70%", timeLimit: "2.5 hours", fee: "$66" },
+  },
+  TX: {
+    name: "Texas", abbr: "TX", color: "#f59e0b",
+    regulator: "Texas Department of Insurance (TDI)",
+    regulatorSite: "tdi.texas.gov",
+    preLicenseHours: 40,
+    licenseRenewal: "2 years",
+    ceHours: 24,
+    ceEthics: 3,
+    freeLookLife: "10 days",
+    freeLookAnnuity: "30 days",
+    gracePeriod: "31 days",
+    incontestability: "2 years",
+    suicideExclusion: "2 years",
+    guarantyAssociation: "Texas Life, Accident, Health & Hospital Service Insurance Guaranty Association",
+    guarantyDeathBenefit: "$300,000",
+    guarantyCashValue: "$100,000",
+    replacementForm: "Texas Replacement Notice",
+    keyStatutes: ["Texas Insurance Code Ch. 1101 (Life Insurance)", "Texas Ins. Code Ch. 4005 (Unfair Practices)", "Texas Ins. Code Ch. 4054 (Life Agents)"],
+    uniqueRules: [
+      "Texas requires 40 hours of pre-licensing education (vs. 20 in WI)",
+      "Agents must complete an additional 8-hour course on annuities",
+      "Texas mandates a written disclosure for replacement transactions",
+      "Agents must provide a Buyer's Guide for annuity sales",
+      "Texas-specific suitability requirements for annuity sales to seniors",
+    ],
+    examInfo: { provider: "Pearson VUE", questions: 150, passingScore: "70%", timeLimit: "2.5 hours", fee: "$61" },
+  },
+  FL: {
+    name: "Florida", abbr: "FL", color: "#38bdf8",
+    regulator: "Florida Department of Financial Services (DFS)",
+    regulatorSite: "myfloridacfo.com",
+    preLicenseHours: 40,
+    licenseRenewal: "2 years",
+    ceHours: 24,
+    ceEthics: 5,
+    freeLookLife: "14 days",
+    freeLookAnnuity: "21 days",
+    gracePeriod: "31 days",
+    incontestability: "2 years",
+    suicideExclusion: "2 years",
+    guarantyAssociation: "Florida Life & Health Insurance Guaranty Association (FLHIGA)",
+    guarantyDeathBenefit: "$300,000",
+    guarantyCashValue: "$100,000",
+    replacementForm: "Florida Notice Regarding Replacement",
+    keyStatutes: ["Florida Statute Ch. 627 (Insurance Rates, Contracts)", "Florida Statute Ch. 626 (Insurance Field Representatives)", "Florida Statute Ch. 631 (Insurer Insolvency)"],
+    uniqueRules: [
+      "Florida requires 5 hours of ethics CE (vs. 3 in WI)",
+      "Free look period is 14 days for life insurance (vs. 10 in WI)",
+      "Florida has a 5-year lookback for background checks",
+      "Annuity suitability training required before selling annuities",
+      "Hurricane and catastrophe exposure disclosures required",
+    ],
+    examInfo: { provider: "Pearson VUE", questions: 150, passingScore: "70%", timeLimit: "2.5 hours", fee: "$54" },
+  },
+};
+
+const comparisonFields = [
+  { key: "preLicenseHours", label: "Pre-License Education" },
+  { key: "licenseRenewal", label: "License Renewal Cycle" },
+  { key: "ceHours", label: "CE Hours Required" },
+  { key: "ceEthics", label: "Ethics CE Hours" },
+  { key: "freeLookLife", label: "Free Look — Life" },
+  { key: "freeLookAnnuity", label: "Free Look — Annuity" },
+  { key: "gracePeriod", label: "Grace Period" },
+  { key: "incontestability", label: "Incontestability Period" },
+  { key: "suicideExclusion", label: "Suicide Exclusion" },
+  { key: "guarantyDeathBenefit", label: "Guaranty Death Benefit Max" },
+];
+
+const contentLayers = [
+  { label: "Universal Core Content", desc: "Applies to ALL states. Policy types, provisions, underwriting, taxes, annuities. Never changes.", color: "#00c896", icon: "🌐", pct: 75 },
+  { label: "State Regulation Layer", desc: "Injected per student's selected state. Licensing, CE, market conduct, policy requirements.", color: "#c084fc", icon: "🏛", pct: 20 },
+  { label: "State Callouts in Core Lessons", desc: "Inline notes within core lessons flagging where WI differs from the norm.", color: "#f59e0b", icon: "📌", pct: 5 },
+];
+
+function StateEngine() {
+  const [selectedState, setSelectedState] = useState("WI");
+  const [tab, setTab] = useState("profile");
+  const [compareA, setCompareA] = useState("WI");
+  const [compareB, setCompareB] = useState("TX");
+
+  const s = states[selectedState];
+  const sA = states[compareA];
+  const sB = states[compareB];
+
+  return (
+    <div style={{ fontFamily: "'DM Sans', system-ui, sans-serif", background: "#07090f", minHeight: "100vh", color: "#fff" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        .state-btn { cursor: pointer; border: none; transition: all 0.2s; }
+        .state-btn:hover { transform: translateY(-2px); }
+        .tab-btn { cursor: pointer; border: none; transition: all 0.2s; }
+        .rule-item { transition: background 0.15s; border-radius: 8px; }
+        .rule-item:hover { background: rgba(255,255,255,0.03); }
+        select { cursor: pointer; }
+      `}</style>
+
+      {/* Header */}
+      <div style={{ padding: "44px 40px 28px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: "#c084fc", letterSpacing: 3, textTransform: "uppercase", marginBottom: 12 }}>PassPro — State Customization Engine</div>
+        <h1 style={{ fontFamily: "'Syne'", fontSize: "clamp(28px,4vw,52px)", fontWeight: 800, letterSpacing: -2, marginBottom: 16 }}>
+          State Regulation<br /><span style={{ color: "#c084fc" }}>Layer System</span>
+        </h1>
+        <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 14, maxWidth: 520, marginBottom: 24, lineHeight: 1.7 }}>
+          Each student's curriculum auto-adapts to their selected state. Core content is universal. State-specific rules are injected as a separate regulation layer — swappable without touching the core curriculum.
+        </p>
+
+        {/* Content layer visual */}
+        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+          {contentLayers.map((layer, i) => (
+            <div key={i} style={{ background: `${layer.color}08`, border: `1px solid ${layer.color}20`, borderRadius: 10, padding: "12px 16px", display: "flex", alignItems: "center", gap: 12, flex: "1 1 240px" }}>
+              <span style={{ fontSize: 20 }}>{layer.icon}</span>
+              <div>
+                <div style={{ fontSize: 12, fontWeight: 600, color: layer.color, marginBottom: 2 }}>{layer.label} <span style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, opacity: 0.7 }}>({layer.pct}%)</span></div>
+                <div style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", lineHeight: 1.4 }}>{layer.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* State selector */}
+      <div style={{ padding: "20px 40px", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", gap: 10, alignItems: "center" }}>
+        <span style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", marginRight: 4 }}>Active state:</span>
+        {Object.values(states).map(st => (
+          <button key={st.abbr} className="state-btn" onClick={() => setSelectedState(st.abbr)} style={{ padding: "8px 18px", borderRadius: 20, fontSize: 13, fontFamily: "'DM Sans'", fontWeight: 500, background: selectedState === st.abbr ? st.color : "rgba(255,255,255,0.05)", color: selectedState === st.abbr ? "#000" : "rgba(255,255,255,0.5)", border: "none" }}>
+            {st.abbr} — {st.name}
+          </button>
+        ))}
+        <span style={{ marginLeft: "auto", fontFamily: "'JetBrains Mono'", fontSize: 11, color: "rgba(255,255,255,0.2)" }}>More states coming soon</span>
+      </div>
+
+      {/* Tabs */}
+      <div style={{ display: "flex", gap: 4, padding: "0 40px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        {[["profile", "State Profile"], ["exam", "Exam Info"], ["compare", "Compare States"], ["rules", "Unique Rules"]].map(([val, label]) => (
+          <button key={val} className="tab-btn" onClick={() => setTab(val)} style={{ padding: "12px 18px", fontSize: 13, fontFamily: "'DM Sans'", background: "transparent", color: tab === val ? s.color : "rgba(255,255,255,0.35)", borderBottom: tab === val ? `2px solid ${s.color}` : "2px solid transparent" }}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ padding: "32px 40px" }}>
+
+        {/* STATE PROFILE */}
+        {tab === "profile" && (
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 32 }}>
+              <div style={{ width: 60, height: 60, borderRadius: 16, background: `${s.color}15`, border: `2px solid ${s.color}30`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Syne'", fontSize: 18, fontWeight: 800, color: s.color }}>{s.abbr}</div>
+              <div>
+                <div style={{ fontFamily: "'Syne'", fontSize: 26, fontWeight: 800 }}>{s.name}</div>
+                <div style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", marginTop: 2 }}>Regulator: {s.regulator}</div>
+              </div>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 12, marginBottom: 28 }}>
+              {[
+                { label: "Pre-License Hours", value: `${s.preLicenseHours} hours` },
+                { label: "License Renewal", value: s.licenseRenewal },
+                { label: "CE Hours / Cycle", value: `${s.ceHours} hours` },
+                { label: "Ethics CE", value: `${s.ceEthics} hours` },
+                { label: "Free Look — Life", value: s.freeLookLife },
+                { label: "Free Look — Annuity", value: s.freeLookAnnuity },
+                { label: "Grace Period", value: s.gracePeriod },
+                { label: "Incontestability", value: s.incontestability },
+                { label: "Suicide Exclusion", value: s.suicideExclusion },
+                { label: "Guaranty Max — Death", value: s.guarantyDeathBenefit },
+              ].map((item, i) => (
+                <div key={i} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 10, padding: "14px 16px" }}>
+                  <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 6 }}>{item.label}</div>
+                  <div style={{ fontFamily: "'Syne'", fontSize: 16, fontWeight: 700, color: s.color }}>{item.value}</div>
+                </div>
+              ))}
+            </div>
+            <div>
+              <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "rgba(255,255,255,0.25)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 10 }}>Key Statutes</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                {s.keyStatutes.map((statute, i) => (
+                  <div key={i} style={{ padding: "10px 14px", background: `${s.color}08`, border: `1px solid ${s.color}15`, borderRadius: 8, fontSize: 13, color: "rgba(255,255,255,0.6)", fontFamily: "'JetBrains Mono'" }}>📜 {statute}</div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* EXAM INFO */}
+        {tab === "exam" && (
+          <div style={{ maxWidth: 600 }}>
+            <h2 style={{ fontFamily: "'Syne'", fontSize: 22, fontWeight: 800, letterSpacing: -0.5, marginBottom: 24 }}>{s.name} Licensing Exam</h2>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 28 }}>
+              {[
+                { label: "Testing Provider", value: s.examInfo.provider },
+                { label: "Number of Questions", value: s.examInfo.questions },
+                { label: "Passing Score", value: s.examInfo.passingScore },
+                { label: "Time Limit", value: s.examInfo.timeLimit },
+                { label: "Exam Fee", value: s.examInfo.fee },
+                { label: "Guaranty Association", value: s.guarantyAssociation.split("(")[0].trim() },
+              ].map((item, i) => (
+                <div key={i} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 10, padding: "16px 18px" }}>
+                  <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.25)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 8 }}>{item.label}</div>
+                  <div style={{ fontFamily: "'Syne'", fontSize: 18, fontWeight: 700, color: s.color }}>{item.value}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{ padding: "20px 24px", background: `${s.color}08`, border: `1px solid ${s.color}20`, borderLeft: `3px solid ${s.color}`, borderRadius: 10 }}>
+              <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: s.color, letterSpacing: 2, marginBottom: 8 }}>REPLACEMENT FORM</div>
+              <p style={{ fontSize: 14, color: "rgba(255,255,255,0.6)" }}>{s.replacementForm} — must be delivered to the applicant when a replacement transaction is involved.</p>
+            </div>
+          </div>
+        )}
+
+        {/* COMPARE STATES */}
+        {tab === "compare" && (
+          <div>
+            <div style={{ display: "flex", gap: 12, marginBottom: 24, alignItems: "center" }}>
+              <select value={compareA} onChange={e => setCompareA(e.target.value)} style={{ background: "#111118", border: "1px solid rgba(255,255,255,0.1)", color: "#fff", padding: "8px 14px", borderRadius: 8, fontSize: 13, fontFamily: "'DM Sans'" }}>
+                {Object.keys(states).map(k => <option key={k} value={k}>{states[k].name}</option>)}
+              </select>
+              <span style={{ color: "rgba(255,255,255,0.2)", fontSize: 18 }}>vs</span>
+              <select value={compareB} onChange={e => setCompareB(e.target.value)} style={{ background: "#111118", border: "1px solid rgba(255,255,255,0.1)", color: "#fff", padding: "8px 14px", borderRadius: 8, fontSize: 13, fontFamily: "'DM Sans'" }}>
+                {Object.keys(states).map(k => <option key={k} value={k}>{states[k].name}</option>)}
+              </select>
+            </div>
+            <div style={{ background: "#0d0d14", borderRadius: 12, overflow: "hidden", border: "1px solid rgba(255,255,255,0.06)" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", background: "rgba(255,255,255,0.03)" }}>
+                <div style={{ padding: "12px 16px", fontFamily: "'JetBrains Mono'", fontSize: 10, color: "rgba(255,255,255,0.3)", letterSpacing: 2, textTransform: "uppercase" }}>Requirement</div>
+                <div style={{ padding: "12px 16px", fontFamily: "'Syne'", fontWeight: 800, fontSize: 14, color: sA.color, borderLeft: "1px solid rgba(255,255,255,0.06)" }}>{sA.abbr} — {sA.name}</div>
+                <div style={{ padding: "12px 16px", fontFamily: "'Syne'", fontWeight: 800, fontSize: 14, color: sB.color, borderLeft: "1px solid rgba(255,255,255,0.06)" }}>{sB.abbr} — {sB.name}</div>
+              </div>
+              {comparisonFields.map((field, i) => {
+                const valA = sA[field.key];
+                const valB = sB[field.key];
+                const diff = String(valA) !== String(valB);
+                return (
+                  <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", borderTop: "1px solid rgba(255,255,255,0.04)", background: diff ? "rgba(245,158,11,0.03)" : "transparent" }}>
+                    <div style={{ padding: "12px 16px", fontSize: 13, color: "rgba(255,255,255,0.5)" }}>{field.label}</div>
+                    <div style={{ padding: "12px 16px", fontSize: 13, fontWeight: 500, color: sA.color, borderLeft: "1px solid rgba(255,255,255,0.04)" }}>{valA}{typeof valA === "number" && (field.key.includes("Hours") || field.key.includes("hours")) ? " hrs" : ""}</div>
+                    <div style={{ padding: "12px 16px", fontSize: 13, fontWeight: 500, color: diff ? sB.color : "rgba(255,255,255,0.5)", borderLeft: "1px solid rgba(255,255,255,0.04)", display: "flex", alignItems: "center", gap: 6 }}>
+                      {valB}{typeof valB === "number" && (field.key.includes("Hours") || field.key.includes("hours")) ? " hrs" : ""}
+                      {diff && <span style={{ background: "rgba(245,158,11,0.15)", color: "#f59e0b", fontSize: 9, padding: "1px 6px", borderRadius: 4, fontFamily: "'JetBrains Mono'" }}>DIFF</span>}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* UNIQUE RULES */}
+        {tab === "rules" && (
+          <div>
+            <h2 style={{ fontFamily: "'Syne'", fontSize: 20, fontWeight: 800, marginBottom: 6 }}>{s.name} — Unique Rules & Watch Points</h2>
+            <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", marginBottom: 24 }}>These are the rules that appear on the {s.name} exam that differ from other states or from general principles.</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {s.uniqueRules.map((rule, i) => (
+                <div key={i} className="rule-item" style={{ padding: "16px 18px", background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", display: "flex", gap: 14, alignItems: "flex-start" }}>
+                  <div style={{ width: 28, height: 28, borderRadius: 8, background: `${s.color}15`, border: `1px solid ${s.color}25`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Syne'", fontSize: 13, fontWeight: 800, color: s.color, flexShrink: 0 }}>{i + 1}</div>
+                  <p style={{ fontSize: 14, color: "rgba(255,255,255,0.65)", lineHeight: 1.6 }}>{rule}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(StateEngine));
+</script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PassPro — 10-build-roadmap</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>* { box-sizing: border-box; margin: 0; padding: 0; } body { background: #06060c; } #root { min-height: 100vh; }</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const phases = [
+  {
+    num: "1",
+    tag: "Months 1–4",
+    title: "Build & Launch",
+    color: "#00c896",
+    bg: "rgba(0,200,150,0.07)",
+    border: "rgba(0,200,150,0.2)",
+    milestones: [
+      { month: 1, text: "Hire dev team (1 senior + 1 mid fullstack)" },
+      { month: 1, text: "Content: 5 states, full curriculum written" },
+      { month: 2, text: "Core study modules + flashcard system" },
+      { month: 2, text: "Full-length practice exams (timed)" },
+      { month: 3, text: "Gap analysis engine (post-exam)" },
+      { month: 3, text: "AI Study Companion (text mode)" },
+      { month: 4, text: "Progress dashboard + streak + gamification" },
+      { month: 4, text: "Stripe payments + 3 pricing tiers" },
+      { month: 4, text: "Waitlist → 500 signups pre-launch" },
+      { month: 4, text: "Public launch → target 200 paying users" },
+    ],
+    target: "200 users · $8K MRR",
+  },
+  {
+    num: "2",
+    tag: "Months 5–8",
+    title: "Scale & Monetize",
+    color: "#a78bfa",
+    bg: "rgba(167,139,250,0.07)",
+    border: "rgba(167,139,250,0.2)",
+    milestones: [
+      { month: 5, text: "AI Roleplay Simulator launch (text mode)" },
+      { month: 5, text: "Agency B2B plan + admin dashboard" },
+      { month: 6, text: "Expand content to all 50 states" },
+      { month: 6, text: "SEO content engine (50+ articles)" },
+      { month: 7, text: "First 10 agency partnerships signed" },
+      { month: 7, text: "Affiliate program launch" },
+      { month: 8, text: "XP leaderboard + full badge system" },
+      { month: 8, text: "Paid ads ramp-up (Meta + Google)" },
+    ],
+    target: "500 users · $20K MRR",
+  },
+  {
+    num: "3",
+    tag: "Months 9–12",
+    title: "Dominate & Exit Prep",
+    color: "#f59e0b",
+    bg: "rgba(245,158,11,0.07)",
+    border: "rgba(245,158,11,0.2)",
+    milestones: [
+      { month: 9, text: "Voice mode for Roleplay Simulator" },
+      { month: 9, text: "Native iOS + Android apps" },
+      { month: 10, text: "P&C license content (new market)" },
+      { month: 10, text: "CPA / tax referral partnership program" },
+      { month: 11, text: "Raise prices (market validation)" },
+      { month: 11, text: "Explore seed funding or strategic partner" },
+      { month: 12, text: "1,500 users, $60K+ MRR" },
+      { month: 12, text: "Begin acquisition conversations" },
+    ],
+    target: "1,500 users · $60K+ MRR",
+  },
+];
+
+const budget = [
+  { category: "MVP Development", amount: 45000, pct: 30, color: "#00c896", note: "Offshore senior dev team, 4 months" },
+  { category: "Content Creation", amount: 25000, pct: 17, color: "#38bdf8", note: "Curriculum writing, video production, 5 states" },
+  { category: "Design & Branding", amount: 10000, pct: 7, color: "#a78bfa", note: "UI/UX design, logo, brand system" },
+  { category: "Legal & Compliance", amount: 5000, pct: 3, color: "#f87171", note: "LLC, ToS, privacy policy, data compliance" },
+  { category: "Paid Ads (Launch)", amount: 35000, pct: 23, color: "#f59e0b", note: "Google + Meta, tax season timing" },
+  { category: "Reserve / Buffer", amount: 30000, pct: 20, color: "#6cc24a", note: "Iteration, unexpected costs, operations" },
+];
+
+const exits = [
+  { arrs: "$500K ARR", multiple: "4–6x", range: "$2M–$3M", note: "Year 2 scenario" },
+  { arrs: "$1M ARR", multiple: "5–8x", range: "$5M–$8M", note: "Year 3 base case" },
+  { arrs: "$2M ARR", multiple: "6–10x", range: "$12M–$20M", note: "Year 4 bull case" },
+];
+
+function BuildRoadmap() {
+  const [tab, setTab] = useState("roadmap");
+  const [openPhase, setOpenPhase] = useState(0);
+
+  return (
+    <div style={{ fontFamily: "'DM Sans', system-ui, sans-serif", background: "#0a0a0f", minHeight: "100vh", color: "#fff" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        .tab-btn { cursor: pointer; border: none; transition: all 0.2s; }
+        .phase-toggle { cursor: pointer; transition: background 0.15s; }
+        .phase-toggle:hover { filter: brightness(1.1); }
+        .budget-bar { transition: width 1.2s cubic-bezier(0.16,1,0.3,1); }
+        .milestone { animation: fadeUp 0.3s ease both; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+      `}</style>
+
+      <div style={{ padding: "48px 40px 28px", borderBottom: "1px solid rgba(255,255,255,0.06)", background: "linear-gradient(135deg, #0a0a0f, #0a0f0a)" }}>
+        <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: "#00c896", letterSpacing: 3, textTransform: "uppercase", marginBottom: 12 }}>10 — Build Roadmap</div>
+        <h1 style={{ fontFamily: "'Syne'", fontSize: "clamp(28px,4vw,52px)", fontWeight: 800, letterSpacing: -2, marginBottom: 12 }}>
+          12-month<br /><span style={{ color: "#00c896" }}>execution plan</span>
+        </h1>
+        <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 14, maxWidth: 480 }}>Three phases, each with clear milestones and revenue targets. Full $150K budget deployed strategically across the year.</p>
+      </div>
+
+      <div style={{ display: "flex", gap: 4, padding: "0 40px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        {[["roadmap", "Roadmap"], ["budget", "$150K Budget"], ["exit", "Exit Potential"]].map(([val, label]) => (
+          <button key={val} className="tab-btn" onClick={() => setTab(val)} style={{ padding: "12px 18px", fontSize: 13, fontFamily: "'DM Sans'", background: "transparent", color: tab === val ? "#00c896" : "rgba(255,255,255,0.35)", borderBottom: tab === val ? "2px solid #00c896" : "2px solid transparent" }}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ padding: "36px 40px" }}>
+        {/* Roadmap */}
+        {tab === "roadmap" && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {phases.map((phase, pi) => (
+              <div key={pi} style={{ border: `1px solid ${openPhase === pi ? phase.color + "40" : "rgba(255,255,255,0.06)"}`, borderRadius: 14, overflow: "hidden" }}>
+                <div className="phase-toggle" onClick={() => setOpenPhase(openPhase === pi ? -1 : pi)} style={{ background: openPhase === pi ? phase.bg : "rgba(255,255,255,0.02)", padding: "20px 24px", display: "flex", alignItems: "center", gap: 16 }}>
+                  <div style={{ fontFamily: "'Syne'", fontSize: 36, fontWeight: 800, color: phase.color, opacity: 0.25, lineHeight: 1, minWidth: 36 }}>{phase.num}</div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: phase.color, letterSpacing: 2, textTransform: "uppercase", marginBottom: 4 }}>{phase.tag}</div>
+                    <div style={{ fontFamily: "'Syne'", fontSize: 18, fontWeight: 700 }}>{phase.title}</div>
+                  </div>
+                  <div style={{ background: `${phase.color}15`, border: `1px solid ${phase.color}30`, color: phase.color, padding: "6px 14px", borderRadius: 20, fontSize: 12, fontFamily: "'JetBrains Mono'", textAlign: "right" }}>{phase.target}</div>
+                  <div style={{ color: "rgba(255,255,255,0.2)", marginLeft: 8 }}>{openPhase === pi ? "▲" : "▼"}</div>
+                </div>
+                {openPhase === pi && (
+                  <div style={{ padding: "0 24px 24px", background: phase.bg }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 8, paddingTop: 16 }}>
+                      {phase.milestones.map((m, mi) => (
+                        <div key={mi} className="milestone" style={{ animationDelay: `${mi * 0.05}s`, display: "flex", alignItems: "flex-start", gap: 10, padding: "10px 14px", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: 8 }}>
+                          <div style={{ width: 22, height: 22, borderRadius: 6, background: `${phase.color}20`, border: `1px solid ${phase.color}30`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                            <span style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: phase.color }}>M{m.month}</span>
+                          </div>
+                          <span style={{ fontSize: 13, color: "rgba(255,255,255,0.65)", lineHeight: 1.4 }}>{m.text}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Budget */}
+        {tab === "budget" && (
+          <div>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 32 }}>
+              <div style={{ fontFamily: "'Syne'", fontSize: 48, fontWeight: 800, color: "#00c896" }}>$150K</div>
+              <div style={{ fontSize: 14, color: "rgba(255,255,255,0.4)" }}>Total seed budget · 12-month deployment</div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              {budget.map((item, i) => (
+                <div key={i}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <div style={{ width: 10, height: 10, borderRadius: "50%", background: item.color }} />
+                      <span style={{ fontSize: 15, fontWeight: 500 }}>{item.category}</span>
+                    </div>
+                    <div style={{ textAlign: "right" }}>
+                      <span style={{ fontFamily: "'Syne'", fontWeight: 700, fontSize: 18, color: item.color }}>${(item.amount / 1000).toFixed(0)}K</span>
+                      <span style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", marginLeft: 6 }}>{item.pct}%</span>
+                    </div>
+                  </div>
+                  <div style={{ height: 8, background: "rgba(255,255,255,0.06)", borderRadius: 4, overflow: "hidden" }}>
+                    <div className="budget-bar" style={{ height: "100%", width: `${item.pct}%`, background: item.color, borderRadius: 4 }} />
+                  </div>
+                  <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", marginTop: 5 }}>{item.note}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Exit */}
+        {tab === "exit" && (
+          <div>
+            <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 14, marginBottom: 32 }}>EdTech and InsurTech are both hot acquisition targets. Potential buyers include Kaplan, Intuit, Gusto, or ExamFX itself.</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 40 }}>
+              {exits.map((e, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 20, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, padding: "20px 24px" }}>
+                  <div style={{ minWidth: 120 }}>
+                    <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: "rgba(255,255,255,0.3)", marginBottom: 4 }}>ARR</div>
+                    <div style={{ fontFamily: "'Syne'", fontSize: 20, fontWeight: 700, color: "#00c896" }}>{e.arrs}</div>
+                  </div>
+                  <div style={{ fontSize: 20, color: "rgba(255,255,255,0.15)" }}>×</div>
+                  <div style={{ minWidth: 80 }}>
+                    <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: "rgba(255,255,255,0.3)", marginBottom: 4 }}>Multiple</div>
+                    <div style={{ fontFamily: "'Syne'", fontSize: 20, fontWeight: 700, color: "#a78bfa" }}>{e.multiple}</div>
+                  </div>
+                  <div style={{ fontSize: 20, color: "rgba(255,255,255,0.15)" }}>=</div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: "rgba(255,255,255,0.3)", marginBottom: 4 }}>Exit Value</div>
+                    <div style={{ fontFamily: "'Syne'", fontSize: 24, fontWeight: 800, color: "#f59e0b" }}>{e.range}</div>
+                  </div>
+                  <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", padding: "5px 12px", borderRadius: 20, fontSize: 12, color: "rgba(255,255,255,0.35)", fontFamily: "'JetBrains Mono'" }}>{e.note}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{ padding: "24px 28px", background: "rgba(0,200,150,0.06)", border: "1px solid rgba(0,200,150,0.2)", borderLeft: "3px solid #00c896", borderRadius: 10 }}>
+              <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "#00c896", letterSpacing: 2, marginBottom: 8 }}>ROI CALCULATION</div>
+              <p style={{ fontSize: 15, color: "rgba(255,255,255,0.7)", lineHeight: 1.7 }}>
+                $150K invested → $5M–$8M exit at base case = <strong style={{ color: "#00c896" }}>33–53x return</strong> in 3 years.<br />
+                Conservative case ($2M exit) still = <strong style={{ color: "#f59e0b" }}>13x return</strong> on initial capital.
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(BuildRoadmap));
+</script>
+</body>
+</html>

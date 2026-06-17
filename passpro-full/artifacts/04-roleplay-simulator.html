@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PassPro — 04-roleplay-simulator</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>* { box-sizing: border-box; margin: 0; padding: 0; } body { background: #06060c; } #root { min-height: 100vh; }</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const scenarios = [
+  { id: 1, name: "The Skeptic", tag: "Objection handling", diff: "MED", diffColor: "#f59e0b", emoji: "😤", desc: "Distrustful, direct, experienced with sales pitches. Doesn't believe in life insurance.", active: true },
+  { id: 2, name: "Young Professional", tag: "Needs-based selling", diff: "EASY", diffColor: "#00c896", emoji: "💼", desc: "Career-focused, healthy, thinks they're too young for insurance." },
+  { id: 3, name: "Grieving Spouse", tag: "Empathy + compliance", diff: "HARD", diffColor: "#f87171", emoji: "💔", desc: "Recently lost a partner, emotionally vulnerable, needs very careful handling." },
+  { id: 4, name: "Business Owner", tag: "Key-man insurance", diff: "HARD", diffColor: "#f87171", emoji: "🏢", desc: "Time-pressed, analytical, wants clear ROI before committing." },
+  { id: 5, name: "Confused Retiree", tag: "Plain language", diff: "EASY", diffColor: "#00c896", emoji: "👴", desc: "Friendly, slow to process, confuses life insurance with Medicare." },
+];
+
+const initialMessages = [
+  { role: "customer", text: "Look, I've heard the whole pitch before. Insurance companies just take your money and find ways not to pay. Why should I trust you?" },
+  { role: "agent", text: "That's a fair concern, Robert, and honestly one I respect. The industry hasn't always done a great job earning trust. Can I ask — if something happened to you tomorrow, what would that mean financially for your family?", score: "+8 pts — good needs discovery" },
+  { role: "customer", text: "My wife would probably have to sell the house. We've got a mortgage and she doesn't work full time." },
+  { role: "agent", text: "That's exactly the scenario a term life policy is designed for. Not to enrich anyone — just to make sure your wife keeps the house if the worst happens. A 20-year term policy might be less than your cable bill.", score: "+12 pts — strong framing" },
+];
+
+const scoreBreakdown = [
+  { label: "Product Accuracy", score: 88, color: "#00c896" },
+  { label: "Objection Handling", score: 75, color: "#f59e0b" },
+  { label: "Needs Discovery", score: 92, color: "#a78bfa" },
+  { label: "Compliance", score: 100, color: "#38bdf8" },
+  { label: "Empathy & Tone", score: 70, color: "#f87171" },
+];
+
+function RoleplaySimulator() {
+  const [selectedScenario, setSelectedScenario] = useState(1);
+  const [messages, setMessages] = useState(initialMessages);
+  const [input, setInput] = useState("");
+  const [showScore, setShowScore] = useState(false);
+  const [liveScore, setLiveScore] = useState(82);
+
+  const scenario = scenarios.find(s => s.id === selectedScenario);
+
+  const sendMessage = () => {
+    if (!input.trim()) return;
+    setMessages(prev => [...prev, { role: "agent", text: input, score: null }]);
+    setInput("");
+    setLiveScore(prev => Math.min(99, prev + Math.floor(Math.random() * 5)));
+    setTimeout(() => {
+      setMessages(prev => [...prev, { role: "customer", text: "Hmm, that's actually a fair point. But I'm still worried about the fine print — what exactly is covered?" }]);
+    }, 1000);
+  };
+
+  return (
+    <div style={{ fontFamily: "'DM Sans', system-ui, sans-serif", background: "#0a0a0f", minHeight: "100vh", color: "#fff" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        .scenario-card { transition: all 0.15s; cursor: pointer; border-radius: 10px; padding: 12px 14px; margin-bottom: 6px; }
+        .send-btn { transition: all 0.15s; cursor: pointer; border: none; }
+        .send-btn:hover { opacity: 0.85; transform: scale(0.98); }
+        .msg-bubble { animation: popIn 0.3s ease; }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.95) translateY(4px); } to { opacity: 1; transform: none; } }
+        .score-bar { transition: width 1s ease; }
+        input { outline: none; }
+      `}</style>
+
+      {/* Header */}
+      <div style={{ padding: "16px 24px", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", gap: 12 }}>
+        <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: "#a78bfa", letterSpacing: 3, textTransform: "uppercase" }}>04 — AI Roleplay Simulator</div>
+        <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.06)" }} />
+        <button onClick={() => setShowScore(!showScore)} style={{ background: "rgba(167,139,250,0.1)", border: "1px solid rgba(167,139,250,0.25)", color: "#a78bfa", padding: "6px 14px", borderRadius: 20, fontSize: 12, cursor: "pointer", fontFamily: "'DM Sans'" }}>
+          {showScore ? "← Back to Chat" : "📊 View Score Report"}
+        </button>
+      </div>
+
+      {!showScore ? (
+        <div style={{ display: "grid", gridTemplateColumns: "260px 1fr", height: "calc(100vh - 57px)" }}>
+          {/* Scenario Panel */}
+          <div style={{ background: "#0d0d16", borderRight: "1px solid rgba(255,255,255,0.05)", padding: "20px 14px", overflowY: "auto" }}>
+            <div style={{ fontFamily: "'Syne'", fontSize: 14, fontWeight: 700, marginBottom: 4 }}>Choose a Scenario</div>
+            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", marginBottom: 18 }}>Select difficulty & customer type</div>
+            {scenarios.map(s => (
+              <div key={s.id} className="scenario-card" onClick={() => { setSelectedScenario(s.id); setMessages(initialMessages); setLiveScore(82); }} style={{ background: selectedScenario === s.id ? "rgba(167,139,250,0.1)" : "rgba(255,255,255,0.02)", border: `1px solid ${selectedScenario === s.id ? "rgba(167,139,250,0.25)" : "rgba(255,255,255,0.05)"}` }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                  <span style={{ fontSize: 16 }}>{s.emoji}</span>
+                  <span style={{ fontSize: 13, fontWeight: 500, color: selectedScenario === s.id ? "#a78bfa" : "rgba(255,255,255,0.75)" }}>{s.name}</span>
+                  <span style={{ marginLeft: "auto", fontSize: 9, background: `${s.diffColor}20`, color: s.diffColor, padding: "2px 7px", borderRadius: 10, fontFamily: "'JetBrains Mono'" }}>{s.diff}</span>
+                </div>
+                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", fontFamily: "'JetBrains Mono'" }}>{s.tag}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Chat */}
+          <div style={{ display: "flex", flexDirection: "column", background: "#0a0a12" }}>
+            {/* Chat header */}
+            <div style={{ padding: "16px 20px", borderBottom: "1px solid rgba(255,255,255,0.05)", display: "flex", alignItems: "center", gap: 12 }}>
+              <div style={{ width: 40, height: 40, borderRadius: "50%", background: "linear-gradient(135deg, #a78bfa, #7c5cbf)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>{scenario?.emoji}</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 14, fontWeight: 600 }}>Robert, 52 — {scenario?.name}</div>
+                <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>{scenario?.desc?.substring(0, 60)}...</div>
+              </div>
+              <div style={{ background: "rgba(0,200,150,0.08)", border: "1px solid rgba(0,200,150,0.2)", borderRadius: 8, padding: "8px 16px", textAlign: "center" }}>
+                <div style={{ fontFamily: "'Syne'", fontSize: 22, fontWeight: 800, color: "#00c896", lineHeight: 1 }}>{liveScore}</div>
+                <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: 1 }}>LIVE SCORE</div>
+              </div>
+            </div>
+
+            {/* Messages */}
+            <div style={{ flex: 1, padding: "20px", overflowY: "auto", display: "flex", flexDirection: "column", gap: 14 }}>
+              {messages.map((msg, i) => (
+                <div key={i} style={{ display: "flex", gap: 10, justifyContent: msg.role === "agent" ? "flex-end" : "flex-start", maxWidth: "85%", alignSelf: msg.role === "agent" ? "flex-end" : "flex-start" }}>
+                  {msg.role === "customer" && (
+                    <div style={{ width: 28, height: 28, borderRadius: "50%", background: "linear-gradient(135deg, #a78bfa, #7c5cbf)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, flexShrink: 0 }}>{scenario?.emoji}</div>
+                  )}
+                  <div>
+                    <div className="msg-bubble" style={{ padding: "10px 14px", borderRadius: 12, fontSize: 13, lineHeight: 1.55, background: msg.role === "customer" ? "rgba(255,255,255,0.06)" : "rgba(0,200,150,0.1)", color: "rgba(255,255,255,0.82)", borderBottomLeftRadius: msg.role === "customer" ? 4 : 12, borderBottomRightRadius: msg.role === "agent" ? 4 : 12 }}>
+                      {msg.text}
+                    </div>
+                    {msg.score && (
+                      <div style={{ fontSize: 10, color: "#00c896", marginTop: 4, fontFamily: "'JetBrains Mono'", textAlign: "right" }}>✓ {msg.score}</div>
+                    )}
+                  </div>
+                  {msg.role === "agent" && (
+                    <div style={{ width: 28, height: 28, borderRadius: "50%", background: "linear-gradient(135deg, #00c896, #00a07a)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, flexShrink: 0 }}>🧑</div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Input */}
+            <div style={{ padding: "12px 20px", borderTop: "1px solid rgba(255,255,255,0.05)", display: "flex", gap: 10, alignItems: "center" }}>
+              <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && sendMessage()} placeholder={`Respond to ${scenario?.name}...`} style={{ flex: 1, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, padding: "10px 14px", fontSize: 13, color: "rgba(255,255,255,0.7)", fontFamily: "'DM Sans'" }} />
+              <button className="send-btn" onClick={sendMessage} style={{ background: "#00c896", color: "#000", padding: "10px 20px", borderRadius: 8, fontWeight: 600, fontSize: 13, fontFamily: "'DM Sans'" }}>Send</button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* Score Report */
+        <div style={{ padding: "40px", maxWidth: 700, margin: "0 auto" }}>
+          <div style={{ fontFamily: "'Syne'", fontSize: 32, fontWeight: 800, letterSpacing: -1, marginBottom: 8 }}>Session Score Report</div>
+          <div style={{ fontSize: 14, color: "rgba(255,255,255,0.4)", marginBottom: 40 }}>Scenario: {scenario?.name} · Duration: 4m 22s</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 32, marginBottom: 48, padding: 28, background: "rgba(0,200,150,0.06)", border: "1px solid rgba(0,200,150,0.15)", borderRadius: 14 }}>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontFamily: "'Syne'", fontSize: 64, fontWeight: 800, color: "#00c896", lineHeight: 1 }}>{liveScore}</div>
+              <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: "rgba(255,255,255,0.3)", letterSpacing: 2 }}>OVERALL</div>
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontFamily: "'Syne'", fontSize: 18, fontWeight: 700, marginBottom: 8 }}>Good performance!</div>
+              <div style={{ fontSize: 14, color: "rgba(255,255,255,0.5)", lineHeight: 1.6 }}>You handled objections well and discovered the client's core need. Work on empathy signals and softer tone when the client gets defensive.</div>
+            </div>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            {scoreBreakdown.map((item, i) => (
+              <div key={i}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+                  <span style={{ fontSize: 14, color: "rgba(255,255,255,0.7)" }}>{item.label}</span>
+                  <span style={{ fontFamily: "'Syne'", fontWeight: 700, color: item.color }}>{item.score}%</span>
+                </div>
+                <div style={{ height: 6, background: "rgba(255,255,255,0.06)", borderRadius: 4, overflow: "hidden" }}>
+                  <div className="score-bar" style={{ height: "100%", width: `${item.score}%`, background: item.color, borderRadius: 4 }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(RoleplaySimulator));
+</script>
+</body>
+</html>

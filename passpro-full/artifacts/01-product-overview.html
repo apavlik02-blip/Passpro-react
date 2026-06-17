@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PassPro — 01-product-overview</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>* { box-sizing: border-box; margin: 0; padding: 0; } body { background: #06060c; } #root { min-height: 100vh; }</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const users = [
+  { segment: "New Licensees", desc: "First-time exam takers, 18–35 years old", plan: "Pro — $79", volume: "High", color: "#00c896" },
+  { segment: "Career Switchers", desc: "Adults changing careers into insurance", plan: "Elite — $149", volume: "Medium", color: "#a78bfa" },
+  { segment: "Insurance Agencies", desc: "Onboarding 5–50 agents per year", plan: "Agency — $499/mo", volume: "High LTV", color: "#f59e0b" },
+  { segment: "Side-Hustlers", desc: "Adding insurance license to existing work", plan: "Basic — $39", volume: "Medium", color: "#38bdf8" },
+];
+
+const problems = [
+  { icon: "😴", color: "#00c896", bg: "rgba(0,200,150,0.1)", title: "Boring Content", desc: "Static walls of text replaced with bite-sized micro-lessons, real-world scenarios, and explainer videos." },
+  { icon: "📊", color: "#a78bfa", bg: "rgba(167,139,250,0.1)", title: "No Progress Visibility", desc: "Real-time readiness scores, topic-level mastery tracking, and predicted pass probability after every session." },
+  { icon: "🎮", color: "#f59e0b", bg: "rgba(245,158,11,0.1)", title: "Zero Engagement", desc: "Daily streaks, XP points, badges, leaderboards, and study challenges keep learners returning every day." },
+  { icon: "🎯", color: "#38bdf8", bg: "rgba(56,189,248,0.1)", title: "No Smart Remediation", desc: "After every practice exam, instant AI gap analysis identifies weak areas and builds a personalized catch-up plan." },
+];
+
+const plans = [
+  { name: "Basic", price: "$39", period: "one-time", features: ["One state", "One license type", "90-day access", "Practice exams"], color: "#38bdf8" },
+  { name: "Pro", price: "$79", period: "one-time", features: ["One state", "All license types", "6-month access", "AI Study Companion"], color: "#00c896", popular: true },
+  { name: "Elite", price: "$149", period: "one-time", features: ["All states", "All licenses", "1-year access", "AI Roleplay Simulator"], color: "#a78bfa" },
+  { name: "Agency", price: "$499", period: "/month", features: ["Unlimited seats", "Admin dashboard", "Progress reports", "Team analytics"], color: "#f59e0b" },
+];
+
+function ProductOverview() {
+  const [activeTab, setActiveTab] = useState("problems");
+
+  return (
+    <div style={{ fontFamily: "'DM Sans', system-ui, sans-serif", background: "#0a0a0f", minHeight: "100vh", color: "#fff", padding: "0" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        .fade-in { animation: fadeIn 0.6s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+        .card-hover { transition: transform 0.2s, box-shadow 0.2s; cursor: default; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .tab-btn { transition: all 0.2s; cursor: pointer; border: none; }
+        .plan-card { transition: transform 0.2s, border-color 0.2s; }
+        .plan-card:hover { transform: translateY(-6px); }
+      `}</style>
+
+      {/* Hero */}
+      <div style={{ background: "linear-gradient(135deg, #0a0a0f 0%, #0f1a14 50%, #0a0a0f 100%)", padding: "64px 40px 48px", borderBottom: "1px solid rgba(255,255,255,0.06)", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle, rgba(0,200,150,0.08) 0%, transparent 70%)", top: -100, right: -100, pointerEvents: "none" }} />
+        <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: "#00c896", letterSpacing: 3, textTransform: "uppercase", marginBottom: 16 }}>01 — Product Overview</div>
+        <h1 style={{ fontFamily: "'Syne'", fontSize: "clamp(40px,6vw,72px)", fontWeight: 800, letterSpacing: -2, lineHeight: 0.95, marginBottom: 20 }}>
+          Pass<span style={{ color: "#00c896" }}>Pro</span><br />Platform
+        </h1>
+        <p style={{ color: "rgba(255,255,255,0.5)", maxWidth: 520, fontSize: 16, fontWeight: 300, lineHeight: 1.7 }}>
+          The only insurance exam prep platform that gets you licensed <em>and</em> client-ready. Built for the modern learner — AI-powered, gamified, and devastatingly effective.
+        </p>
+        <div style={{ marginTop: 32, padding: "16px 24px", background: "rgba(0,200,150,0.08)", border: "1px solid rgba(0,200,150,0.2)", borderLeft: "3px solid #00c896", borderRadius: 8, maxWidth: 580 }}>
+          <p style={{ color: "#ccc", fontSize: 14 }}>💡 <strong style={{ color: "#fff" }}>Core thesis:</strong> Every other platform prepares you to pass the exam. PassPro prepares you to pass the exam AND succeed in the job.</p>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div style={{ display: "flex", gap: 4, padding: "24px 40px 0", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        {["problems", "users", "pricing"].map(tab => (
+          <button key={tab} className="tab-btn" onClick={() => setActiveTab(tab)} style={{ padding: "10px 20px", borderRadius: "8px 8px 0 0", fontSize: 13, fontWeight: 500, fontFamily: "'DM Sans'", background: activeTab === tab ? "rgba(0,200,150,0.12)" : "transparent", color: activeTab === tab ? "#00c896" : "rgba(255,255,255,0.4)", borderBottom: activeTab === tab ? "2px solid #00c896" : "2px solid transparent" }}>
+            {tab.charAt(0).toUpperCase() + tab.slice(1)}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ padding: "40px" }}>
+        {/* Problems */}
+        {activeTab === "problems" && (
+          <div className="fade-in">
+            <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 14, marginBottom: 28 }}>The 4 core problems PassPro solves that competitors have ignored.</p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
+              {problems.map((p, i) => (
+                <div key={i} className="card-hover" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 14, padding: 28 }}>
+                  <div style={{ width: 48, height: 48, borderRadius: 12, background: p.bg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, marginBottom: 16 }}>{p.icon}</div>
+                  <h3 style={{ fontFamily: "'Syne'", fontSize: 16, fontWeight: 700, marginBottom: 8, color: p.color }}>{p.title}</h3>
+                  <p style={{ fontSize: 13, color: "rgba(255,255,255,0.5)", lineHeight: 1.6 }}>{p.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Users */}
+        {activeTab === "users" && (
+          <div className="fade-in">
+            <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 14, marginBottom: 28 }}>Four distinct user segments with different needs and willingness to pay.</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {users.map((u, i) => (
+                <div key={i} className="card-hover" style={{ display: "flex", alignItems: "center", gap: 20, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, padding: "20px 24px" }}>
+                  <div style={{ width: 4, height: 48, borderRadius: 4, background: u.color, flexShrink: 0 }} />
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontFamily: "'Syne'", fontWeight: 700, fontSize: 15, marginBottom: 4 }}>{u.segment}</div>
+                    <div style={{ fontSize: 13, color: "rgba(255,255,255,0.4)" }}>{u.desc}</div>
+                  </div>
+                  <div style={{ textAlign: "right" }}>
+                    <div style={{ fontSize: 13, color: u.color, fontFamily: "'JetBrains Mono'", marginBottom: 4 }}>{u.plan}</div>
+                    <div style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", fontFamily: "'JetBrains Mono'" }}>Volume: {u.volume}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Pricing */}
+        {activeTab === "pricing" && (
+          <div className="fade-in">
+            <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 14, marginBottom: 28 }}>Four pricing tiers designed to capture every segment from individual learners to large agencies.</p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 16 }}>
+              {plans.map((plan, i) => (
+                <div key={i} className="plan-card" style={{ background: plan.popular ? `rgba(0,200,150,0.06)` : "rgba(255,255,255,0.03)", border: `1px solid ${plan.popular ? "rgba(0,200,150,0.3)" : "rgba(255,255,255,0.07)"}`, borderRadius: 14, padding: 24, position: "relative" }}>
+                  {plan.popular && <div style={{ position: "absolute", top: -10, right: 16, background: "#00c896", color: "#000", fontSize: 10, fontFamily: "'JetBrains Mono'", fontWeight: 600, padding: "3px 10px", borderRadius: 20, letterSpacing: 1 }}>MOST POPULAR</div>}
+                  <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: plan.color, letterSpacing: 2, textTransform: "uppercase", marginBottom: 8 }}>{plan.name}</div>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 20 }}>
+                    <span style={{ fontFamily: "'Syne'", fontSize: 36, fontWeight: 800, color: "#fff" }}>{plan.price}</span>
+                    <span style={{ fontSize: 13, color: "rgba(255,255,255,0.3)" }}>{plan.period}</span>
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    {plan.features.map((f, j) => (
+                      <div key={j} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "rgba(255,255,255,0.6)" }}>
+                        <span style={{ color: plan.color, fontSize: 11 }}>✓</span> {f}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(ProductOverview));
+</script>
+</body>
+</html>

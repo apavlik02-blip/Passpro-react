@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PassPro — Complete Platform</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #13110e; font-family: 'Instrument Sans', sans-serif; color: #f0e8d8; }
+#root { min-height: 100vh; }
+.orb { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; }
+.orb1 { width: 700px; height: 700px; background: radial-gradient(circle, rgba(180,130,50,0.1) 0%, transparent 65%); top: -200px; right: -150px; animation: drift1 10s ease-in-out infinite; }
+.orb2 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(0,150,100,0.08) 0%, transparent 65%); bottom: -150px; left: -120px; animation: drift2 14s ease-in-out infinite; }
+@keyframes drift1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(20px,-18px)} }
+@keyframes drift2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-18px,22px)} }
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+
+const T = {
+  bg: "#13110e", card: "rgba(240,232,216,0.04)", hover: "rgba(240,232,216,0.07)",
+  border: "rgba(240,232,216,0.08)", borderStrong: "rgba(240,232,216,0.14)",
+  text: "#f0e8d8", muted: "rgba(240,232,216,0.5)", dim: "rgba(240,232,216,0.28)",
+  green: "#7ecfa0", greenDim: "rgba(126,207,160,0.1)", greenBorder: "rgba(126,207,160,0.22)",
+  amber: "#c8a96e", amberDim: "rgba(200,169,110,0.1)", amberBorder: "rgba(200,169,110,0.2)",
+  red: "#e07b6a", redDim: "rgba(224,123,106,0.08)", redBorder: "rgba(224,123,106,0.18)",
+  purple: "#a78bfa", purpleDim: "rgba(167,139,250,0.08)", purpleBorder: "rgba(167,139,250,0.2)",
+  blue: "#60cfe8", blueDim: "rgba(96,207,232,0.08)", blueBorder: "rgba(96,207,232,0.2)",
+};
+
+const SECTIONS = [
+  {
+    id: "platform", label: "🌿 Live Platform", color: T.green,
+    desc: "The full PassPro product — student experience + admin back office",
+    artifacts: [
+      { num: "33", title: "Complete Integrated Platform", desc: "Student dashboard, study, practice, flashcards, AI coach, admin panel — everything in one", file: "33-passpro-complete-platform.jsx", featured: true },
+      { num: "26", title: "Unified Platform Demo", desc: "12 navigable screens in one app", file: "26-passpro-platform.jsx" },
+      { num: "32", title: "Organic Depth Dashboard", desc: "Full dashboard in the final design language with live AI Coach", file: "32-organic-depth-dashboard.jsx" },
+      { num: "03", title: "Student Dashboard", desc: "Core student experience mockup", file: "03-ui-dashboard.jsx" },
+      { num: "22", title: "Onboarding Flow", desc: "8-step student signup and personalization", file: "22-onboarding-flow.jsx" },
+    ]
+  },
+  {
+    id: "learning", label: "📚 Learning Features", color: T.blue,
+    desc: "Study modules, practice exams, flashcards and compliance tracking",
+    artifacts: [
+      { num: "27", title: "Exam Simulation", desc: "100-question Wisconsin PSI Series 22-01 exam with timer and gap analysis", file: "27-exam-simulation.jsx" },
+      { num: "25", title: "Flashcard System", desc: "SM-2 spaced repetition, 37 cards, 6 study modes", file: "25-flashcard-system.jsx" },
+      { num: "13", title: "Lesson Module", desc: "Interactive lesson with WI callouts, scenario quiz, XP", file: "13-lesson-module.jsx" },
+      { num: "16", title: "Test Your Knowledge", desc: "4 practice modes with live question engine", file: "16-test-your-knowledge.jsx" },
+      { num: "14", title: "Practice Level Architecture", desc: "Learning science behind the 4 practice modes", file: "14-practice-levels.jsx" },
+      { num: "15", title: "Compliance Tracker", desc: "20-hour OCI seat time tracker with certificate eligibility", file: "15-compliance-tracker.jsx" },
+    ]
+  },
+  {
+    id: "ai", label: "🤖 AI Features", color: T.purple,
+    desc: "Claude-powered study companion, roleplay simulator and question generator",
+    artifacts: [
+      { num: "23", title: "AI Study Companion", desc: "Live Claude API chat tutor — fully wired", file: "23-ai-study-companion.jsx", featured: true },
+      { num: "04", title: "AI Roleplay Simulator", desc: "6 customer personas, live chat, 5-dimension scoring", file: "04-roleplay-simulator.jsx" },
+      { num: "17", title: "AI Question Generator", desc: "Claude generates exam questions on demand", file: "17-ai-question-generator.jsx" },
+    ]
+  },
+  {
+    id: "curriculum", label: "🏛 Curriculum & Compliance", color: T.purple,
+    desc: "Wisconsin PSI content, gap modules, and exam alignment",
+    artifacts: [
+      { num: "21", title: "P2 Gap Modules", desc: "MECs, WI Security Fund, field underwriting, illustrations", file: "21-p2-gap-modules.jsx" },
+      { num: "19", title: "P1 Gap Modules", desc: "Beneficiary designations, federal regulation, life settlements", file: "19-p1-gap-modules.jsx" },
+      { num: "18", title: "PSI Alignment Map", desc: "Series 22-01 coverage — ~95% complete", file: "18-psi-alignment.jsx" },
+      { num: "11", title: "Curriculum Map", desc: "8 units, 30+ modules, 150+ lessons", file: "11-curriculum-map.jsx" },
+      { num: "12", title: "State Engine", desc: "WI profile, state comparison, unique rules", file: "12-state-engine.jsx" },
+    ]
+  },
+  {
+    id: "analytics", label: "📊 Analytics & Reporting", color: T.amber,
+    desc: "Student progress tracking, agency dashboards and financial model",
+    artifacts: [
+      { num: "29", title: "Analytics Dashboard", desc: "4-tab analytics: overview, topic mastery, sessions, predictions", file: "29-analytics-dashboard.jsx" },
+      { num: "24", title: "Agency Admin Dashboard", desc: "12 agents, compliance tracking, nudge emails", file: "24-agency-dashboard.jsx" },
+      { num: "30", title: "Financial Model", desc: "24-month P&L, bear/base/bull scenarios, exit analysis", file: "30-financial-model.jsx" },
+      { num: "28", title: "Platform Audit", desc: "Full build status — 73% complete, gap report, what's next", file: "28-platform-audit.jsx" },
+    ]
+  },
+  {
+    id: "design", label: "🎨 Design Concepts", color: T.red,
+    desc: "5 distinct visual directions for the PassPro brand",
+    artifacts: [
+      { num: "31", title: "Design Alternatives", desc: "All 5 designs with side-by-side comparison mode", file: "31-design-alternatives.jsx", featured: true },
+      { num: "D1", title: "Glassmorphic Aurora", desc: "Frosted glass panels over animated aurora gradients", file: "design-1-glassmorphic.jsx" },
+      { num: "D2", title: "Neo-Brutalist", desc: "Raw grids, thick borders, Bebas Neue, neon green", file: "design-2-brutalist.jsx" },
+      { num: "D3", title: "Bento Grid", desc: "Apple-inspired bento box layout", file: "design-3-bento.jsx" },
+      { num: "D4", title: "Organic Depth", desc: "Warm earthy tones, soft depth, Instrument Serif — SELECTED", file: "design-4-organic.jsx" },
+      { num: "D5", title: "Terminal Pro", desc: "Monochromatic CRT terminal aesthetic", file: "design-5-terminal.jsx" },
+    ]
+  },
+  {
+    id: "business", label: "💼 Business & Strategy", color: T.green,
+    desc: "Product specs, architecture, roadmap and developer handoff",
+    artifacts: [
+      { num: "01", title: "Product Overview", desc: "Problems, users, pricing, competitive analysis", file: "01-product-overview.jsx" },
+      { num: "02", title: "System Architecture", desc: "5-layer architecture diagram", file: "02-system-architecture.jsx" },
+      { num: "05", title: "Feature Specifications", desc: "Gap analysis engine, gamification, agency features", file: "05-feature-spec.jsx" },
+      { num: "06", title: "AI Systems Spec", desc: "Prompt architecture, persona library, scoring engine", file: "06-ai-systems-spec.jsx" },
+      { num: "07", title: "Database Schema", desc: "8 tables with RLS, full Prisma schema", file: "07-database-schema.jsx" },
+      { num: "08", title: "API Reference", desc: "30+ endpoints with request/response specs", file: "08-api-reference.jsx" },
+      { num: "09", title: "Tech Stack", desc: "Every technology with reasoning", file: "09-tech-stack.jsx" },
+      { num: "10", title: "Build Roadmap", desc: "3-phase 12-month plan, $150K budget breakdown", file: "10-build-roadmap.jsx" },
+      { num: "20", title: "Developer Handoff", desc: "12-section complete dev handoff package", file: "20-dev-handoff.jsx" },
+    ]
+  },
+  {
+    id: "guide", label: "📖 Build Guide", color: T.amber,
+    desc: "Step-by-step guide to building PassPro with AI tools",
+    artifacts: [
+      { num: "BG", title: "PassPro Build Guide", desc: "6 phases, 33 steps, beginner-friendly — full interactive webpage", file: "passpro-build-guide.html", external: true },
+      { num: "TS", title: "Technical Specification", desc: "Full technical spec document", file: "passpro-technical-spec.html", external: true },
+    ]
+  },
+];
+
+const STATS = [
+  { val: "33", label: "Artifacts" },
+  { val: "~95%", label: "PSI Coverage" },
+  { val: "$150K", label: "Seed Budget" },
+  { val: "16–167×", label: "ROI Range" },
+];
+
+function Hub() {
+  const [activeSection, setActiveSection] = useState("platform");
+  const [search, setSearch] = useState("");
+
+  const section = SECTIONS.find(s => s.id === activeSection);
+  const filtered = search
+    ? SECTIONS.flatMap(s => s.artifacts.map(a => ({...a, sectionColor: s.color}))).filter(a =>
+        a.title.toLowerCase().includes(search.toLowerCase()) ||
+        a.desc.toLowerCase().includes(search.toLowerCase()) ||
+        a.num.toLowerCase().includes(search.toLowerCase())
+      )
+    : null;
+
+  return (
+    <div style={{ position: "relative", zIndex: 1, minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+
+      {/* TOPBAR */}
+      <div style={{ background: "rgba(16,14,11,0.92)", backdropFilter: "blur(20px)", borderBottom: `1px solid ${T.border}`, padding: "0 40px", display: "flex", alignItems: "center", gap: 16, height: 56, position: "sticky", top: 0, zIndex: 100 }}>
+        <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: 22, letterSpacing: -0.5 }}>Pass<em style={{ color: T.green }}>Pro</em></div>
+        <div style={{ width: 1, height: 18, background: T.border }} />
+        <div style={{ fontSize: 12, color: T.muted }}>Complete Platform · All 33 Artifacts</div>
+        <div style={{ marginLeft: "auto", display: "flex", gap: 10, alignItems: "center" }}>
+          {/* Search */}
+          <div style={{ position: "relative" }}>
+            <input
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Search artifacts..."
+              style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 20, padding: "6px 16px 6px 32px", fontSize: 12, color: T.text, width: 200, outline: "none" }}
+            />
+            <span style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", fontSize: 13, color: T.dim }}>🔍</span>
+          </div>
+          <div style={{ background: T.greenDim, border: `1px solid ${T.greenBorder}`, borderRadius: 20, padding: "4px 14px", fontSize: 11, color: T.green, fontFamily: "'JetBrains Mono', monospace" }}>33 Artifacts ✓</div>
+        </div>
+      </div>
+
+      {/* HERO */}
+      <div style={{ padding: "56px 40px 48px", borderBottom: `1px solid ${T.border}`, background: "linear-gradient(135deg, rgba(126,207,160,0.05), rgba(167,139,250,0.04))", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", width: 400, height: 400, borderRadius: "50%", background: `radial-gradient(circle, ${T.greenDim}, transparent 70%)`, right: -80, top: -80, pointerEvents: "none" }} />
+        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: T.green, letterSpacing: 3, textTransform: "uppercase", marginBottom: 14 }}>Wisconsin Life Insurance Exam Prep SaaS</div>
+        <h1 style={{ fontFamily: "'Instrument Serif', serif", fontSize: "clamp(36px,5vw,64px)", letterSpacing: -2, lineHeight: 1, marginBottom: 16, color: T.text }}>
+          PassPro<br /><em style={{ color: T.green }}>Complete Platform</em>
+        </h1>
+        <p style={{ fontSize: 15, color: T.muted, maxWidth: 560, lineHeight: 1.75, marginBottom: 32 }}>
+          Every artifact built across this project — 33 interactive demos covering the full product, curriculum, AI features, analytics, business model, and design system. Click any card to open it.
+        </p>
+        <div style={{ display: "flex", gap: 28, flexWrap: "wrap" }}>
+          {STATS.map((s, i) => (
+            <div key={i}>
+              <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: 36, color: T.green, lineHeight: 1 }}>{s.val}</div>
+              <div style={{ fontSize: 12, color: T.dim, marginTop: 3 }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", flex: 1 }}>
+
+        {/* SIDEBAR */}
+        <div style={{ width: 220, flexShrink: 0, background: "rgba(14,12,9,0.8)", borderRight: `1px solid ${T.border}`, padding: "20px 0", position: "sticky", top: 56, height: "calc(100vh - 56px)", overflowY: "auto" }}>
+          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: T.dim, letterSpacing: 2, textTransform: "uppercase", padding: "0 18px 10px" }}>Sections</div>
+          {SECTIONS.map(s => (
+            <button key={s.id} onClick={() => { setActiveSection(s.id); setSearch(""); }} style={{ width: "100%", padding: "10px 18px", background: activeSection === s.id && !search ? `${s.color}12` : "none", border: "none", borderLeft: `2px solid ${activeSection === s.id && !search ? s.color : "transparent"}`, color: activeSection === s.id && !search ? s.color : T.muted, fontSize: 13, textAlign: "left", cursor: "pointer", display: "flex", alignItems: "center", gap: 8, transition: "all 0.15s", fontFamily: "'Instrument Sans', sans-serif" }}>
+              <span>{s.label}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* MAIN CONTENT */}
+        <div style={{ flex: 1, padding: "32px 40px", overflowY: "auto" }}>
+
+          {/* Search results */}
+          {search && (
+            <div>
+              <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: 24, marginBottom: 6 }}>
+                Search results for "<em style={{ color: T.green }}>{search}</em>"
+              </div>
+              <p style={{ fontSize: 13, color: T.muted, marginBottom: 24 }}>{filtered.length} artifact{filtered.length !== 1 ? "s" : ""} found</p>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px,1fr))", gap: 12 }}>
+                {filtered.map((a, i) => <ArtifactCard key={i} a={a} color={a.sectionColor} />)}
+              </div>
+            </div>
+          )}
+
+          {/* Section view */}
+          {!search && section && (
+            <div>
+              <div style={{ marginBottom: 28 }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: section.color, letterSpacing: 2, textTransform: "uppercase", marginBottom: 8 }}>Section</div>
+                <h2 style={{ fontFamily: "'Instrument Serif', serif", fontSize: "clamp(24px,3vw,40px)", letterSpacing: -1, marginBottom: 8 }}>{section.label}</h2>
+                <p style={{ fontSize: 14, color: T.muted, maxWidth: 560 }}>{section.desc}</p>
+              </div>
+
+              {/* Featured */}
+              {section.artifacts.filter(a => a.featured).length > 0 && (
+                <div style={{ marginBottom: 28 }}>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: T.dim, letterSpacing: 2, textTransform: "uppercase", marginBottom: 12 }}>Featured</div>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px,1fr))", gap: 14 }}>
+                    {section.artifacts.filter(a => a.featured).map((a, i) => (
+                      <ArtifactCard key={i} a={a} color={section.color} featured />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* All */}
+              {section.artifacts.filter(a => !a.featured).length > 0 && (
+                <div>
+                  <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: T.dim, letterSpacing: 2, textTransform: "uppercase", marginBottom: 12 }}>All Artifacts</div>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px,1fr))", gap: 12 }}>
+                    {section.artifacts.filter(a => !a.featured).map((a, i) => (
+                      <ArtifactCard key={i} a={a} color={section.color} />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ArtifactCard({ a, color, featured }) {
+  const [hovered, setHovered] = useState(false);
+  const href = a.external ? a.file : `artifacts/${a.file.replace('.jsx', '.html')}`;
+
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        display: "block", textDecoration: "none",
+        padding: featured ? "22px 20px" : "18px 18px",
+        background: hovered ? `${color}10` : T.card,
+        border: `1px solid ${hovered ? color + "35" : T.border}`,
+        borderRadius: featured ? 18 : 14,
+        transition: "all 0.2s",
+        transform: hovered ? "translateY(-4px)" : "none",
+        boxShadow: hovered ? "0 16px 40px rgba(0,0,0,0.3)" : "none",
+        cursor: "pointer",
+      }}
+    >
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
+        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color, background: `${color}15`, border: `1px solid ${color}25`, padding: "2px 8px", borderRadius: 20 }}>#{a.num}</div>
+        {a.featured && <div style={{ fontSize: 10, color, fontFamily: "'JetBrains Mono', monospace", background: `${color}15`, border: `1px solid ${color}25`, padding: "2px 8px", borderRadius: 20 }}>★ Featured</div>}
+        <span style={{ fontSize: 16, color: hovered ? color : T.dim, transition: "color 0.2s", marginLeft: "auto" }}>→</span>
+      </div>
+      <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: featured ? 20 : 17, color: T.text, marginBottom: 6, lineHeight: 1.2 }}>{a.title}</div>
+      <div style={{ fontSize: 12, color: T.muted, lineHeight: 1.55 }}>{a.desc}</div>
+    </a>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(Hub));
+</script>
+</body>
+</html>

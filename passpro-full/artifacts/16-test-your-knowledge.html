@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PassPro — 16-test-your-knowledge</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>* { box-sizing: border-box; margin: 0; padding: 0; } body { background: #06060c; } #root { min-height: 100vh; }</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const questionBank = [
+  { id: 1, unit: 2, topic: "Term Life Insurance", difficulty: "medium", question: "A life insurance policy where the face amount decreases over time but the premium remains level is called a:", options: ["Level term policy", "Decreasing term policy", "Modified whole life policy", "Adjustable life policy"], correct: 1, explanation: "A decreasing term policy has a face amount that reduces over time — commonly used for mortgage protection where the outstanding loan balance decreases. The premium stays level throughout.", wiNote: null },
+  { id: 2, unit: 1, topic: "Insurance Contract", difficulty: "medium", question: "Which element of a valid insurance contract refers to the premium paid by the insured and the promise to pay claims by the insurer?", options: ["Offer and acceptance", "Legal purpose", "Consideration", "Competent parties"], correct: 2, explanation: "Consideration is the exchange of value — the insured pays premiums, the insurer promises to pay claims. Both sides give something of value, which is a required element of any contract.", wiNote: null },
+  { id: 3, unit: 8, topic: "Wisconsin Regulations", difficulty: "hard", question: "Under Wisconsin law, the free look period for a life insurance policy is:", options: ["10 days", "14 days", "20 days", "30 days"], correct: 0, explanation: "Wisconsin law requires a 10-day free look period for life insurance policies. During this time, the policyowner can return the policy for a full refund. Annuities have a longer 30-day free look.", wiNote: "Wisconsin Statute — this is a tested WI-specific rule. Florida requires 14 days and some other states require 20 days, so knowing Wisconsin's 10-day rule specifically is critical." },
+  { id: 4, unit: 3, topic: "Nonforfeiture Options", difficulty: "medium", question: "When a whole life policyholder stops paying premiums, the nonforfeiture option that uses the cash value to purchase paid-up insurance for a reduced face amount is called:", options: ["Extended term", "Reduced paid-up insurance", "Cash surrender", "Automatic premium loan"], correct: 1, explanation: "Reduced paid-up insurance uses the available cash value as a single premium to purchase a smaller paid-up whole life policy. No more premiums are due, but the coverage continues at a reduced amount for the insured's lifetime.", wiNote: null },
+  { id: 5, unit: 4, topic: "Annuities", difficulty: "hard", question: "An annuity owner who dies during the accumulation phase. The death benefit paid to the beneficiary is typically:", options: ["The annuity's surrender value only", "Greater of account value or premiums paid", "Nothing — annuities have no death benefit", "A fixed amount set at purchase"], correct: 1, explanation: "During the accumulation phase, most annuity contracts pay the greater of the account value or total premiums paid as a death benefit to the named beneficiary. This protects against market loss at death.", wiNote: null },
+  { id: 6, unit: 8, topic: "Wisconsin Regulations", difficulty: "hard", question: "The Wisconsin Life Insurance Guaranty Association (WLGA) provides protection up to what maximum for death benefits?", options: ["$100,000", "$250,000", "$300,000", "$500,000"], correct: 2, explanation: "The WLGA protects policyowners if their insurer becomes insolvent. The maximum coverage for death benefits is $300,000 per life. Cash values are protected up to $100,000.", wiNote: "This is a Wisconsin-specific tested fact. The $300,000 limit is consistent with most state guaranty associations but must be known precisely for the WI exam." },
+  { id: 7, unit: 2, topic: "Whole Life Insurance", difficulty: "easy", question: "Which of the following is a characteristic of a participating life insurance policy?", options: ["Premiums never change", "Policy can pay dividends to the owner", "Coverage ends at age 65", "No cash value accumulation"], correct: 1, explanation: "Participating policies (issued by mutual companies) allow policyowners to receive dividends, which represent a return of excess premiums. Dividends are not guaranteed but are paid when the insurer performs better than expected.", wiNote: null },
+  { id: 8, unit: 5, topic: "Underwriting", difficulty: "medium", question: "An applicant who is accepted by the insurer but charged a higher premium due to above-average risk is classified as:", options: ["Preferred risk", "Standard risk", "Substandard risk", "Declined risk"], correct: 2, explanation: "Substandard (impaired) risks are accepted by the insurer but rated — meaning they pay higher premiums or have exclusions due to health conditions, dangerous occupations, or other factors that increase the likelihood of a claim.", wiNote: null },
+  { id: 9, unit: 3, topic: "Policy Provisions", difficulty: "medium", question: "An insured misses a premium payment. The life insurance policy continues in force for how long under the grace period provision?", options: ["10 days", "20 days", "31 days", "60 days"], correct: 2, explanation: "The grace period gives the policyholder 31 days (approximately one month) after the premium due date to make payment without the policy lapsing. If the insured dies during the grace period, the death benefit is paid minus the overdue premium.", wiNote: "Wisconsin's grace period is 31 days — consistent with the standard minimum required by most states." },
+  { id: 10, unit: 7, topic: "Taxes", difficulty: "hard", question: "A policyowner surrenders a whole life policy with a cash value of $50,000. They paid $30,000 in total premiums. What is the tax treatment of the gain?", options: ["The full $50,000 is tax-free", "The $20,000 gain is taxable as ordinary income", "The $20,000 gain is taxable as a capital gain", "The full $50,000 is taxable"], correct: 1, explanation: "When a policy is surrendered, the gain — the amount above the cost basis (total premiums paid) — is taxable as ordinary income. Here, $50,000 - $30,000 = $20,000 taxable gain. The original $30,000 basis is returned tax-free.", wiNote: null },
+];
+
+const modeConfig = {
+  knowledge_check: { label: "Knowledge Check", icon: "⚡", questionCount: 5, timed: false, feedback: "immediate", color: "#00c896", desc: "Quick 5-question check — instant feedback on each answer." },
+  module_quiz: { label: "Module Quiz", icon: "📋", questionCount: 8, timed: false, feedback: "after_each", color: "#38bdf8", desc: "8 questions across the module — explanation after each." },
+  unit_test: { label: "Unit Test", icon: "🎯", questionCount: 10, timed: false, feedback: "section_end", color: "#a78bfa", desc: "10 questions — feedback shown at the end." },
+  exam_sim: { label: "Exam Simulation", icon: "🏆", questionCount: 10, timed: true, timeLimit: 15 * 60, feedback: "end_only", color: "#f59e0b", desc: "Timed exam conditions — results at the end only." },
+};
+
+function TestYourKnowledge() {
+  const [mode, setMode] = useState(null);
+  const [phase, setPhase] = useState("select"); // select | active | results
+  const [questions, setQuestions] = useState([]);
+  const [currentQ, setCurrentQ] = useState(0);
+  const [answers, setAnswers] = useState({});
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(null);
+  const timerRef = useRef(null);
+
+  const startQuiz = (modeKey) => {
+    const cfg = modeConfig[modeKey];
+    const shuffled = [...questionBank].sort(() => Math.random() - 0.5).slice(0, cfg.questionCount);
+    setMode(modeKey);
+    setQuestions(shuffled);
+    setCurrentQ(0);
+    setAnswers({});
+    setShowFeedback(false);
+    setTimeLeft(cfg.timed ? cfg.timeLimit : null);
+    setPhase("active");
+  };
+
+  useEffect(() => {
+    if (timeLeft === null) return;
+    if (timeLeft <= 0) { setPhase("results"); return; }
+    timerRef.current = setTimeout(() => setTimeLeft(t => t - 1), 1000);
+    return () => clearTimeout(timerRef.current);
+  }, [timeLeft]);
+
+  const selectAnswer = (qi, optIdx) => {
+    if (answers[qi] !== undefined) return;
+    const newAnswers = { ...answers, [qi]: optIdx };
+    setAnswers(newAnswers);
+    const cfg = modeConfig[mode];
+    if (cfg.feedback === "immediate" || cfg.feedback === "after_each") setShowFeedback(true);
+  };
+
+  const next = () => {
+    setShowFeedback(false);
+    if (currentQ + 1 >= questions.length) {
+      setPhase("results");
+    } else {
+      setCurrentQ(prev => prev + 1);
+    }
+  };
+
+  const score = questions.filter((q, i) => answers[i] === q.correct).length;
+  const pct = questions.length > 0 ? Math.round((score / questions.length) * 100) : 0;
+  const passed = pct >= 70;
+
+  const fmtTime = (s) => `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
+
+  if (phase === "select") {
+    return (
+      <div style={{ fontFamily: "'DM Sans', system-ui, sans-serif", background: "#0a0a0f", minHeight: "100vh", color: "#fff" }}>
+        <style>{`@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap'); * { box-sizing: border-box; margin: 0; padding: 0; } .mode-card { cursor: pointer; transition: all 0.2s; } .mode-card:hover { transform: translateY(-5px); box-shadow: 0 20px 48px rgba(0,0,0,0.5); }`}</style>
+        <div style={{ padding: "48px 40px 32px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+          <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: "#a78bfa", letterSpacing: 3, textTransform: "uppercase", marginBottom: 12 }}>16 — Test Your Knowledge</div>
+          <h1 style={{ fontFamily: "'Syne'", fontSize: "clamp(32px,5vw,60px)", fontWeight: 800, letterSpacing: -2, marginBottom: 14 }}>Choose Your<br /><span style={{ color: "#a78bfa" }}>Practice Mode</span></h1>
+          <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 14, maxWidth: 480 }}>Each mode uses a different feedback model based on learning science. Pick the one that matches where you are in your study journey.</p>
+        </div>
+        <div style={{ padding: "40px", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+          {Object.entries(modeConfig).map(([key, cfg]) => (
+            <div key={key} className="mode-card" onClick={() => startQuiz(key)} style={{ background: "#111118", border: `1px solid ${cfg.color}25`, borderRadius: 16, padding: 28, position: "relative", overflow: "hidden" }}>
+              <div style={{ position: "absolute", top: 16, right: 20, fontFamily: "'Syne'", fontSize: 64, fontWeight: 800, opacity: 0.05, lineHeight: 1 }}>{cfg.icon}</div>
+              <div style={{ fontSize: 28, marginBottom: 14 }}>{cfg.icon}</div>
+              <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: cfg.color, letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>
+                {cfg.timed ? `Timed — ${cfg.timeLimit / 60} min` : "Untimed"}
+              </div>
+              <div style={{ fontFamily: "'Syne'", fontSize: 20, fontWeight: 800, marginBottom: 8 }}>{cfg.label}</div>
+              <div style={{ fontSize: 13, color: "rgba(255,255,255,0.45)", marginBottom: 20, lineHeight: 1.5 }}>{cfg.desc}</div>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12 }}>
+                <span style={{ background: `${cfg.color}15`, color: cfg.color, padding: "4px 10px", borderRadius: 8, fontFamily: "'JetBrains Mono'" }}>{cfg.questionCount} Questions</span>
+                <span style={{ color: "rgba(255,255,255,0.3)" }}>Feedback: {cfg.feedback.replace(/_/g, " ")}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  const cfg = modeConfig[mode];
+  const q = questions[currentQ];
+
+  if (phase === "active" && q) {
+    const answered = answers[currentQ] !== undefined;
+    const isCorrect = answered && answers[currentQ] === q.correct;
+    return (
+      <div style={{ fontFamily: "'DM Sans', system-ui, sans-serif", background: "#0a0a0f", minHeight: "100vh", color: "#fff", display: "flex", flexDirection: "column" }}>
+        <style>{`@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap'); * { box-sizing: border-box; margin: 0; padding: 0; } .opt { cursor: pointer; transition: all 0.15s; } .opt:hover { filter: brightness(1.1); }`}</style>
+
+        {/* Top bar */}
+        <div style={{ padding: "14px 28px", background: "#0d0d16", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", gap: 16 }}>
+          <div style={{ fontFamily: "'Syne'", fontSize: 15, fontWeight: 800 }}>Pass<span style={{ color: "#00c896" }}>Pro</span></div>
+          <div style={{ width: 1, height: 18, background: "rgba(255,255,255,0.1)" }} />
+          <div style={{ background: `${cfg.color}15`, border: `1px solid ${cfg.color}25`, color: cfg.color, padding: "3px 10px", borderRadius: 8, fontSize: 11, fontFamily: "'JetBrains Mono'" }}>{cfg.icon} {cfg.label}</div>
+          <div style={{ flex: 1 }}>
+            <div style={{ height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 4, overflow: "hidden" }}>
+              <div style={{ height: "100%", width: `${((currentQ + 1) / questions.length) * 100}%`, background: cfg.color, borderRadius: 4, transition: "width 0.3s ease" }} />
+            </div>
+          </div>
+          <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 12, color: "rgba(255,255,255,0.4)" }}>Q{currentQ + 1} / {questions.length}</div>
+          {cfg.timed && timeLeft !== null && (
+            <div style={{ background: timeLeft < 60 ? "rgba(248,113,113,0.15)" : "rgba(245,158,11,0.1)", color: timeLeft < 60 ? "#f87171" : "#f59e0b", border: `1px solid ${timeLeft < 60 ? "rgba(248,113,113,0.3)" : "rgba(245,158,11,0.2)"}`, padding: "4px 12px", borderRadius: 8, fontFamily: "'JetBrains Mono'", fontSize: 13, fontWeight: 600 }}>⏱ {fmtTime(timeLeft)}</div>
+          )}
+          <button onClick={() => { setPhase("select"); clearTimeout(timerRef.current); }} style={{ background: "none", border: "none", color: "rgba(255,255,255,0.25)", cursor: "pointer", fontSize: 13, fontFamily: "'DM Sans'" }}>✕ Exit</button>
+        </div>
+
+        {/* Question */}
+        <div style={{ flex: 1, padding: "48px", maxWidth: 760, margin: "0 auto", width: "100%" }}>
+          <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
+            <span style={{ background: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.4)", padding: "3px 10px", borderRadius: 8, fontSize: 11, fontFamily: "'JetBrains Mono'" }}>Unit {q.unit}</span>
+            <span style={{ background: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.4)", padding: "3px 10px", borderRadius: 8, fontSize: 11, fontFamily: "'JetBrains Mono'" }}>{q.topic}</span>
+            {q.wiNote && <span style={{ background: "rgba(192,132,252,0.1)", color: "#c084fc", padding: "3px 10px", borderRadius: 8, fontSize: 11, fontFamily: "'JetBrains Mono'" }}>🏛 WI Specific</span>}
+            <span style={{ background: q.difficulty === "hard" ? "rgba(248,113,113,0.1)" : q.difficulty === "medium" ? "rgba(245,158,11,0.1)" : "rgba(0,200,150,0.1)", color: q.difficulty === "hard" ? "#f87171" : q.difficulty === "medium" ? "#f59e0b" : "#00c896", padding: "3px 10px", borderRadius: 8, fontSize: 11, fontFamily: "'JetBrains Mono'" }}>{q.difficulty}</span>
+          </div>
+
+          <div style={{ fontFamily: "'Syne'", fontSize: "clamp(18px,2.5vw,24px)", fontWeight: 700, lineHeight: 1.4, marginBottom: 32 }}>{q.question}</div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {q.options.map((opt, oi) => {
+              const isSelected = answers[currentQ] === oi;
+              const isRight = oi === q.correct;
+              let bg = "rgba(255,255,255,0.03)";
+              let border = "rgba(255,255,255,0.08)";
+              let color = "rgba(255,255,255,0.75)";
+              if (showFeedback && isRight) { bg = "rgba(0,200,150,0.1)"; border = "#00c896"; color = "#fff"; }
+              if (showFeedback && isSelected && !isRight) { bg = "rgba(248,113,113,0.1)"; border = "#f87171"; color = "#fff"; }
+              if (!showFeedback && isSelected) { bg = `${cfg.color}12`; border = cfg.color; color = "#fff"; }
+              return (
+                <div key={oi} className="opt" onClick={() => selectAnswer(currentQ, oi)} style={{ padding: "16px 20px", background: bg, border: `1px solid ${border}`, borderRadius: 12, fontSize: 15, color, display: "flex", alignItems: "center", gap: 14, transition: "all 0.15s" }}>
+                  <div style={{ width: 28, height: 28, borderRadius: "50%", background: showFeedback ? (isRight ? "rgba(0,200,150,0.2)" : isSelected ? "rgba(248,113,113,0.2)" : "rgba(255,255,255,0.05)") : (isSelected ? `${cfg.color}25` : "rgba(255,255,255,0.05)"), display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: showFeedback ? (isRight ? "#00c896" : isSelected ? "#f87171" : "rgba(255,255,255,0.25)") : (isSelected ? cfg.color : "rgba(255,255,255,0.25)"), flexShrink: 0 }}>
+                    {showFeedback ? (isRight ? "✓" : isSelected ? "✗" : String.fromCharCode(65 + oi)) : String.fromCharCode(65 + oi)}
+                  </div>
+                  {opt}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Feedback block */}
+          {showFeedback && (cfg.feedback === "immediate" || cfg.feedback === "after_each") && (
+            <div style={{ marginTop: 20, padding: "18px 22px", background: isCorrect ? "rgba(0,200,150,0.08)" : "rgba(248,113,113,0.08)", border: `1px solid ${isCorrect ? "rgba(0,200,150,0.25)" : "rgba(248,113,113,0.25)"}`, borderLeft: `3px solid ${isCorrect ? "#00c896" : "#f87171"}`, borderRadius: 10 }}>
+              <div style={{ fontFamily: "'Syne'", fontSize: 15, fontWeight: 700, color: isCorrect ? "#00c896" : "#f87171", marginBottom: 8 }}>{isCorrect ? "✓ Correct!" : "✗ Not quite"}</div>
+              <p style={{ fontSize: 14, color: "rgba(255,255,255,0.65)", lineHeight: 1.7, marginBottom: q.wiNote ? 12 : 0 }}>{q.explanation}</p>
+              {q.wiNote && <div style={{ padding: "10px 14px", background: "rgba(192,132,252,0.08)", border: "1px solid rgba(192,132,252,0.2)", borderRadius: 8, fontSize: 13, color: "#c084fc", marginTop: 10 }}>🏛 <strong>Wisconsin Note:</strong> {q.wiNote}</div>}
+            </div>
+          )}
+
+          {/* Navigation */}
+          <div style={{ marginTop: 28, display: "flex", gap: 12 }}>
+            {(answered && (cfg.feedback === "immediate" || cfg.feedback === "after_each")) || (!showFeedback && cfg.feedback === "section_end" && answered) || cfg.feedback === "end_only" ? (
+              <button onClick={answered ? next : undefined} style={{ background: answered ? cfg.color : "rgba(255,255,255,0.05)", color: answered ? "#000" : "rgba(255,255,255,0.2)", border: "none", padding: "12px 32px", borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: answered ? "pointer" : "not-allowed", fontFamily: "'DM Sans'", transition: "all 0.15s" }}>
+                {currentQ + 1 >= questions.length ? "See Results →" : "Next Question →"}
+              </button>
+            ) : answered && !showFeedback ? (
+              <button onClick={next} style={{ background: cfg.color, color: "#000", border: "none", padding: "12px 32px", borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "'DM Sans'" }}>
+                {currentQ + 1 >= questions.length ? "See Results →" : "Next Question →"}
+              </button>
+            ) : null}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Results screen
+  return (
+    <div style={{ fontFamily: "'DM Sans', system-ui, sans-serif", background: "#0a0a0f", minHeight: "100vh", color: "#fff" }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap'); * { box-sizing: border-box; margin: 0; padding: 0; } .retry-btn { cursor: pointer; border: none; transition: all 0.15s; } .retry-btn:hover { opacity: 0.85; }`}</style>
+      <div style={{ padding: "48px 40px", maxWidth: 700, margin: "0 auto" }}>
+        <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: cfg.color, letterSpacing: 3, textTransform: "uppercase", marginBottom: 16 }}>{cfg.icon} {cfg.label} — Results</div>
+        <div style={{ display: "flex", alignItems: "center", gap: 28, marginBottom: 40, padding: 28, background: passed ? "rgba(0,200,150,0.07)" : "rgba(248,113,113,0.07)", border: `1px solid ${passed ? "rgba(0,200,150,0.2)" : "rgba(248,113,113,0.2)"}`, borderRadius: 16 }}>
+          <div style={{ textAlign: "center" }}>
+            <div style={{ fontFamily: "'Syne'", fontSize: 72, fontWeight: 800, color: passed ? "#00c896" : "#f87171", lineHeight: 1 }}>{pct}%</div>
+            <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: "rgba(255,255,255,0.3)", letterSpacing: 1, marginTop: 4 }}>{score}/{questions.length} correct</div>
+          </div>
+          <div>
+            <div style={{ fontFamily: "'Syne'", fontSize: 22, fontWeight: 800, marginBottom: 8 }}>{passed ? "Well done! 🎉" : "Keep studying — you've got this 💪"}</div>
+            <div style={{ fontSize: 14, color: "rgba(255,255,255,0.5)", lineHeight: 1.6 }}>{passed ? `You passed with ${pct}%. The passing score on the real WI exam is 70%.` : `You scored ${pct}%. Aim for 70%+ before exam day. Review the explanations below.`}</div>
+          </div>
+        </div>
+
+        {/* Per-question review */}
+        <div style={{ marginBottom: 28 }}>
+          <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "rgba(255,255,255,0.25)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 14 }}>Question Review</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {questions.map((q, i) => {
+              const correct = answers[i] === q.correct;
+              return (
+                <div key={i} style={{ background: "#111118", border: `1px solid ${correct ? "rgba(0,200,150,0.15)" : "rgba(248,113,113,0.15)"}`, borderRadius: 10, padding: "14px 18px" }}>
+                  <div style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 8 }}>
+                    <div style={{ width: 22, height: 22, borderRadius: "50%", background: correct ? "rgba(0,200,150,0.15)" : "rgba(248,113,113,0.15)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: correct ? "#00c896" : "#f87171", flexShrink: 0 }}>{correct ? "✓" : "✗"}</div>
+                    <div style={{ fontSize: 13, color: "rgba(255,255,255,0.75)", lineHeight: 1.5, flex: 1 }}>{q.question}</div>
+                  </div>
+                  {!correct && <div style={{ marginLeft: 32, fontSize: 12, color: "rgba(0,200,150,0.8)", lineHeight: 1.5 }}>✓ {q.options[q.correct]}</div>}
+                  <div style={{ marginLeft: 32, fontSize: 12, color: "rgba(255,255,255,0.35)", marginTop: 4, lineHeight: 1.5 }}>{q.explanation}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div style={{ display: "flex", gap: 12 }}>
+          <button className="retry-btn" onClick={() => startQuiz(mode)} style={{ background: cfg.color, color: "#000", padding: "12px 28px", borderRadius: 10, fontSize: 14, fontWeight: 600, fontFamily: "'DM Sans'" }}>Retake {cfg.label}</button>
+          <button className="retry-btn" onClick={() => setPhase("select")} style={{ background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.6)", padding: "12px 28px", borderRadius: 10, fontSize: 14, border: "1px solid rgba(255,255,255,0.1)", fontFamily: "'DM Sans'" }}>Choose Different Mode</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(TestYourKnowledge));
+</script>
+</body>
+</html>

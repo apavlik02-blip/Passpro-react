@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PassPro — design-1-glassmorphic</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>* { box-sizing: border-box; margin: 0; padding: 0; } body { background: #06060c; } #root { min-height: 100vh; }</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const STUDENT = { name: "Amanda", readiness: 74, streak: 7, xp: 2840, daysLeft: 41, hours: 8.5, weak: ["Annuities", "Tax Treatment", "WI Security Fund"] };
+
+function GlassmorphicAurora() {
+  const [activeNav, setActiveNav] = useState("Dashboard");
+
+  return (
+    <div style={{ fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif", background: "#060614", minHeight: "100vh", position: "relative", overflow: "hidden", color: "#fff" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        .glass { backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+        .glass-card { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); transition: all 0.3s cubic-bezier(0.16,1,0.3,1); cursor: default; }
+        .glass-card:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.2); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+        .orb { animation: orbFloat 8s ease-in-out infinite; }
+        .orb2 { animation: orbFloat 11s ease-in-out infinite reverse; }
+        .orb3 { animation: orbFloat 7s ease-in-out infinite; animation-delay: -3s; }
+        @keyframes orbFloat { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(20px,-15px) scale(1.08)} 66%{transform:translate(-10px,10px) scale(0.95)} }
+        .pulse { animation: glowPulse 3s ease-in-out infinite; }
+        @keyframes glowPulse { 0%,100%{opacity:0.7} 50%{opacity:1} }
+        .float { animation: cardFloat 5s ease-in-out infinite; }
+        @keyframes cardFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+        .shimmer { background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%); background-size: 200% 100%; animation: shimmer 3s ease-in-out infinite; }
+        @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+        .nav-item { cursor: pointer; border: none; background: none; transition: all 0.2s; width: 100%; text-align: left; border-radius: 12px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; font-size: 13px; }
+        .nav-item:hover { background: rgba(255,255,255,0.06); }
+        .ai-chip { cursor: pointer; transition: all 0.18s; }
+        .ai-chip:hover { transform: scale(1.04); background: rgba(0,220,150,0.18) !important; }
+        ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+      `}</style>
+
+      {/* ── AURORA BACKGROUND ── */}
+      <div style={{ position: "fixed", inset: 0, overflow: "hidden", zIndex: 0 }}>
+        <div className="orb" style={{ position: "absolute", width: 700, height: 700, borderRadius: "50%", background: "radial-gradient(circle, rgba(0,220,150,0.18) 0%, rgba(0,180,120,0.08) 40%, transparent 70%)", top: -200, left: -150 }} />
+        <div className="orb2" style={{ position: "absolute", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(100,80,255,0.15) 0%, rgba(80,60,220,0.06) 40%, transparent 70%)", bottom: -150, right: -100 }} />
+        <div className="orb3" style={{ position: "absolute", width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle, rgba(0,180,255,0.12) 0%, transparent 70%)", top: "35%", right: "20%" }} />
+        <div style={{ position: "absolute", width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle, rgba(255,100,180,0.08) 0%, transparent 70%)", bottom: "20%", left: "30%" }} />
+        {/* Grid overlay */}
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
+        {/* Noise */}
+        <div style={{ position: "absolute", inset: 0, opacity: 0.3, backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E\")" }} />
+      </div>
+
+      {/* ── LAYOUT ── */}
+      <div style={{ position: "relative", zIndex: 1, display: "grid", gridTemplateColumns: "220px 1fr", minHeight: "100vh" }}>
+
+        {/* SIDEBAR */}
+        <div className="glass" style={{ background: "rgba(6,6,20,0.7)", borderRight: "1px solid rgba(255,255,255,0.08)", padding: "24px 14px", display: "flex", flexDirection: "column", position: "sticky", top: 0, height: "100vh" }}>
+          {/* Logo */}
+          <div style={{ padding: "8px 14px 28px", display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{ width: 34, height: 34, borderRadius: "50%", background: "linear-gradient(135deg, #00dc96, #00b4d8)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, boxShadow: "0 0 20px rgba(0,220,150,0.4)" }}>🎓</div>
+            <div style={{ fontFamily: "'Plus Jakarta Sans'", fontWeight: 800, fontSize: 18, letterSpacing: -0.5 }}>Pass<span style={{ color: "#00dc96" }}>Pro</span></div>
+          </div>
+
+          {/* Student card */}
+          <div className="glass-card" style={{ borderRadius: 16, padding: "14px", marginBottom: 20 }}>
+            <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 10 }}>
+              <div style={{ width: 36, height: 36, borderRadius: "50%", background: "linear-gradient(135deg, #a78bfa, #7c5cbf)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 14 }}>A</div>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: 13 }}>{STUDENT.name}</div>
+                <div style={{ fontSize: 10, color: "#00dc96", fontWeight: 600 }}>Pro Plan · WI</div>
+              </div>
+            </div>
+            <div style={{ height: 4, background: "rgba(255,255,255,0.08)", borderRadius: 10, overflow: "hidden", marginBottom: 4 }}>
+              <div style={{ height: "100%", width: `${STUDENT.readiness}%`, background: "linear-gradient(90deg, #00dc96, #00b4d8)", borderRadius: 10 }} />
+            </div>
+            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.4)" }}>{STUDENT.readiness}% exam ready</div>
+          </div>
+
+          {[
+            { icon: "⬛", label: "Dashboard" },
+            { icon: "📚", label: "Study", section: "LEARN" },
+            { icon: "📝", label: "Practice" },
+            { icon: "🃏", label: "Flashcards" },
+            { icon: "🤖", label: "AI Coach", section: "AI" },
+            { icon: "🎭", label: "Roleplay" },
+            { icon: "📊", label: "Progress", section: "TRACK" },
+            { icon: "🏛", label: "Compliance" },
+          ].map((item, i) => (
+            <div key={i}>
+              {item.section && <div style={{ fontFamily: "'Plus Jakarta Sans'", fontSize: 9, color: "rgba(255,255,255,0.2)", letterSpacing: 2, padding: "10px 14px 4px", textTransform: "uppercase" }}>{item.section}</div>}
+              <button className="nav-item" onClick={() => setActiveNav(item.label)} style={{ color: activeNav === item.label ? "#00dc96" : "rgba(255,255,255,0.45)", background: activeNav === item.label ? "rgba(0,220,150,0.1)" : "transparent", fontFamily: "'Plus Jakarta Sans'", fontWeight: activeNav === item.label ? 600 : 400 }}>
+                <span style={{ fontSize: 16, width: 20 }}>{item.icon}</span> {item.label}
+              </button>
+            </div>
+          ))}
+
+          <div style={{ marginTop: "auto", padding: "12px 14px" }}>
+            <div className="shimmer" style={{ height: 2, background: "rgba(255,255,255,0.06)", borderRadius: 10, marginBottom: 12 }} />
+            <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+              <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#00dc96" }} className="pulse" />
+              <span style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>AI Coach Online</span>
+            </div>
+          </div>
+        </div>
+
+        {/* MAIN */}
+        <div style={{ padding: "32px 36px", overflowY: "auto" }}>
+
+          {/* Top bar */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 }}>
+            <div>
+              <div style={{ fontWeight: 800, fontSize: 28, letterSpacing: -1, marginBottom: 4 }}>
+                Good morning, <span style={{ background: "linear-gradient(135deg, #00dc96, #00b4d8)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{STUDENT.name}</span> 👋
+              </div>
+              <div style={{ fontSize: 14, color: "rgba(255,255,255,0.4)" }}>You're on a {STUDENT.streak}-day streak. {STUDENT.daysLeft} days until your WI exam.</div>
+            </div>
+            <div className="glass" style={{ background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.25)", borderRadius: 20, padding: "8px 16px", fontSize: 12, color: "#f59e0b", fontWeight: 600 }}>📅 Exam in {STUDENT.daysLeft} days</div>
+          </div>
+
+          {/* Stats row */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14, marginBottom: 24 }}>
+            {[
+              { label: "Readiness", value: `${STUDENT.readiness}%`, sub: "+3% this week", color: "#00dc96", icon: "🎯", delay: "0s" },
+              { label: "Study Streak", value: `${STUDENT.streak} 🔥`, sub: "days in a row", color: "#f59e0b", icon: "⚡", delay: "0.1s" },
+              { label: "XP Points", value: "2,840", sub: "Silver II", color: "#c084fc", icon: "✦", delay: "0.2s" },
+              { label: "Hours Logged", value: `${STUDENT.hours}h`, sub: "of 20h required", color: "#00b4d8", icon: "⏱", delay: "0.3s" },
+            ].map((s, i) => (
+              <div key={i} className="glass-card float" style={{ borderRadius: 20, padding: "20px", animationDelay: s.delay }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+                  <div style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", fontWeight: 600, letterSpacing: 1.5, textTransform: "uppercase" }}>{s.label}</div>
+                  <div style={{ width: 36, height: 36, borderRadius: "50%", background: `${s.color}15`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, border: `1px solid ${s.color}30` }}>{s.icon}</div>
+                </div>
+                <div style={{ fontWeight: 800, fontSize: 28, color: s.color, letterSpacing: -1, marginBottom: 4 }}>{s.value}</div>
+                <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>{s.sub}</div>
+                <div style={{ marginTop: 12, height: 2, background: "rgba(255,255,255,0.06)", borderRadius: 10 }}>
+                  <div style={{ height: "100%", width: `${60 + i * 10}%`, background: s.color, borderRadius: 10, opacity: 0.7 }} />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Main content row */}
+          <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 16, marginBottom: 16 }}>
+
+            {/* Progress */}
+            <div className="glass-card" style={{ borderRadius: 22, padding: "24px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+                <div style={{ fontWeight: 700, fontSize: 16 }}>Curriculum Progress</div>
+                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.35)" }}>WI Life License</div>
+              </div>
+              {[
+                { name: "Foundations", pct: 100, color: "#00dc96" },
+                { name: "Policy Types", pct: 100, color: "#00dc96" },
+                { name: "Provisions & Riders", pct: 62, color: "#f59e0b" },
+                { name: "Annuities", pct: 30, color: "#f87171" },
+                { name: "Tax Treatment", pct: 0, color: "#60a5fa" },
+                { name: "Wisconsin Regs", pct: 35, color: "#c084fc" },
+              ].map((m, i) => (
+                <div key={i} style={{ marginBottom: 14 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6, fontSize: 13 }}>
+                    <span style={{ color: "rgba(255,255,255,0.7)", fontWeight: 500 }}>{m.name}</span>
+                    <span style={{ color: m.pct === 100 ? "#00dc96" : "rgba(255,255,255,0.4)", fontWeight: 600, fontSize: 12 }}>{m.pct === 100 ? "✓ Complete" : `${m.pct}%`}</span>
+                  </div>
+                  <div style={{ height: 5, background: "rgba(255,255,255,0.06)", borderRadius: 10, overflow: "hidden" }}>
+                    <div style={{ height: "100%", width: `${m.pct}%`, background: m.color, borderRadius: 10, transition: "width 1s ease", boxShadow: `0 0 8px ${m.color}60` }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Right column */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+
+              {/* AI Coach */}
+              <div className="glass-card" style={{ borderRadius: 22, padding: "22px", background: "linear-gradient(135deg, rgba(0,220,150,0.08), rgba(0,180,216,0.05))", borderColor: "rgba(0,220,150,0.2)", flex: 1 }}>
+                <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 14 }}>
+                  <div style={{ width: 38, height: 38, borderRadius: "50%", background: "linear-gradient(135deg, #00dc96, #00b4d8)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, boxShadow: "0 0 16px rgba(0,220,150,0.5)" }}>🎓</div>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: 14 }}>AI Coach</div>
+                    <div style={{ fontSize: 11, color: "#00dc96", display: "flex", gap: 4, alignItems: "center" }}>
+                      <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#00dc96" }} className="pulse" />
+                      Online · Ready to help
+                    </div>
+                  </div>
+                </div>
+                <div style={{ fontSize: 13, color: "rgba(255,255,255,0.65)", lineHeight: 1.7, marginBottom: 16, padding: "12px 14px", background: "rgba(0,220,150,0.06)", borderRadius: 12, borderLeft: "2px solid rgba(0,220,150,0.4)" }}>
+                  <strong style={{ color: "#fff" }}>Annuities</strong> is your weak spot — 45% mastery. I've built a focused 15-min drill to get you to 70% before your exam.
+                </div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                  {["▶ Start Drill", "💬 Ask Coach", "📋 Study Plan"].map((c, i) => (
+                    <div key={i} className="ai-chip glass-card" style={{ padding: "7px 14px", borderRadius: 20, fontSize: 12, color: "#00dc96", borderColor: "rgba(0,220,150,0.3)", background: "rgba(0,220,150,0.08)" }}>{c}</div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Weak areas */}
+              <div className="glass-card" style={{ borderRadius: 18, padding: "18px" }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: "#f87171", letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 12 }}>⚡ Weak Areas</div>
+                {STUDENT.weak.map((t, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 0", borderBottom: i < STUDENT.weak.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none" }}>
+                    <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#f87171" }} />
+                    <span style={{ fontSize: 13, color: "rgba(255,255,255,0.65)" }}>{t}</span>
+                    <span style={{ marginLeft: "auto", fontSize: 11, color: "#00dc96", cursor: "pointer" }}>→ Drill</span>
+                  </div>
+                ))}
+              </div>
+
+            </div>
+          </div>
+
+          {/* OCI bar */}
+          <div className="glass-card" style={{ borderRadius: 18, padding: "18px 22px", background: "rgba(192,132,252,0.06)", borderColor: "rgba(192,132,252,0.2)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+              <div style={{ fontSize: 13, fontWeight: 600, color: "#c084fc" }}>🏛 OCI Compliance — 20h Required</div>
+              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)" }}>{STUDENT.hours}h logged · {(20 - STUDENT.hours).toFixed(1)}h remaining</div>
+            </div>
+            <div style={{ height: 6, background: "rgba(255,255,255,0.06)", borderRadius: 10, overflow: "hidden" }}>
+              <div style={{ height: "100%", width: `${(STUDENT.hours / 20) * 100}%`, background: "linear-gradient(90deg, #c084fc, #a78bfa)", borderRadius: 10, boxShadow: "0 0 12px rgba(192,132,252,0.5)" }} />
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(GlassmorphicAurora));
+</script>
+</body>
+</html>

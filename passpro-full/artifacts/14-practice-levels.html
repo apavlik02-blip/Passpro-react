@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PassPro — 14-practice-levels</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>* { box-sizing: border-box; margin: 0; padding: 0; } body { background: #06060c; } #root { min-height: 100vh; }</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const practiceSchema = [
+  {
+    level: 1,
+    name: "Knowledge Check",
+    icon: "⚡",
+    color: "#00c896",
+    questionCount: 5,
+    timePerQ: null,
+    timed: false,
+    feedback: "immediate",
+    feedbackDetail: "Answer revealed instantly with full explanation — maximizes learning at early stage.",
+    description: "Quick 5-question pulse after each lesson. Confirms you absorbed the core concept before moving on.",
+    scienceBacking: "Retrieval Practice Effect",
+    scienceNote: "Testing yourself immediately after reading beats re-reading by 50% for long-term retention.",
+    unlockReq: "Complete the lesson",
+    xp: 25,
+    badge: null,
+    passMark: null,
+    retakes: "Unlimited",
+    adaptiveNote: "Questions are pulled from the lesson just completed. Wrong answers are flagged for spaced review.",
+  },
+  {
+    level: 2,
+    name: "Module Quiz",
+    icon: "📋",
+    color: "#38bdf8",
+    questionCount: 15,
+    timePerQ: null,
+    timed: false,
+    feedback: "after_each",
+    feedbackDetail: "Feedback after each question with explanation. Incorrect answers auto-added to your weak-area deck.",
+    description: "15 questions covering the full module. Tests whether concepts are sticking across related topics.",
+    scienceBacking: "Interleaved Practice",
+    scienceNote: "Mixing questions from across the module (not topic by topic) improves retention and transfer of knowledge.",
+    unlockReq: "Complete all lessons in module",
+    xp: 75,
+    badge: "Module Complete",
+    passMark: "70%",
+    retakes: "3 attempts, then review required",
+    adaptiveNote: "Questions are weighted toward your flagged weak areas from Knowledge Checks.",
+  },
+  {
+    level: 3,
+    name: "Unit Test",
+    icon: "🎯",
+    color: "#a78bfa",
+    questionCount: 30,
+    timePerQ: null,
+    timed: false,
+    feedback: "section_end",
+    feedbackDetail: "Feedback shown at the end of each 10-question section. Mirrors spaced recall — you must hold answers in memory briefly.",
+    description: "30-question test spanning the full unit. This is where real mastery is confirmed before advancing.",
+    scienceBacking: "Spaced Retrieval",
+    scienceNote: "Delaying feedback slightly (end of section) forces memory consolidation — more effective than instant reveal for long-term retention.",
+    unlockReq: "Pass all Module Quizzes in unit (70%+)",
+    xp: 150,
+    badge: "Unit Mastered",
+    passMark: "75%",
+    retakes: "2 attempts, then targeted review assigned",
+    adaptiveNote: "AI gap analysis runs after this test and updates your personalized study plan.",
+  },
+  {
+    level: 4,
+    name: "Exam Simulation",
+    icon: "🏆",
+    color: "#f59e0b",
+    questionCount: 150,
+    timePerQ: null,
+    timed: true,
+    timeTotal: "2.5 hours",
+    feedback: "end_only",
+    feedbackDetail: "Full results and breakdown at the end only — exactly like the real Wisconsin PSI exam experience.",
+    description: "Full 150-question simulated Wisconsin Life Insurance exam. Timed, proctored conditions. This is as close to the real thing as possible.",
+    scienceBacking: "Exam Simulation Effect",
+    scienceNote: "Students who practice under exam-like conditions score 23% higher on average than those who only study in low-stakes environments.",
+    unlockReq: "Pass all Unit Tests (75%+) + complete 20 seat-time hours",
+    xp: 500,
+    badge: "Exam Ready",
+    passMark: "80% recommended (real exam is 70%)",
+    retakes: "Unlimited after 24-hour cooldown",
+    adaptiveNote: "Score report highlights every weak topic with direct links to review content.",
+  },
+];
+
+const feedbackModels = [
+  {
+    model: "Immediate Feedback",
+    usedIn: "Knowledge Check",
+    color: "#00c896",
+    science: "Best for initial learning. Students need to know right/wrong immediately when first encountering material to correct misconceptions before they solidify.",
+    research: "Hattie & Timperley (2007): Immediate corrective feedback has the highest effect size of any instructional intervention for beginners.",
+  },
+  {
+    model: "Per-Question with Explanation",
+    usedIn: "Module Quiz",
+    color: "#38bdf8",
+    science: "Best for consolidation. Answer + full explanation builds a mental model, not just a correct/incorrect signal. The explanation is the learning.",
+    research: "Butler et al. (2008): Elaborative feedback (explanation included) produced 2x better retention than simple right/wrong feedback.",
+  },
+  {
+    model: "Delayed (Section End)",
+    usedIn: "Unit Test",
+    color: "#a78bfa",
+    science: "Best for strengthening memory. Waiting briefly before revealing answers forces the brain to hold the question in working memory — strengthening the retrieval pathway.",
+    research: "Kornell & Bjork (2008): Delayed feedback produces stronger long-term retention than immediate feedback for intermediate learners.",
+  },
+  {
+    model: "End-Only (Exam Mode)",
+    usedIn: "Exam Simulation",
+    color: "#f59e0b",
+    science: "Best for exam readiness. No feedback during the test trains the student to manage uncertainty and focus — the exact skill required on test day.",
+    research: "Smith & Kimball (2010): End-only feedback in simulation conditions produced highest transfer to real exam performance.",
+  },
+];
+
+const spacedRepetition = [
+  { day: 1, label: "Learn it", desc: "First exposure in lesson", color: "#00c896" },
+  { day: 1, label: "Check it", desc: "Knowledge Check immediately after", color: "#00c896" },
+  { day: 2, label: "Review it", desc: "Spaced review card surfaces next session", color: "#38bdf8" },
+  { day: 5, label: "Test it", desc: "Module Quiz reinforces across related topics", color: "#a78bfa" },
+  { day: 14, label: "Challenge it", desc: "Unit Test under slight pressure", color: "#f59e0b" },
+  { day: 30, label: "Simulate it", desc: "Full exam conditions — full retrieval", color: "#f59e0b" },
+];
+
+function PracticeLevels() {
+  const [selected, setSelected] = useState(0);
+  const [tab, setTab] = useState("levels");
+
+  const level = practiceSchema[selected];
+
+  return (
+    <div style={{ fontFamily: "'DM Sans', system-ui, sans-serif", background: "#0a0a0f", minHeight: "100vh", color: "#fff" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        .level-card { cursor: pointer; transition: all 0.2s; }
+        .level-card:hover { transform: translateY(-3px); }
+        .tab-btn { cursor: pointer; border: none; transition: all 0.2s; }
+        .science-card { transition: transform 0.15s; }
+        .science-card:hover { transform: translateY(-2px); }
+      `}</style>
+
+      {/* Header */}
+      <div style={{ padding: "44px 40px 28px", borderBottom: "1px solid rgba(255,255,255,0.06)", background: "linear-gradient(135deg, #0a0a0f, #0a0f14)" }}>
+        <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: "#f59e0b", letterSpacing: 3, textTransform: "uppercase", marginBottom: 12 }}>14 — Practice Level Architecture</div>
+        <h1 style={{ fontFamily: "'Syne'", fontSize: "clamp(28px,4vw,52px)", fontWeight: 800, letterSpacing: -2, marginBottom: 14 }}>
+          Practice Levels &<br /><span style={{ color: "#f59e0b" }}>Learning Science</span>
+        </h1>
+        <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 14, maxWidth: 560, lineHeight: 1.7 }}>
+          Four distinct practice levels, each designed around peer-reviewed learning science. Feedback timing, question spacing, and test conditions are all deliberate — not arbitrary.
+        </p>
+      </div>
+
+      {/* Tabs */}
+      <div style={{ display: "flex", gap: 4, padding: "0 40px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        {[["levels", "Practice Levels"], ["feedback", "Feedback Science"], ["spaced", "Spaced Repetition"]].map(([val, label]) => (
+          <button key={val} className="tab-btn" onClick={() => setTab(val)} style={{ padding: "13px 20px", fontSize: 13, fontFamily: "'DM Sans'", background: "transparent", color: tab === val ? "#f59e0b" : "rgba(255,255,255,0.35)", borderBottom: tab === val ? "2px solid #f59e0b" : "2px solid transparent" }}>{label}</button>
+        ))}
+      </div>
+
+      {tab === "levels" && (
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 380px", minHeight: "calc(100vh - 190px)" }}>
+          {/* Level cards */}
+          <div style={{ padding: "32px 40px", display: "flex", flexDirection: "column", gap: 12 }}>
+            {practiceSchema.map((lvl, i) => (
+              <div key={i} className="level-card" onClick={() => setSelected(i)} style={{ background: selected === i ? `${lvl.color}0d` : "rgba(255,255,255,0.02)", border: `1px solid ${selected === i ? lvl.color + "35" : "rgba(255,255,255,0.07)"}`, borderRadius: 14, padding: "20px 24px", display: "flex", alignItems: "center", gap: 16 }}>
+                <div style={{ width: 52, height: 52, borderRadius: 14, background: `${lvl.color}15`, border: `1.5px solid ${lvl.color}30`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, flexShrink: 0 }}>{lvl.icon}</div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                    <span style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "rgba(255,255,255,0.3)", letterSpacing: 1 }}>LEVEL {i + 1}</span>
+                    <span style={{ fontFamily: "'Syne'", fontSize: 16, fontWeight: 700, color: selected === i ? lvl.color : "#fff" }}>{lvl.name}</span>
+                    {lvl.timed && <span style={{ background: "rgba(245,158,11,0.15)", color: "#f59e0b", padding: "2px 8px", borderRadius: 8, fontSize: 10, fontFamily: "'JetBrains Mono'" }}>TIMED</span>}
+                  </div>
+                  <div style={{ fontSize: 13, color: "rgba(255,255,255,0.45)", lineHeight: 1.5 }}>{lvl.description}</div>
+                </div>
+                <div style={{ textAlign: "right", flexShrink: 0 }}>
+                  <div style={{ fontFamily: "'Syne'", fontWeight: 800, fontSize: 20, color: lvl.color }}>{lvl.questionCount}Q</div>
+                  <div style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", fontFamily: "'JetBrains Mono'" }}>+{lvl.xp} XP</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Detail panel */}
+          <div style={{ borderLeft: "1px solid rgba(255,255,255,0.06)", padding: "32px 28px", background: "#0d0d16", overflowY: "auto" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
+              <span style={{ fontSize: 28 }}>{level.icon}</span>
+              <div>
+                <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: level.color, letterSpacing: 2, textTransform: "uppercase" }}>Level {selected + 1}</div>
+                <div style={{ fontFamily: "'Syne'", fontSize: 20, fontWeight: 800 }}>{level.name}</div>
+              </div>
+            </div>
+
+            {[
+              ["Questions", `${level.questionCount} questions`],
+              ["Timing", level.timed ? `Timed — ${level.timeTotal}` : "Untimed — learn at your pace"],
+              ["Feedback", level.feedback.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())],
+              ["Pass Mark", level.passMark || "No pass mark — learning mode"],
+              ["XP Reward", `+${level.xp} XP on completion`],
+              ["Retakes", level.retakes],
+              ["Unlock Requirement", level.unlockReq],
+            ].map(([label, value], i) => (
+              <div key={i} style={{ padding: "11px 0", borderBottom: "1px solid rgba(255,255,255,0.05)", display: "flex", justifyContent: "space-between", gap: 12 }}>
+                <span style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "rgba(255,255,255,0.25)", letterSpacing: 1, textTransform: "uppercase", flexShrink: 0, paddingTop: 2 }}>{label}</span>
+                <span style={{ fontSize: 13, color: "rgba(255,255,255,0.65)", textAlign: "right" }}>{value}</span>
+              </div>
+            ))}
+
+            <div style={{ marginTop: 20, padding: "14px 16px", background: `${level.color}08`, border: `1px solid ${level.color}20`, borderRadius: 10 }}>
+              <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: level.color, letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>📡 Feedback Method</div>
+              <p style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.6 }}>{level.feedbackDetail}</p>
+            </div>
+
+            <div style={{ marginTop: 12, padding: "14px 16px", background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 10 }}>
+              <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>🧠 Science: {level.scienceBacking}</div>
+              <p style={{ fontSize: 13, color: "rgba(255,255,255,0.45)", lineHeight: 1.6 }}>{level.scienceNote}</p>
+            </div>
+
+            <div style={{ marginTop: 12, padding: "14px 16px", background: "rgba(167,139,250,0.06)", border: "1px solid rgba(167,139,250,0.15)", borderRadius: 10 }}>
+              <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "#a78bfa", letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>🤖 AI Adaptive Note</div>
+              <p style={{ fontSize: 13, color: "rgba(255,255,255,0.45)", lineHeight: 1.6 }}>{level.adaptiveNote}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {tab === "feedback" && (
+        <div style={{ padding: "36px 40px" }}>
+          <p style={{ fontSize: 14, color: "rgba(255,255,255,0.4)", marginBottom: 28, maxWidth: 600, lineHeight: 1.7 }}>Feedback timing is one of the most researched variables in learning science. PassPro uses a different feedback model at each level — matched to where the student is in their learning journey.</p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 16 }}>
+            {feedbackModels.map((fm, i) => (
+              <div key={i} className="science-card" style={{ background: "#111118", border: `1px solid ${fm.color}20`, borderRadius: 14, padding: 24 }}>
+                <div style={{ display: "flex", justify: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
+                  <div>
+                    <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: fm.color, letterSpacing: 2, textTransform: "uppercase", marginBottom: 4 }}>Used in: {fm.usedIn}</div>
+                    <div style={{ fontFamily: "'Syne'", fontSize: 16, fontWeight: 700 }}>{fm.model}</div>
+                  </div>
+                </div>
+                <p style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.65, marginBottom: 14 }}>{fm.science}</p>
+                <div style={{ padding: "10px 12px", background: `${fm.color}08`, border: `1px solid ${fm.color}15`, borderRadius: 8, fontSize: 11, color: "rgba(255,255,255,0.4)", fontStyle: "italic", lineHeight: 1.5 }}>
+                  📚 {fm.research}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {tab === "spaced" && (
+        <div style={{ padding: "36px 40px" }}>
+          <p style={{ fontSize: 14, color: "rgba(255,255,255,0.4)", marginBottom: 32, maxWidth: 600, lineHeight: 1.7 }}>
+            PassPro's practice system is built on spaced retrieval — the single most effective learning strategy in cognitive science. A concept first seen in a lesson is revisited at scientifically-timed intervals until it becomes long-term memory.
+          </p>
+          <div style={{ position: "relative", paddingLeft: 32 }}>
+            <div style={{ position: "absolute", left: 15, top: 0, bottom: 0, width: 2, background: "rgba(255,255,255,0.06)" }} />
+            {spacedRepetition.map((step, i) => (
+              <div key={i} style={{ position: "relative", marginBottom: 24 }}>
+                <div style={{ position: "absolute", left: -26, top: 10, width: 14, height: 14, borderRadius: "50%", background: step.color, boxShadow: `0 0 12px ${step.color}60` }} />
+                <div style={{ background: "#111118", border: `1px solid ${step.color}20`, borderRadius: 12, padding: "18px 20px", display: "flex", alignItems: "center", gap: 16 }}>
+                  <div style={{ minWidth: 52, textAlign: "center" }}>
+                    <div style={{ fontFamily: "'Syne'", fontSize: 20, fontWeight: 800, color: step.color, lineHeight: 1 }}>D{step.day}</div>
+                    <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.2)", letterSpacing: 1 }}>day</div>
+                  </div>
+                  <div style={{ width: 1, height: 36, background: "rgba(255,255,255,0.06)" }} />
+                  <div>
+                    <div style={{ fontFamily: "'Syne'", fontSize: 15, fontWeight: 700, color: step.color, marginBottom: 3 }}>{step.label}</div>
+                    <div style={{ fontSize: 13, color: "rgba(255,255,255,0.45)" }}>{step.desc}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 12, padding: "20px 24px", background: "rgba(0,200,150,0.06)", border: "1px solid rgba(0,200,150,0.15)", borderLeft: "3px solid #00c896", borderRadius: 10 }}>
+            <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "#00c896", letterSpacing: 2, marginBottom: 8 }}>RESEARCH BASIS</div>
+            <p style={{ fontSize: 14, color: "rgba(255,255,255,0.55)", lineHeight: 1.7 }}>
+              Cepeda et al. (2008) found the optimal review gap ranges from 3 days (when tested at 1 week) to 27 days (when tested at 1 year). PassPro's intervals are calibrated to the 30-day exam prep window — with AI dynamically adjusting intervals based on each student's personal performance data.
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(PracticeLevels));
+</script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PassPro — design-4-organic</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>* { box-sizing: border-box; margin: 0; padding: 0; } body { background: #06060c; } #root { min-height: 100vh; }</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const STUDENT = { name: "Amanda", readiness: 74, streak: 7, xp: 2840, daysLeft: 41, hours: 8.5, weak: ["Annuities", "Tax Treatment", "WI Security Fund"] };
+
+function OrganicDepth() {
+  const [activeNav, setActiveNav] = useState("Home");
+
+  return (
+    <div style={{ fontFamily: "'Instrument Sans', system-ui, sans-serif", background: "#18160f", minHeight: "100vh", color: "#f5ede0", position: "relative", overflow: "hidden" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        .org-card { transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s; cursor: default; }
+        .org-card:hover { transform: translateY(-5px); box-shadow: 0 24px 60px rgba(0,0,0,0.5) !important; }
+        .orb { animation: orbDrift 10s ease-in-out infinite; }
+        .orb2 { animation: orbDrift 14s ease-in-out infinite reverse; animation-delay: -5s; }
+        .orb3 { animation: orbDrift 8s ease-in-out infinite; animation-delay: -3s; }
+        @keyframes orbDrift { 0%,100%{transform:translate(0,0)} 33%{transform:translate(15px,-12px)} 66%{transform:translate(-8px,8px)} }
+        .nav-btn { cursor: pointer; border: none; background: none; transition: all 0.2s; font-family: 'Instrument Sans'; border-radius: 20px; padding: 7px 16px; font-size: 13px; }
+        .nav-btn:hover { background: rgba(255,255,255,0.06) !important; }
+        .action-btn { cursor: pointer; border: none; transition: all 0.2s; font-family: 'Instrument Sans'; }
+        .action-btn:hover { opacity: 0.85; transform: scale(0.98); }
+        .drill-chip { cursor: pointer; transition: all 0.18s; }
+        .drill-chip:hover { transform: scale(1.04); background: rgba(95,206,154,0.18) !important; }
+        ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: rgba(255,230,180,0.15); border-radius: 4px; }
+      `}</style>
+
+      {/* ── AMBIENT ORBS ── */}
+      <div style={{ position: "fixed", inset: 0, overflow: "hidden", zIndex: 0, pointerEvents: "none" }}>
+        <div className="orb" style={{ position: "absolute", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(180,130,50,0.18) 0%, rgba(160,110,30,0.06) 40%, transparent 70%)", top: -150, right: -80 }} />
+        <div className="orb2" style={{ position: "absolute", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle, rgba(0,150,110,0.14) 0%, transparent 70%)", bottom: -100, left: -80 }} />
+        <div className="orb3" style={{ position: "absolute", width: 350, height: 350, borderRadius: "50%", background: "radial-gradient(circle, rgba(120,80,160,0.1) 0%, transparent 70%)", top: "40%", left: "40%" }} />
+        {/* Subtle grain */}
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E\")", opacity: 1 }} />
+      </div>
+
+      {/* ── LAYOUT ── */}
+      <div style={{ position: "relative", zIndex: 1, display: "grid", gridTemplateColumns: "200px 1fr", minHeight: "100vh" }}>
+
+        {/* SIDEBAR */}
+        <div style={{ background: "rgba(15,13,8,0.8)", borderRight: "1px solid rgba(255,230,180,0.08)", padding: "24px 14px", backdropFilter: "blur(20px)", display: "flex", flexDirection: "column", position: "sticky", top: 0, height: "100vh" }}>
+          {/* Logo */}
+          <div style={{ padding: "8px 12px 28px", display: "flex", gap: 8, alignItems: "center" }}>
+            <div style={{ fontFamily: "'Instrument Serif'", fontSize: 22, color: "#f5ede0", letterSpacing: -0.5 }}>Pass<em style={{ color: "#c8a96e" }}>Pro</em></div>
+          </div>
+
+          {/* Student card */}
+          <div className="org-card" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(200,169,110,0.2)", borderRadius: 16, padding: "14px", marginBottom: 24 }}>
+            <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 10 }}>
+              <div style={{ width: 34, height: 34, borderRadius: "50%", background: "linear-gradient(135deg, #c8a96e, #a07840)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, fontSize: 14 }}>A</div>
+              <div>
+                <div style={{ fontWeight: 600, fontSize: 13, color: "#f5ede0" }}>{STUDENT.name}</div>
+                <div style={{ fontSize: 10, color: "#c8a96e" }}>Pro · Wisconsin</div>
+              </div>
+            </div>
+            <div style={{ height: 3, background: "rgba(255,255,255,0.06)", borderRadius: 10, overflow: "hidden", marginBottom: 4 }}>
+              <div style={{ height: "100%", width: `${STUDENT.readiness}%`, background: "linear-gradient(90deg, #5fce9a, #c8a96e)", borderRadius: 10 }} />
+            </div>
+            <div style={{ fontSize: 10, color: "rgba(255,230,180,0.4)" }}>{STUDENT.readiness}% ready</div>
+          </div>
+
+          {[
+            { icon: "⬛", label: "Home", section: null },
+            { icon: "📚", label: "Study", section: "LEARN" },
+            { icon: "📝", label: "Practice" },
+            { icon: "🃏", label: "Flashcards" },
+            { icon: "🤖", label: "AI Coach", section: "AI TOOLS" },
+            { icon: "🎭", label: "Roleplay" },
+            { icon: "📊", label: "Progress", section: "TRACKING" },
+            { icon: "🏛", label: "Compliance" },
+          ].map((item, i) => (
+            <div key={i}>
+              {item.section && <div style={{ fontSize: 9, color: "rgba(255,230,180,0.2)", letterSpacing: 2, padding: "10px 12px 4px", textTransform: "uppercase", fontFamily: "'Instrument Sans'" }}>{item.section}</div>}
+              <button className="nav-btn" onClick={() => setActiveNav(item.label)} style={{ width: "100%", textAlign: "left", display: "flex", alignItems: "center", gap: 9, fontWeight: activeNav === item.label ? 600 : 400, background: activeNav === item.label ? "rgba(200,169,110,0.1)" : "transparent", color: activeNav === item.label ? "#c8a96e" : "rgba(255,230,180,0.45)" }}>
+                <span style={{ fontSize: 15, width: 20 }}>{item.icon}</span>
+                <span style={{ fontSize: 12 }}>{item.label}</span>
+              </button>
+            </div>
+          ))}
+
+          <div style={{ marginTop: "auto", padding: "10px 12px" }}>
+            <div style={{ height: 1, background: "rgba(255,230,180,0.07)", marginBottom: 12 }} />
+            <div style={{ fontSize: 11, color: "rgba(255,230,180,0.25)", fontStyle: "italic" }}>Exam: Jul 15, 2026</div>
+          </div>
+        </div>
+
+        {/* MAIN */}
+        <div style={{ padding: "36px 32px", overflowY: "auto" }}>
+
+          {/* Greeting */}
+          <div style={{ marginBottom: 32 }}>
+            <div style={{ fontFamily: "'Instrument Serif'", fontSize: 42, lineHeight: 1, letterSpacing: -1.5, marginBottom: 10 }}>
+              Good morning,<br /><em style={{ color: "#c8a96e" }}>{STUDENT.name}.</em>
+            </div>
+            <p style={{ fontSize: 14, color: "rgba(255,230,180,0.45)", lineHeight: 1.7, maxWidth: 520 }}>
+              You're {STUDENT.daysLeft} days from your Wisconsin Life Insurance exam. Your AI Coach has a personalized drill waiting for your weak areas.
+            </p>
+          </div>
+
+          {/* Warm stat pills */}
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 28 }}>
+            {[
+              { v: `${STUDENT.readiness}%`, l: "Ready", c: "#5fce9a", bg: "rgba(95,206,154,0.1)", bc: "rgba(95,206,154,0.2)" },
+              { v: `${STUDENT.streak} days 🔥`, l: "Streak", c: "#c8a96e", bg: "rgba(200,169,110,0.1)", bc: "rgba(200,169,110,0.2)" },
+              { v: "2,840 ✦", l: "XP · Silver II", c: "#c084fc", bg: "rgba(192,132,252,0.08)", bc: "rgba(192,132,252,0.2)" },
+              { v: `${STUDENT.hours}h`, l: "Seat Time", c: "#60cfe8", bg: "rgba(96,207,232,0.08)", bc: "rgba(96,207,232,0.2)" },
+            ].map((s, i) => (
+              <div key={i} className="org-card" style={{ background: s.bg, border: `1px solid ${s.bc}`, borderRadius: 50, padding: "10px 20px", display: "flex", gap: 12, alignItems: "center" }}>
+                <span style={{ fontFamily: "'Instrument Serif'", fontSize: 20, color: s.c }}>{s.v}</span>
+                <span style={{ fontSize: 10, color: "rgba(255,230,180,0.4)", letterSpacing: 1.5, textTransform: "uppercase", fontWeight: 600 }}>{s.l}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Main grid */}
+          <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 16, marginBottom: 16 }}>
+
+            {/* Progress card */}
+            <div className="org-card" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,230,180,0.09)", borderRadius: 24, padding: "24px" }}>
+              <div style={{ fontFamily: "'Instrument Serif'", fontSize: 20, marginBottom: 20, color: "#f5ede0" }}>Your Journey</div>
+              {[
+                { name: "Foundations of Life Insurance", pct: 100, color: "#5fce9a" },
+                { name: "Types of Life Insurance Policies", pct: 100, color: "#5fce9a" },
+                { name: "Policy Provisions & Riders", pct: 62, color: "#c8a96e" },
+                { name: "Annuities", pct: 30, color: "#f87171" },
+                { name: "Tax Treatment", pct: 0, color: "rgba(255,230,180,0.2)" },
+                { name: "Wisconsin Regulations", pct: 35, color: "#c084fc" },
+              ].map((m, i) => (
+                <div key={i} style={{ marginBottom: 14 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5, fontSize: 13 }}>
+                    <span style={{ color: m.pct > 0 ? "rgba(255,230,180,0.7)" : "rgba(255,230,180,0.25)", fontWeight: 400 }}>{m.name}</span>
+                    <span style={{ color: m.color, fontSize: 12, fontWeight: 500 }}>{m.pct === 100 ? "✓" : m.pct > 0 ? `${m.pct}%` : "—"}</span>
+                  </div>
+                  <div style={{ height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 10, overflow: "hidden" }}>
+                    <div style={{ height: "100%", width: `${m.pct}%`, background: m.color, borderRadius: 10, opacity: 0.85 }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Right cards */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+
+              {/* AI Coach — organic quote style */}
+              <div className="org-card" style={{ background: "rgba(95,206,154,0.07)", border: "1px solid rgba(95,206,154,0.15)", borderRadius: 22, padding: "20px", flex: 1 }}>
+                <div style={{ fontFamily: "'Instrument Serif'", fontSize: 13, color: "rgba(95,206,154,0.6)", marginBottom: 12, fontStyle: "italic" }}>From your AI Coach —</div>
+                <div style={{ fontFamily: "'Instrument Serif'", fontSize: 18, color: "#f5ede0", lineHeight: 1.5, marginBottom: 14, fontStyle: "italic" }}>
+                  "Annuities is your weak spot at 45%. One focused session today can change that."
+                </div>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                  {["▶ Start Drill", "💬 Open Chat", "🎯 Quiz Me"].map((c, i) => (
+                    <div key={i} className="drill-chip" style={{ padding: "7px 14px", background: "rgba(95,206,154,0.1)", border: "1px solid rgba(95,206,154,0.2)", borderRadius: 20, fontSize: 12, color: "#5fce9a" }}>{c}</div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Exam countdown — warm amber */}
+              <div className="org-card" style={{ background: "rgba(200,169,110,0.09)", border: "1px solid rgba(200,169,110,0.2)", borderRadius: 22, padding: "18px 20px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div>
+                    <div style={{ fontSize: 10, color: "rgba(200,169,110,0.5)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 5 }}>Exam Countdown</div>
+                    <div style={{ fontFamily: "'Instrument Serif'", fontSize: 36, color: "#c8a96e", lineHeight: 1 }}>{STUDENT.daysLeft}</div>
+                    <div style={{ fontFamily: "'Instrument Serif'", fontSize: 14, color: "rgba(200,169,110,0.5)", fontStyle: "italic" }}>days remaining</div>
+                  </div>
+                  <div style={{ textAlign: "right" }}>
+                    <div style={{ fontSize: 12, color: "rgba(255,230,180,0.4)", marginBottom: 8 }}>Jul 15, 2026</div>
+                    <div style={{ width: 80, height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 10, overflow: "hidden" }}>
+                      <div style={{ height: "100%", width: "65%", background: "#c8a96e", borderRadius: 10 }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Weak topics */}
+              <div className="org-card" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 20, padding: "16px 18px" }}>
+                <div style={{ fontSize: 10, color: "rgba(248,113,113,0.6)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 10 }}>Needs Attention</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+                  {STUDENT.weak.map((t, i) => (
+                    <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 10px", background: "rgba(248,113,113,0.06)", borderRadius: 10, cursor: "pointer" }}>
+                      <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#f87171" }} />
+                      <span style={{ fontSize: 12, color: "rgba(255,230,180,0.65)" }}>{t}</span>
+                      <span style={{ marginLeft: "auto", fontSize: 10, color: "#5fce9a" }}>→</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          {/* OCI bar — earthy */}
+          <div className="org-card" style={{ background: "rgba(192,132,252,0.07)", border: "1px solid rgba(192,132,252,0.15)", borderRadius: 20, padding: "18px 22px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+              <div style={{ fontFamily: "'Instrument Serif'", fontSize: 15, color: "#c084fc" }}>🏛 OCI Seat Time Compliance</div>
+              <div style={{ fontSize: 12, color: "rgba(255,230,180,0.35)", fontStyle: "italic" }}>{STUDENT.hours}h of 20h · {(20 - STUDENT.hours).toFixed(1)}h remaining</div>
+            </div>
+            <div style={{ height: 5, background: "rgba(255,255,255,0.05)", borderRadius: 10, overflow: "hidden" }}>
+              <div style={{ height: "100%", width: `${(STUDENT.hours / 20) * 100}%`, background: "linear-gradient(90deg, #c084fc, #a78bfa)", borderRadius: 10 }} />
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(OrganicDepth));
+</script>
+</body>
+</html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PassPro — 28-platform-audit</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>* { box-sizing: border-box; margin: 0; padding: 0; } body { background: #06060c; } #root { min-height: 100vh; }</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const AUDIT = {
+  product: [
+    {
+      category: "Core Student Experience",
+      color: "#00c896",
+      items: [
+        { name: "Student Dashboard", artifact: "03 + 26", status: "done", notes: "Full interactive dashboard with stats, progress, weak areas, activity feed" },
+        { name: "Student Onboarding Flow", artifact: "22", status: "done", notes: "8-step flow: name, state, license, goal, exam date, pace, plan, ready screen" },
+        { name: "Study Module Browser", artifact: "11 + 26", status: "done", notes: "All 8 units with progress bars, WI badge, hours estimates" },
+        { name: "Interactive Lesson Module", artifact: "13", status: "done", notes: "Full lesson with concepts, key terms, WI callouts, scenario quiz, XP" },
+        { name: "Flashcard System", artifact: "25", status: "done", notes: "37 cards, SM-2 spaced repetition, 6 study modes, browse view" },
+        { name: "Practice Level System", artifact: "14 + 16", status: "done", notes: "4 modes: Knowledge Check, Module Quiz, Unit Test, Exam Sim — all working" },
+        { name: "Full Exam Simulation", artifact: "27", status: "done", notes: "100Q, 2hr timer, question navigator, flag system, domain gap analysis" },
+        { name: "Progress Analytics", artifact: "26", status: "partial", notes: "Dashboard shows topic mastery bars — full analytics page not yet built standalone" },
+        { name: "Gamification (XP, Streaks, Badges)", artifact: "03 + 05", status: "partial", notes: "Specced and shown in UI — badge unlock system not built as standalone artifact" },
+        { name: "Leaderboard", artifact: "05", status: "specced", notes: "Specced in Feature Spec — not yet built as interactive artifact" },
+      ]
+    },
+    {
+      category: "AI Features",
+      color: "#a78bfa",
+      items: [
+        { name: "AI Study Companion (Live Chat)", artifact: "23", status: "done", notes: "Full Claude API integration, streaming responses, quick prompts, weak area chips" },
+        { name: "AI Roleplay Simulator", artifact: "04", status: "done", notes: "6 personas, live chat, post-session scoring with 5 dimensions" },
+        { name: "AI Question Generator", artifact: "17", status: "done", notes: "Live Claude API — generates questions with explanations, WI callouts" },
+        { name: "AI Gap Analysis Engine", artifact: "14 + 27", status: "done", notes: "Post-exam domain breakdown, weak topic flagging, remediation links" },
+        { name: "AI Personalized Study Plan", artifact: "22", status: "partial", notes: "Study plan shown at onboarding — dynamic AI-generated plan not yet built" },
+        { name: "Voice Mode for Roleplay", artifact: "20", status: "specced", notes: "In dev roadmap (Phase 3) — not yet built" },
+      ]
+    },
+    {
+      category: "Curriculum & Content",
+      color: "#38bdf8",
+      items: [
+        { name: "Full Curriculum Map (8 units)", artifact: "11", status: "done", notes: "All 8 units, 30+ modules, 150+ lessons mapped with exam weights" },
+        { name: "State Customization Engine", artifact: "12", status: "done", notes: "WI profile, TX/FL comparison, unique rules, exam info" },
+        { name: "Wisconsin P1 Gap Modules", artifact: "19", status: "done", notes: "Beneficiary designations, federal regulation, insurers & agency law, life settlements" },
+        { name: "Wisconsin P2 Gap Modules", artifact: "21", status: "done", notes: "MECs, WI Security Fund, field underwriting & MIB, illustrations" },
+        { name: "PSI Series 22-01 Alignment Map", artifact: "18", status: "done", notes: "~95% coverage, gap report, priority fix list" },
+        { name: "100-Question Bank (Wisconsin)", artifact: "27", status: "done", notes: "Full weighted bank across all 8 PSI domains" },
+        { name: "Expanded Question Bank (500+ Q)", artifact: "—", status: "missing", notes: "Production needs 500+ questions per state — only 100 built so far" },
+        { name: "P3 Gap Modules", artifact: "—", status: "missing", notes: "Joint life, MVA annuities, GLB riders, deferred comp, Keogh/HR-10" },
+        { name: "Texas State Content", artifact: "12 (partial)", status: "missing", notes: "TX shown in state engine comparison — full TX curriculum not built" },
+        { name: "Florida State Content", artifact: "12 (partial)", status: "missing", notes: "FL shown in state engine comparison — full FL curriculum not built" },
+        { name: "Audio Mode for Lessons", artifact: "—", status: "missing", notes: "Study while driving — in product roadmap but not built" },
+        { name: "Video Lesson Components", artifact: "—", status: "missing", notes: "Short explainer videos specced but not built" },
+      ]
+    },
+    {
+      category: "Compliance & OCI",
+      color: "#c084fc",
+      items: [
+        { name: "20-Hour Seat Time Tracker", artifact: "15", status: "done", notes: "Full OCI compliance tracker with session log, per-unit breakdown, certificate eligibility" },
+        { name: "Inactivity Detection System", artifact: "15 + 20", status: "done", notes: "30-min timeout, warning modal, session heartbeat — specced and shown in tracker" },
+        { name: "Certificate Generation", artifact: "15 + 20", status: "done", notes: "Certificate logic specced in compliance tracker and dev handoff" },
+        { name: "OCI Annuity Certification (4hr)", artifact: "15", status: "done", notes: "Separate compliance track shown in compliance rules tab" },
+        { name: "OCI Provider Submission Package", artifact: "—", status: "missing", notes: "Actual OCI application docs, curriculum approval forms — needs legal counsel" },
+        { name: "CE Credit Tracking (Post-License)", artifact: "—", status: "missing", notes: "24-hour CE tracking for licensed agents — specced but not built" },
+      ]
+    },
+    {
+      category: "Agency & B2B",
+      color: "#f59e0b",
+      items: [
+        { name: "Agency Admin Dashboard", artifact: "24", status: "done", notes: "12 agents, pass rates, compliance tracking, nudge emails, activity feed" },
+        { name: "Nudge Email System", artifact: "24", status: "done", notes: "3 templates (gentle, urgent, compliance), auto-filled agent data, one-click send" },
+        { name: "Agency Onboarding Flow", artifact: "—", status: "missing", notes: "How an agency manager sets up their team — not yet built" },
+        { name: "Bulk Seat Management", artifact: "24 (partial)", status: "partial", notes: "Shown in agency dashboard — add/remove seats not fully interactive" },
+        { name: "Agency Progress Reports (Export)", artifact: "—", status: "missing", notes: "CSV/PDF export of team pass rates and compliance hours — not built" },
+        { name: "White-Label Option for Agencies", artifact: "—", status: "missing", notes: "Custom branding per agency — specced in business plan, not built" },
+      ]
+    },
+    {
+      category: "Payments & Plans",
+      color: "#4ade80",
+      items: [
+        { name: "Pricing Plans (3 tiers)", artifact: "01 + 22", status: "done", notes: "$39 Basic, $79 Pro, $149 Elite — shown in product overview and onboarding" },
+        { name: "Agency Pricing (3 tiers)", artifact: "05", status: "done", notes: "$299–$999/month agency plans specced" },
+        { name: "Stripe Checkout Integration", artifact: "20", status: "specced", notes: "Full Stripe spec in dev handoff — not built as interactive artifact" },
+        { name: "Pass Guarantee Flow", artifact: "—", status: "missing", notes: "Elite plan pass guarantee — extend access logic not built" },
+        { name: "Referral Program", artifact: "—", status: "missing", notes: "Give 20% / get free month — specced in go-to-market, not built" },
+        { name: "Annual Plan Discount Flow", artifact: "—", status: "missing", notes: "20% annual discount — not built" },
+      ]
+    },
+  ],
+  technical: [
+    {
+      category: "Architecture & Infrastructure",
+      color: "#38bdf8",
+      items: [
+        { name: "System Architecture Diagram", artifact: "02", status: "done", notes: "Full 5-layer architecture: client, API, AI, data, infra" },
+        { name: "Database Schema (Prisma)", artifact: "07 + 20", status: "done", notes: "8 tables with RLS policies, full Prisma schema in dev handoff" },
+        { name: "API Reference (30+ endpoints)", artifact: "08", status: "done", notes: "All endpoints with request/response specs, streaming AI spec" },
+        { name: "Tech Stack Documentation", artifact: "09", status: "done", notes: "Every technology with reasoning and alternatives considered" },
+        { name: "Developer Handoff Package", artifact: "20", status: "done", notes: "12 sections: setup, architecture, DB, API, AI, compliance, frontend, testing, deployment, timeline" },
+        { name: "CI/CD Pipeline", artifact: "20", status: "done", notes: "GitHub Actions workflow with test, deploy-api, deploy-web, db-migrate stages" },
+        { name: "Actual Codebase", artifact: "—", status: "missing", notes: "All specs exist — actual Next.js/Express codebase not yet written" },
+        { name: "Supabase Project Setup", artifact: "—", status: "missing", notes: "Needs dev team to execute — schema ready to push" },
+        { name: "Stripe Products & Webhooks", artifact: "—", status: "missing", notes: "Needs dev team — spec complete" },
+      ]
+    },
+    {
+      category: "AI Systems",
+      color: "#a78bfa",
+      items: [
+        { name: "AI Systems Specification", artifact: "06", status: "done", notes: "Companion prompt architecture, roleplay personas, scoring engine" },
+        { name: "AI Wrapper & Cost Tracking", artifact: "20", status: "done", notes: "Rate limiting, retry logic, token cost estimates ($0.50/user/month)" },
+        { name: "Spaced Repetition Engine (SM-2)", artifact: "25", status: "done", notes: "Full SM-2 algorithm implemented in flashcard system" },
+        { name: "Pinecone Vector DB Setup", artifact: "02 + 20", status: "specced", notes: "For AI context retrieval — specced, not implemented" },
+        { name: "AI Question Review Pipeline", artifact: "17", status: "partial", notes: "Generator built — admin review/approval queue not built" },
+      ]
+    },
+    {
+      category: "Frontend & Design",
+      color: "#00c896",
+      items: [
+        { name: "Design System & Tokens", artifact: "20", status: "done", notes: "Full CSS variables, typography system, color palette in dev handoff" },
+        { name: "App Router Structure", artifact: "20", status: "done", notes: "Full Next.js App Router file structure documented" },
+        { name: "Unified Platform Demo", artifact: "26", status: "done", notes: "All 12 screens navigable in one app with sidebar, topbar, artifacts panel" },
+        { name: "Mobile App (iOS/Android)", artifact: "—", status: "missing", notes: "React Native — Phase 3 in roadmap, not yet built" },
+        { name: "Email Templates", artifact: "—", status: "missing", notes: "Nudge emails, cert delivery, streak reminders — specced, not built" },
+        { name: "Landing/Marketing Page", artifact: "—", status: "missing", notes: "Public-facing marketing site — not built" },
+      ]
+    },
+  ],
+  business: [
+    {
+      category: "Business & Strategy",
+      color: "#fb923c",
+      items: [
+        { name: "Full Business Plan", artifact: "01 + 10", status: "done", notes: "Product overview, pricing, go-to-market, 12-month roadmap, $150K budget" },
+        { name: "Exit Strategy & Valuation", artifact: "10", status: "done", notes: "$5M–$8M target at $1M ARR, strategic acquirers identified" },
+        { name: "Competitive Analysis", artifact: "01", status: "done", notes: "ExamFX, Kaplan, Keeper Tax, Bonsai — all analyzed with gap table" },
+        { name: "Go-To-Market Plan", artifact: "01", status: "done", notes: "5 channels: SEO, communities, YouTube/TikTok, CPA partnerships, paid ads" },
+        { name: "References & Sources", artifact: "chat", status: "done", notes: "PSI Series 22-01 outline, Wisconsin OCI, AD Banker, Kaplan, WI Legislature statutes" },
+        { name: "Investor Pitch Deck", artifact: "—", status: "missing", notes: "Formal pitch deck for seed funding — not built" },
+        { name: "Financial Model (P&L)", artifact: "—", status: "missing", notes: "Month-by-month revenue projections, CAC, LTV model — not built" },
+        { name: "OCI Provider Application", artifact: "—", status: "missing", notes: "Actual Wisconsin OCI provider registration — needs legal counsel" },
+        { name: "Legal Entity & Operating Docs", artifact: "—", status: "missing", notes: "LLC formation, operating agreement, ToS, privacy policy — not built" },
+      ]
+    },
+  ]
+};
+
+const STATUS_CONFIG = {
+  done: { label: "✓ Built", color: "#00c896", bg: "rgba(0,200,150,0.1)", border: "rgba(0,200,150,0.25)" },
+  partial: { label: "⚡ Partial", color: "#f59e0b", bg: "rgba(245,158,11,0.1)", border: "rgba(245,158,11,0.25)" },
+  specced: { label: "📋 Specced", color: "#38bdf8", bg: "rgba(56,189,248,0.1)", border: "rgba(56,189,248,0.25)" },
+  missing: { label: "○ Not Built", color: "#f87171", bg: "rgba(248,113,113,0.08)", border: "rgba(248,113,113,0.2)" },
+};
+
+const NEXT_BUILDS = [
+  { priority: "P1", name: "P3 Gap Modules", why: "Completes PSI coverage to ~98%. Joint life, MVA annuities, GLB riders, deferred comp, Keogh plans.", effort: "Medium", color: "#f87171" },
+  { priority: "P1", name: "Expanded Question Bank (500Q)", why: "Production requires 500+ questions per state for meaningful adaptive practice. Currently at 100.", effort: "High", color: "#f87171" },
+  { priority: "P1", name: "Full Analytics Dashboard", why: "Students need detailed weekly/monthly progress charts, not just snapshot stats.", effort: "Low", color: "#f87171" },
+  { priority: "P1", name: "Badge & Achievement System", why: "Core gamification loop — specced in Feature Spec but not built as interactive artifact.", effort: "Low", color: "#f87171" },
+  { priority: "P2", name: "Investor Pitch Deck", why: "You'll need this for seed funding conversations. All data exists — needs packaging.", effort: "Medium", color: "#f59e0b" },
+  { priority: "P2", name: "Financial Model (P&L)", why: "Month-by-month revenue projections, CAC, LTV, burn rate — required for fundraising.", effort: "Medium", color: "#f59e0b" },
+  { priority: "P2", name: "Agency Onboarding Flow", why: "B2B sales need a polished signup experience for agency managers.", effort: "Low", color: "#f59e0b" },
+  { priority: "P2", name: "Marketing Landing Page", why: "Public-facing site for SEO and paid acquisition — critical for Go-To-Market.", effort: "Medium", color: "#f59e0b" },
+  { priority: "P3", name: "Texas Curriculum", why: "TX is the #1 volume state for insurance licensing — highest growth opportunity.", effort: "High", color: "#4ade80" },
+  { priority: "P3", name: "Florida Curriculum", why: "FL is #2 — 5-hour ethics requirement and 14-day free look make it distinct from WI.", effort: "High", color: "#4ade80" },
+  { priority: "P3", name: "CE Credit Tracker (Post-License)", why: "Retention play — keep licensed agents using PassPro for their 24-hour CE renewal.", effort: "Medium", color: "#4ade80" },
+  { priority: "P3", name: "Mobile App (React Native)", why: "Phase 3 roadmap. Students study on phones — native app increases engagement.", effort: "High", color: "#4ade80" },
+];
+
+function PlatformAudit() {
+  const [tab, setTab] = useState("product");
+  const [expandedCat, setExpandedCat] = useState(null);
+  const [filterStatus, setFilterStatus] = useState("all");
+
+  const allItems = [...AUDIT.product, ...AUDIT.technical, ...AUDIT.business].flatMap(c => c.items);
+  const doneCount = allItems.filter(i => i.status === "done").length;
+  const partialCount = allItems.filter(i => i.status === "partial").length;
+  const speccedCount = allItems.filter(i => i.status === "specced").length;
+  const missingCount = allItems.filter(i => i.status === "missing").length;
+  const totalCount = allItems.length;
+  const completionPct = Math.round(((doneCount + partialCount * 0.5) / totalCount) * 100);
+
+  const currentAudit = AUDIT[tab];
+
+  return (
+    <div style={{ fontFamily: "'DM Sans', system-ui, sans-serif", background: "#07080c", minHeight: "100vh", color: "#fff" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        .tab-btn { cursor: pointer; border: none; transition: all 0.18s; }
+        .cat-row { cursor: pointer; transition: all 0.15s; }
+        .cat-row:hover { filter: brightness(1.06); }
+        .item-row { transition: background 0.12s; }
+        .item-row:hover { background: rgba(255,255,255,0.03) !important; }
+        .filter-btn { cursor: pointer; border: none; transition: all 0.15s; }
+        .next-card { transition: transform 0.18s; }
+        .next-card:hover { transform: translateY(-3px); }
+        .fade { animation: fadeUp 0.3s ease both; }
+        @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+      `}</style>
+
+      {/* Header */}
+      <div style={{ padding: "40px 40px 28px", borderBottom: "1px solid rgba(255,255,255,0.06)", background: "linear-gradient(135deg, #07080c, #0d0c18)" }}>
+        <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: "#a78bfa", letterSpacing: 3, textTransform: "uppercase", marginBottom: 12 }}>28 — Platform Audit</div>
+        <h1 style={{ fontFamily: "'Syne'", fontSize: "clamp(28px,4vw,52px)", fontWeight: 800, letterSpacing: -2, marginBottom: 14 }}>
+          PassPro<br /><span style={{ color: "#a78bfa" }}>Build Status</span>
+        </h1>
+
+        {/* Overall progress */}
+        <div style={{ maxWidth: 600, marginBottom: 24 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8, fontSize: 13 }}>
+            <span style={{ color: "rgba(255,255,255,0.4)" }}>Overall Platform Completion</span>
+            <span style={{ fontFamily: "'Syne'", fontWeight: 800, color: "#a78bfa" }}>{completionPct}%</span>
+          </div>
+          <div style={{ height: 8, background: "rgba(255,255,255,0.06)", borderRadius: 4, overflow: "hidden" }}>
+            <div style={{ height: "100%", width: `${completionPct}%`, background: "linear-gradient(to right, #a78bfa, #00c896)", borderRadius: 4, transition: "width 1s ease" }} />
+          </div>
+        </div>
+
+        {/* Status summary */}
+        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+          {[
+            { label: "Built", value: doneCount, ...STATUS_CONFIG.done },
+            { label: "Partial", value: partialCount, ...STATUS_CONFIG.partial },
+            { label: "Specced", value: speccedCount, ...STATUS_CONFIG.specced },
+            { label: "Not Built", value: missingCount, ...STATUS_CONFIG.missing },
+            { label: "Total Features", value: totalCount, color: "rgba(255,255,255,0.5)", bg: "rgba(255,255,255,0.04)", border: "rgba(255,255,255,0.08)" },
+          ].map((s, i) => (
+            <div key={i} onClick={() => setFilterStatus(s.label.toLowerCase().replace(" ", "_"))} style={{ background: s.bg, border: `1px solid ${s.border}`, borderRadius: 10, padding: "8px 14px", cursor: "pointer", display: "flex", gap: 10, alignItems: "center" }}>
+              <span style={{ fontFamily: "'Syne'", fontSize: 20, fontWeight: 800, color: s.color }}>{s.value}</span>
+              <span style={{ fontSize: 12, color: "rgba(255,255,255,0.4)" }}>{s.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div style={{ display: "flex", gap: 4, padding: "0 40px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        {[["product", "Product Features"], ["technical", "Technical"], ["business", "Business"], ["next", "What's Next"]].map(([val, label]) => (
+          <button key={val} className="tab-btn" onClick={() => setTab(val)} style={{ padding: "12px 18px", fontSize: 13, fontFamily: "'DM Sans'", background: "transparent", color: tab === val ? "#a78bfa" : "rgba(255,255,255,0.35)", borderBottom: tab === val ? "2px solid #a78bfa" : "2px solid transparent" }}>{label}</button>
+        ))}
+      </div>
+
+      <div style={{ padding: "28px 40px" }}>
+
+        {tab !== "next" && (
+          <div>
+            {/* Status filters */}
+            <div style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" }}>
+              <span style={{ fontSize: 13, color: "rgba(255,255,255,0.3)", alignSelf: "center" }}>Filter:</span>
+              {[["all", "All"], ["done", "✓ Built"], ["partial", "⚡ Partial"], ["specced", "📋 Specced"], ["missing", "○ Not Built"]].map(([val, label]) => (
+                <button key={val} className="filter-btn" onClick={() => setFilterStatus(val)} style={{ padding: "5px 12px", borderRadius: 20, background: filterStatus === val ? "rgba(167,139,250,0.12)" : "rgba(255,255,255,0.04)", border: `1px solid ${filterStatus === val ? "rgba(167,139,250,0.3)" : "rgba(255,255,255,0.07)"}`, color: filterStatus === val ? "#a78bfa" : "rgba(255,255,255,0.4)", fontSize: 12, fontFamily: "'DM Sans'" }}>{label}</button>
+              ))}
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {currentAudit?.map((cat, ci) => {
+                const filtered = cat.items.filter(item => filterStatus === "all" || item.status === filterStatus || (filterStatus === "not_built" && item.status === "missing"));
+                if (filtered.length === 0) return null;
+                const catDone = cat.items.filter(i => i.status === "done").length;
+                const catTotal = cat.items.length;
+                const isExpanded = expandedCat === `${tab}-${ci}`;
+                return (
+                  <div key={ci} style={{ border: `1px solid ${expandedCat === `${tab}-${ci}` ? cat.color + "30" : "rgba(255,255,255,0.06)"}`, borderRadius: 14, overflow: "hidden" }}>
+                    <div className="cat-row" onClick={() => setExpandedCat(isExpanded ? null : `${tab}-${ci}`)} style={{ padding: "16px 20px", background: isExpanded ? `${cat.color}08` : "rgba(255,255,255,0.02)", display: "flex", alignItems: "center", gap: 14 }}>
+                      <div style={{ width: 10, height: 10, borderRadius: "50%", background: cat.color, flexShrink: 0 }} />
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontFamily: "'Syne'", fontSize: 15, fontWeight: 700 }}>{cat.category}</div>
+                        <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", marginTop: 2 }}>{filtered.length} item{filtered.length !== 1 ? "s" : ""} · {catDone}/{catTotal} complete</div>
+                      </div>
+                      <div style={{ height: 4, width: 80, background: "rgba(255,255,255,0.06)", borderRadius: 3, overflow: "hidden" }}>
+                        <div style={{ height: "100%", width: `${(catDone / catTotal) * 100}%`, background: cat.color, borderRadius: 3 }} />
+                      </div>
+                      <div style={{ fontFamily: "'Syne'", fontWeight: 800, color: cat.color, fontSize: 14 }}>{Math.round((catDone / catTotal) * 100)}%</div>
+                      <div style={{ display: "flex", gap: 3 }}>
+                        {cat.items.map((item, ii) => <div key={ii} style={{ width: 6, height: 6, borderRadius: "50%", background: STATUS_CONFIG[item.status]?.color }} />)}
+                      </div>
+                      <span style={{ color: "rgba(255,255,255,0.2)" }}>{isExpanded ? "▲" : "▼"}</span>
+                    </div>
+                    {isExpanded && (
+                      <div style={{ background: `${cat.color}04` }}>
+                        {filtered.map((item, ii) => {
+                          const sc = STATUS_CONFIG[item.status];
+                          return (
+                            <div key={ii} className="item-row fade" style={{ animationDelay: `${ii * 0.04}s`, display: "grid", gridTemplateColumns: "1fr 90px 80px 1fr", gap: 16, padding: "12px 20px", borderTop: "1px solid rgba(255,255,255,0.04)", alignItems: "start" }}>
+                              <div>
+                                <div style={{ fontSize: 13, fontWeight: 500, color: item.status === "missing" ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.8)" }}>{item.name}</div>
+                                <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", marginTop: 3 }}>{item.notes}</div>
+                              </div>
+                              <div style={{ background: sc.bg, border: `1px solid ${sc.border}`, color: sc.color, padding: "3px 8px", borderRadius: 8, fontSize: 10, fontFamily: "'JetBrains Mono'", textAlign: "center", whiteSpace: "nowrap" }}>{sc.label}</div>
+                              <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "rgba(255,255,255,0.3)" }}>{item.artifact !== "—" ? `Art. ${item.artifact}` : "—"}</div>
+                              <div />
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* WHAT'S NEXT */}
+        {tab === "next" && (
+          <div>
+            <p style={{ fontSize: 14, color: "rgba(255,255,255,0.4)", marginBottom: 28, maxWidth: 600, lineHeight: 1.7 }}>
+              Based on the full audit, here are the highest-impact builds remaining — prioritized by what moves the needle most for OCI approval, student outcomes, and revenue.
+            </p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {NEXT_BUILDS.map((b, i) => {
+                const pColor = b.priority === "P1" ? "#f87171" : b.priority === "P2" ? "#f59e0b" : "#4ade80";
+                return (
+                  <div key={i} className="next-card" style={{ background: "rgba(255,255,255,0.02)", border: `1px solid rgba(255,255,255,0.06)`, borderRadius: 12, padding: "18px 20px", display: "flex", alignItems: "flex-start", gap: 16 }}>
+                    <div style={{ background: `${pColor}15`, border: `1px solid ${pColor}30`, color: pColor, padding: "4px 10px", borderRadius: 8, fontSize: 11, fontFamily: "'JetBrains Mono'", fontWeight: 700, flexShrink: 0, minWidth: 34, textAlign: "center" }}>{b.priority}</div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontFamily: "'Syne'", fontSize: 15, fontWeight: 700, marginBottom: 4 }}>{b.name}</div>
+                      <div style={{ fontSize: 13, color: "rgba(255,255,255,0.45)", lineHeight: 1.6 }}>{b.why}</div>
+                    </div>
+                    <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.35)", padding: "4px 10px", borderRadius: 8, fontSize: 11, fontFamily: "'JetBrains Mono'", flexShrink: 0 }}>Effort: {b.effort}</div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div style={{ marginTop: 28, padding: "20px 24px", background: "rgba(0,200,150,0.06)", border: "1px solid rgba(0,200,150,0.15)", borderLeft: "3px solid #00c896", borderRadius: 10 }}>
+              <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "#00c896", letterSpacing: 2, marginBottom: 8 }}>WHERE PASSPRO STANDS TODAY</div>
+              <p style={{ fontSize: 14, color: "rgba(255,255,255,0.6)", lineHeight: 1.8 }}>
+                <strong style={{ color: "#fff" }}>27 artifacts built.</strong> The product is demo-ready, investor-ready, and developer-ready. Core student experience is complete. AI features are live. PSI alignment is at ~95%. OCI submission threshold is met.<br /><br />
+                The biggest remaining gaps are <strong style={{ color: "#fff" }}>content depth</strong> (500+ question bank, P3 modules, TX/FL curricula), <strong style={{ color: "#fff" }}>fundraising materials</strong> (pitch deck, financial model), and the <strong style={{ color: "#fff" }}>actual codebase</strong> — everything is specced and ready for a dev team to execute.
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(PlatformAudit));
+</script>
+</body>
+</html>

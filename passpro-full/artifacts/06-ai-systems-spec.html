@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PassPro — 06-ai-systems-spec</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>* { box-sizing: border-box; margin: 0; padding: 0; } body { background: #06060c; } #root { min-height: 100vh; }</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const personas = [
+  { name: "The Skeptic", emoji: "😤", traits: "Distrustful, direct, experienced with sales pitches", objections: ["Insurance is a scam", "You'll find loopholes not to pay"], diff: "Medium", diffColor: "#f59e0b" },
+  { name: "Confused Retiree", emoji: "👴", traits: "Friendly, slow to process, worried about costs", objections: ["I don't understand", "Is this Medicare?"], diff: "Easy", diffColor: "#00c896" },
+  { name: "Grieving Spouse", emoji: "💔", traits: "Emotional, overwhelmed, grieving", objections: ["Emotional responses — needs empathy first"], diff: "Hard", diffColor: "#f87171" },
+  { name: "Price Objector", emoji: "💰", traits: "Analytical, budget-focused, comparison shopper", objections: ["Too expensive", "I found it cheaper online"], diff: "Medium", diffColor: "#f59e0b" },
+  { name: "Business Owner", emoji: "🏢", traits: "Time-pressed, sophisticated, wants ROI clarity", objections: ["What's the business case?", "Talk to my CFO"], diff: "Hard", diffColor: "#f87171" },
+];
+
+const promptLayers = [
+  { label: "Layer 1 — Identity", color: "#00c896", items: ['"You are Coach, an expert insurance licensing tutor..."', '"Tone: encouraging, clear, never condescending"', '"You are NOT a sales tool — you are a learning companion"'] },
+  { label: "Layer 2 — Knowledge Base", color: "#38bdf8", items: ["[Injected: full state curriculum for {state}]", "[Injected: student's weak areas from DB]", "[Injected: last 5 session results + scores]", "[Injected: current module the student is studying]"] },
+  { label: "Layer 3 — Behavioral Rules", color: "#a78bfa", items: ['"Never give answers directly — use Socratic method"', '"Always end with a follow-up question or drill offer"', '"If student is frustrated, acknowledge before explaining"', '"Use real-world analogies — avoid jargon-heavy explanations"'] },
+];
+
+const scoringDimensions = [
+  { dim: "Product Accuracy", desc: "Did the agent explain coverage, exclusions, and terms correctly?", weight: 30, color: "#00c896" },
+  { dim: "Objection Handling", desc: "Did they acknowledge and address objections professionally?", weight: 25, color: "#f59e0b" },
+  { dim: "Needs Discovery", desc: "Did they ask questions to understand the customer's situation?", weight: 20, color: "#a78bfa" },
+  { dim: "Compliance", desc: "Did they avoid unlicensed advice or misleading statements?", weight: 15, color: "#38bdf8" },
+  { dim: "Empathy & Tone", desc: "Was communication human, clear, and appropriate?", weight: 10, color: "#f87171" },
+];
+
+function AISystemsSpec() {
+  const [tab, setTab] = useState("companion");
+  const [selectedPersona, setSelectedPersona] = useState(0);
+
+  return (
+    <div style={{ fontFamily: "'DM Sans', system-ui, sans-serif", background: "#0a0a0f", minHeight: "100vh", color: "#fff" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        .tab-btn { cursor: pointer; border: none; transition: all 0.2s; }
+        .persona-card { transition: all 0.15s; cursor: pointer; }
+        .persona-card:hover { transform: translateY(-2px); }
+        .layer-block { animation: slideIn 0.4s ease both; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: none; } }
+      `}</style>
+
+      {/* Header */}
+      <div style={{ padding: "48px 40px 32px", background: "linear-gradient(135deg, #0a0a0f 0%, #0f0a1a 100%)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: "#a78bfa", letterSpacing: 3, textTransform: "uppercase", marginBottom: 12 }}>06 — AI Systems Specification</div>
+        <h1 style={{ fontFamily: "'Syne'", fontSize: "clamp(32px,5vw,52px)", fontWeight: 800, letterSpacing: -2, marginBottom: 12 }}>
+          How the <span style={{ color: "#a78bfa" }}>AI</span><br />is built
+        </h1>
+        <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 14, maxWidth: 480, lineHeight: 1.7 }}>Two distinct AI systems: an adaptive Study Companion and a Customer Roleplay Simulator. Both powered by Claude API with carefully engineered prompts.</p>
+      </div>
+
+      {/* Tabs */}
+      <div style={{ display: "flex", gap: 4, padding: "0 40px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        {[["companion", "AI Study Companion"], ["roleplay", "Roleplay Personas"], ["scoring", "Scoring Engine"]].map(([val, label]) => (
+          <button key={val} className="tab-btn" onClick={() => setTab(val)} style={{ padding: "14px 20px", fontSize: 13, fontFamily: "'DM Sans'", background: "transparent", color: tab === val ? "#a78bfa" : "rgba(255,255,255,0.35)", borderBottom: tab === val ? "2px solid #a78bfa" : "2px solid transparent" }}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ padding: "40px" }}>
+        {/* Companion */}
+        {tab === "companion" && (
+          <div>
+            <h2 style={{ fontFamily: "'Syne'", fontSize: 22, fontWeight: 800, letterSpacing: -0.5, marginBottom: 8 }}>System Prompt Architecture</h2>
+            <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 14, marginBottom: 32 }}>The companion's behavior is shaped by a three-layer system prompt injected at runtime. Each layer is dynamically populated from the database.</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              {promptLayers.map((layer, li) => (
+                <div key={li} className="layer-block" style={{ animationDelay: `${li * 0.1}s`, background: "#111118", border: `1px solid ${layer.color}20`, borderRadius: 12, overflow: "hidden" }}>
+                  <div style={{ padding: "12px 20px", background: `${layer.color}10`, borderBottom: `1px solid ${layer.color}20`, display: "flex", alignItems: "center", gap: 10 }}>
+                    <div style={{ width: 8, height: 8, borderRadius: "50%", background: layer.color }} />
+                    <span style={{ fontFamily: "'JetBrains Mono'", fontSize: 12, color: layer.color, fontWeight: 500 }}>{layer.label}</span>
+                  </div>
+                  <div style={{ padding: "16px 20px", display: "flex", flexDirection: "column", gap: 8 }}>
+                    {layer.items.map((item, ii) => (
+                      <div key={ii} style={{ fontFamily: "'JetBrains Mono'", fontSize: 12, color: "rgba(255,255,255,0.55)", padding: "8px 12px", background: "rgba(255,255,255,0.03)", borderRadius: 6, borderLeft: `2px solid ${layer.color}40` }}>
+                        {item}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div style={{ marginTop: 32, padding: "20px 24px", background: "rgba(0,200,150,0.06)", border: "1px solid rgba(0,200,150,0.2)", borderRadius: 10 }}>
+              <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "#00c896", letterSpacing: 2, marginBottom: 8 }}>CONVERSATION MEMORY</div>
+              <p style={{ fontSize: 14, color: "rgba(255,255,255,0.55)", lineHeight: 1.7 }}>Full conversation history is passed with every API call. Claude maintains context across the entire study session. Session transcripts are stored in <code style={{ color: "#00c896", background: "rgba(0,200,150,0.1)", padding: "1px 6px", borderRadius: 4 }}>ai_sessions.messages_json</code> for post-session analysis.</p>
+            </div>
+          </div>
+        )}
+
+        {/* Roleplay Personas */}
+        {tab === "roleplay" && (
+          <div>
+            <h2 style={{ fontFamily: "'Syne'", fontSize: 22, fontWeight: 800, letterSpacing: -0.5, marginBottom: 8 }}>Customer Persona Library</h2>
+            <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 14, marginBottom: 32 }}>Each persona is a separate system prompt with defined personality, emotional state, knowledge level, and objection patterns. Click a persona to inspect.</p>
+            <div style={{ display: "grid", gridTemplateColumns: "260px 1fr", gap: 20 }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {personas.map((p, i) => (
+                  <div key={i} className="persona-card" onClick={() => setSelectedPersona(i)} style={{ padding: "14px 16px", borderRadius: 10, background: selectedPersona === i ? "rgba(167,139,250,0.12)" : "rgba(255,255,255,0.03)", border: `1px solid ${selectedPersona === i ? "rgba(167,139,250,0.3)" : "rgba(255,255,255,0.06)"}` }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+                      <span style={{ fontSize: 18 }}>{p.emoji}</span>
+                      <span style={{ fontSize: 13, fontWeight: 500, color: selectedPersona === i ? "#a78bfa" : "rgba(255,255,255,0.75)" }}>{p.name}</span>
+                      <span style={{ marginLeft: "auto", fontSize: 9, background: `${p.diffColor}20`, color: p.diffColor, padding: "2px 7px", borderRadius: 10, fontFamily: "'JetBrains Mono'" }}>{p.diff}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ background: "#111118", border: "1px solid rgba(167,139,250,0.2)", borderRadius: 12, padding: 28 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 24 }}>
+                  <div style={{ fontSize: 36 }}>{personas[selectedPersona].emoji}</div>
+                  <div>
+                    <div style={{ fontFamily: "'Syne'", fontSize: 20, fontWeight: 800 }}>{personas[selectedPersona].name}</div>
+                    <div style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", marginTop: 2 }}>Difficulty: <span style={{ color: personas[selectedPersona].diffColor }}>{personas[selectedPersona].diff}</span></div>
+                  </div>
+                </div>
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "rgba(255,255,255,0.3)", letterSpacing: 2, marginBottom: 8 }}>PERSONALITY TRAITS</div>
+                  <p style={{ fontSize: 14, color: "rgba(255,255,255,0.6)", lineHeight: 1.6 }}>{personas[selectedPersona].traits}</p>
+                </div>
+                <div>
+                  <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "rgba(255,255,255,0.3)", letterSpacing: 2, marginBottom: 8 }}>COMMON OBJECTIONS</div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    {personas[selectedPersona].objections.map((obj, i) => (
+                      <div key={i} style={{ padding: "10px 14px", background: "rgba(255,255,255,0.04)", borderRadius: 8, fontSize: 13, color: "rgba(255,255,255,0.6)", borderLeft: "2px solid rgba(167,139,250,0.4)" }}>
+                        "{obj}"
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Scoring */}
+        {tab === "scoring" && (
+          <div>
+            <h2 style={{ fontFamily: "'Syne'", fontSize: 22, fontWeight: 800, letterSpacing: -0.5, marginBottom: 8 }}>Post-Session Scoring Engine</h2>
+            <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 14, marginBottom: 32 }}>After every roleplay session, an AI scoring engine evaluates the full conversation transcript across 5 weighted dimensions.</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {scoringDimensions.map((dim, i) => (
+                <div key={i} style={{ background: "#111118", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 10, padding: "20px 24px", display: "flex", alignItems: "center", gap: 20 }}>
+                  <div style={{ width: 56, height: 56, borderRadius: 12, background: `${dim.color}15`, border: `1px solid ${dim.color}30`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <span style={{ fontFamily: "'Syne'", fontSize: 18, fontWeight: 800, color: dim.color }}>{dim.weight}%</span>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontFamily: "'Syne'", fontSize: 15, fontWeight: 700, marginBottom: 4, color: dim.color }}>{dim.dim}</div>
+                    <div style={{ fontSize: 13, color: "rgba(255,255,255,0.45)" }}>{dim.desc}</div>
+                  </div>
+                  <div style={{ width: 100, height: 6, background: "rgba(255,255,255,0.08)", borderRadius: 4, overflow: "hidden", flexShrink: 0 }}>
+                    <div style={{ height: "100%", width: `${dim.weight * 3.33}%`, background: dim.color, borderRadius: 4 }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(AISystemsSpec));
+</script>
+</body>
+</html>
