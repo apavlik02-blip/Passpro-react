@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+'use client';
+
+import React from 'react';
+import ARIAAgent from './ARIAAgent';
 
 interface ARIAModalProps {
   isOpen: boolean;
@@ -8,30 +11,27 @@ interface ARIAModalProps {
 }
 
 export default function ARIAModal({ isOpen, onClose, user, initialMode = 'study' }: ARIAModalProps) {
-  const [mode, setMode] = useState(initialMode);
   if (!isOpen) return null;
 
   return (
-    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(15,10,7,0.85)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }} onClick={onClose}>
-      <div style={{ width: '100%', maxWidth: 820, maxHeight: '92vh', background: 'linear-gradient(160deg, #1A120A 0%, #231509 60%, #1C100A 100%)', borderRadius: 24, border: '1px solid rgba(201,135,79,0.2)', overflow: 'hidden' }} onClick={e => e.stopPropagation()}>
-        <div style={{ padding: '16px 24px', borderBottom: '1px solid rgba(201,135,79,0.12)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.3)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg, #C9874F, #7B3910)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ color: '#FFF8F2', fontSize: 14, fontWeight: 700 }}>A</span>
-            </div>
-            <div>
-              <div style={{ color: '#EDE0D4', fontSize: 17, fontWeight: 600, letterSpacing: 2 }}>ARIA</div>
-              <div style={{ color: 'rgba(201,135,79,0.6)', fontSize: 11, letterSpacing: 1.5 }}>WISCONSIN LIFE + PASSPRO</div>
-            </div>
-          </div>
-          <button onClick={onClose} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(201,135,79,0.2)', color: '#EDE0D4', padding: '6px 14px', borderRadius: 999, fontSize: 13, cursor: 'pointer' }}>Close</button>
-        </div>
-        <div style={{ height: 'calc(92vh - 70px)', overflow: 'hidden', padding: 20, color: '#EDE0D4' }}>
-          <div style={{ textAlign: 'center', paddingTop: 40 }}>
-            <div style={{ fontSize: 20, fontStyle: 'italic' }}>Ready when you are, Amanda.</div>
-            <p style={{ color: 'rgba(237,224,212,0.6)', marginTop: 12 }}>Full chat + quiz experience coming in next update.<br />For now, use the ReadinessWidget and connect to the backend API.</p>
-          </div>
-        </div>
+    <div 
+      style={{
+        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+        background: 'rgba(15, 10, 7, 0.88)', backdropFilter: 'blur(8px)',
+        zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16
+      }} 
+      onClick={onClose}
+    >
+      <div 
+        style={{ 
+          width: '100%', maxWidth: 860, maxHeight: '92vh',
+          borderRadius: 24, overflow: 'hidden',
+          boxShadow: '0 25px 70px rgba(0,0,0,0.6)',
+          border: '1px solid rgba(201,135,79,0.2)'
+        }} 
+        onClick={e => e.stopPropagation()}
+      >
+        <ARIAAgent userId={user?.id} />
       </div>
     </div>
   );
