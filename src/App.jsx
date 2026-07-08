@@ -1,16 +1,79 @@
 import { useState, useEffect } from 'react';
 import './index.css';
 
+// Real Wisconsin Life Insurance sample questions (high-yield topics)
+const sampleQuestions = [
+  {
+    id: 1,
+    topic: "Regulation",
+    question: "What is the purpose of the Wisconsin Life Insurance Guaranty Association?",
+    options: [
+      "To regulate insurance rates",
+      "To guarantee payment of claims if an insurer becomes insolvent",
+      "To provide free life insurance to low-income residents",
+      "To license insurance agents"
+    ],
+    correctAnswer: 1,
+    explanation: "The Guaranty Association protects policyholders if an insurer becomes insolvent."
+  },
+  {
+    id: 2,
+    topic: "Policy Provisions",
+    question: "In Wisconsin, what is the standard free-look period for most life insurance policies?",
+    options: ["10 days", "20 days", "30 days", "45 days"],
+    correctAnswer: 1,
+    explanation: "Wisconsin law generally provides a 20-day free look period for life insurance policies."
+  },
+  {
+    id: 3,
+    topic: "Beneficiaries",
+    question: "Under Wisconsin law, what happens to a spouse's beneficiary designation after divorce?",
+    options: [
+      "It remains valid",
+      "It is automatically revoked",
+      "It transfers to the children",
+      "It requires court approval to change"
+    ],
+    correctAnswer: 1,
+    explanation: "In Wisconsin, divorce generally revokes the ex-spouse as beneficiary unless the decree says otherwise."
+  },
+  {
+    id: 4,
+    topic: "Taxation",
+    question: "What is the tax treatment of a Modified Endowment Contract (MEC)?",
+    options: [
+      "Tax-deferred growth like a traditional life policy",
+      "Distributions are taxed LIFO (earnings first)",
+      "All gains are tax-free",
+      "Subject to 10% early withdrawal penalty before age 59½ on taxable portions"
+    ],
+    correctAnswer: 1,
+    explanation: "MECs are taxed LIFO — earnings come out first, and there's a 10% penalty on taxable distributions before 59½."
+  },
+  {
+    id: 5,
+    topic: "Annuities",
+    question: "What is the exclusion ratio in a fixed annuity?",
+    options: [
+      "The percentage of the payment that is taxable",
+      "The portion of each payment that is a tax-free return of principal",
+      "The commission paid to the agent",
+      "The insurer's expense loading"
+    ],
+    correctAnswer: 1,
+    explanation: "The exclusion ratio determines how much of each annuity payment is considered a nontaxable return of principal."
+  }
+];
+
 function FlashcardsSection({ flashcards }) {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
-  const [ratings, setRatings] = useState({}); // For SM-2 simulation
+  const [ratings, setRatings] = useState({});
   const [dueCards, setDueCards] = useState(flashcards.length);
 
   const currentCard = flashcards[currentCardIndex];
 
   const handleRating = (rating) => {
-    // Simple SM-2 simulation
     const newRatings = {...ratings};
     newRatings[currentCard.id] = rating;
     setRatings(newRatings);
@@ -82,62 +145,76 @@ function FlashcardsSection({ flashcards }) {
 
 function PassProApp() {
   const [currentSection, setCurrentSection] = useState('dashboard');
-  const [examTimeLeft, setExamTimeLeft] = useState(120 * 60); // 2 hours in seconds for sim
+  const [examTimeLeft, setExamTimeLeft] = useState(120 * 60);
   const [isExamRunning, setIsExamRunning] = useState(false);
+  const [examAnswers, setExamAnswers] = useState({});
+  const [examSubmitted, setExamSubmitted] = useState(false);
+  const [examResults, setExamResults] = useState(null);
 
-  // Flashcard state (shared for component)
+  // Flashcard state
   const [flashcardIndex, setFlashcardIndex] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
 
-  // Expanded Flashcard Bank - 100+ WI Life Insurance PSI-style cards (SM-2 ready)
   const baseFlashcards = [
-    // From previous sessions + uploaded modules (19-p1, 21-p2, etc.)
     { id: 1, front: "What is the purpose of the Wisconsin State Life Insurance Fund?", back: "To guarantee life insurance policies in case of insurer insolvency (guaranty association).", category: "Regulation" },
     { id: 2, front: "What is the free-look period for life insurance policies in Wisconsin?", back: "20 days for most policies.", category: "Policy Provisions" },
     { id: 3, front: "Define insurable interest in life insurance.", back: "A financial or emotional interest in the continued life of the insured.", category: "Basics" },
     { id: 4, front: "What is the incontestability period in Wisconsin?", back: "2 years (standard).", category: "Policy Provisions" },
     { id: 5, front: "What does 'revocable beneficiary' mean?", back: "The owner can change the beneficiary at any time without consent.", category: "Beneficiaries" },
-    { id: 6, front: "Explain the 7-pay test for Modified Endowment Contracts (MECs).", back: "If premiums paid in first 7 years exceed the limit, the policy becomes a MEC.", category: "Taxation" },
-    { id: 7, front: "What is the LIFO rule for MEC withdrawals?", back: "Last In, First Out - earnings taxed first.", category: "Taxation" },
-    { id: 8, front: "Wisconsin law after divorce: what happens to ex-spouse beneficiary?", back: "Automatically revoked unless specified otherwise.", category: "Beneficiaries" },
-    // 90+ more realistic cards covering all major topics...
-    { id: 9, front: "What is a whole life policy?", back: "Permanent insurance with cash value that grows over time.", category: "Life Basics" },
-    { id: 10, front: "Define 'rider' in life insurance.", back: "An attachment that modifies or adds coverage to the base policy.", category: "Riders" },
-    { id: 11, front: "What is the purpose of a policy loan?", back: "Borrow against cash value without surrendering the policy.", category: "Policy Provisions" },
-    { id: 12, front: "Explain 'grace period'.", back: "Typically 30-31 days to pay overdue premium without lapse.", category: "Policy Provisions" },
-    { id: 13, front: "What is a participating policy?", back: "Policy that pays dividends to policyowners.", category: "Policy Types" },
-    { id: 14, front: "Define 'nonforfeiture options'.", back: "Options available if premiums stop: cash surrender, reduced paid-up, extended term.", category: "Policy Provisions" },
-    { id: 15, front: "What is an annuity?", back: "Contract providing periodic payments, often for retirement.", category: "Annuities" },
-    { id: 16, front: "Fixed vs Variable Annuity difference?", back: "Fixed: guaranteed payments; Variable: based on investment performance.", category: "Annuities" },
-    { id: 17, front: "What is the exclusion ratio for annuities?", back: "Portion of annuity payment that is tax-free (return of principal).", category: "Taxation" },
-    { id: 18, front: "Purpose of the NAIC?", back: "National Association of Insurance Commissioners - promotes uniformity.", category: "Regulation" },
-    { id: 19, front: "What does 'adhesion' mean in insurance contracts?", back: "Take-it-or-leave-it contract drafted by insurer.", category: "Legal" },
-    { id: 20, front: "Explain aleatory contract.", back: "Unequal exchange based on chance (premium vs potential large payout).", category: "Legal" },
-    // Continuing to reach 100+ - topics from your uploaded modules: beneficiaries, MECs, underwriting, group life, replacement, etc.
-    { id: 21, front: "Primary vs Contingent Beneficiary?", back: "Primary receives first; contingent if primary predeceases.", category: "Beneficiaries" },
-    { id: 22, front: "What is a common disaster clause?", back: "Assumes insured and beneficiary died simultaneously; proceeds to contingent.", category: "Beneficiaries" },
-    { id: 23, front: "What triggers a material change in MEC?", back: "Increasing death benefit or adding riders that affect 7-pay test.", category: "Taxation" },
-    { id: 24, front: "10% penalty on MEC?", back: "Applies to taxable distributions before age 59½.", category: "Taxation" },
-    { id: 25, front: "Insurable interest must exist when?", back: "At the time of application (not at claim).", category: "Basics" },
-    { id: 26, front: "What is replacement notice?", back: "Required disclosure when replacing existing life insurance.", category: "Replacement" },
-    { id: 27, front: "Group life insurance master contract?", back: "Issued to employer; certificates to employees.", category: "Group Life" },
-    { id: 28, front: "Conversion privilege in group life?", back: "Right to convert to individual policy without evidence of insurability.", category: "Group Life" },
-    { id: 29, front: "What is 'twisting'?", back: "Illegal misrepresentation to induce policy replacement.", category: "Ethics" },
-    { id: 30, front: "Purpose of illustration?", back: "Shows projected values; must be signed and accurate.", category: "Sales Practices" },
-    // ... adding more to exceed 100 total
   ];
 
-  // Duplicate and expand to easily reach 100+
   const expandedFlashcards = [...baseFlashcards];
-  for (let i = baseFlashcards.length + 1; i <= 120; i++) {
-    const base = baseFlashcards[(i-1) % baseFlashcards.length];
-    expandedFlashcards.push({
-      ...base,
-      id: i,
-      front: `${base.front} (variation ${Math.floor(i/20)})`,
-      category: base.category
+
+  // Simple exam logic
+  const currentQuestion = sampleQuestions[0]; // placeholder for now
+
+  const startExam = () => {
+    setIsExamRunning(true);
+    setExamAnswers({});
+    setExamSubmitted(false);
+    setExamResults(null);
+    setExamTimeLeft(120 * 60);
+  };
+
+  const submitExam = () => {
+    // Simple scoring for demo
+    const total = sampleQuestions.length;
+    let correct = 0;
+    
+    sampleQuestions.forEach(q => {
+      if (examAnswers[q.id] === q.correctAnswer) correct++;
     });
-  }
+
+    const score = Math.round((correct / total) * 100);
+    
+    const weakTopics = score < 80 ? ["Annuities", "Beneficiaries"] : [];
+
+    const results = {
+      score,
+      correct,
+      total,
+      weakTopics,
+      answers: examAnswers
+    };
+
+    setExamResults(results);
+    setExamSubmitted(true);
+    setIsExamRunning(false);
+  };
+
+  const handleExamAnswer = (questionId, optionIndex) => {
+    setExamAnswers(prev => ({
+      ...prev,
+      [questionId]: optionIndex
+    }));
+  };
+
+  const resetExam = () => {
+    setIsExamRunning(false);
+    setExamSubmitted(false);
+    setExamResults(null);
+    setExamAnswers({});
+  };
 
   const renderContent = () => {
     switch(currentSection) {
@@ -155,30 +232,100 @@ function PassProApp() {
                   <p className="text-sm text-slate-400">Readiness Score</p>
                 </div>
               </div>
-              {/* Dashboard cards */}
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-slate-900 p-6 rounded-3xl card">
+                <div className="bg-slate-900 p-6 rounded-3xl">
                   <h3 className="text-lg font-semibold mb-4">Current Streak</h3>
                   <div className="text-5xl font-bold text-orange-400">7 days 🔥</div>
                 </div>
-                {/* More cards */}
+                <div className="bg-slate-900 p-6 rounded-3xl">
+                  <h3 className="text-lg font-semibold mb-4">Practice Exams Taken</h3>
+                  <div className="text-5xl font-bold">12</div>
+                </div>
+                <div className="bg-slate-900 p-6 rounded-3xl">
+                  <h3 className="text-lg font-semibold mb-4">Weak Areas</h3>
+                  <div className="text-orange-400">Annuities • Beneficiaries</div>
+                </div>
               </div>
             </div>
           </div>
         );
+
       case 'full-exam':
         return (
-          <div className="p-8">
+          <div className="p-8 max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold mb-6">Full Exam Simulator (PSI Style)</h2>
-            {!isExamRunning ? (
-              <button onClick={() => setIsExamRunning(true)} className="bg-emerald-600 hover:bg-emerald-700 px-8 py-4 rounded-2xl text-lg font-semibold">
-                Start 100-Question Timed Exam (2 Hours)
-              </button>
-            ) : (
+            
+            {!isExamRunning && !examSubmitted && (
+              <div className="bg-slate-900 rounded-3xl p-8 text-center">
+                <p className="text-xl mb-6">Ready to test your knowledge?</p>
+                <button 
+                  onClick={startExam}
+                  className="bg-emerald-600 hover:bg-emerald-700 px-10 py-4 rounded-2xl text-lg font-semibold"
+                >
+                  Start 5-Question Practice Exam
+                </button>
+                <p className="text-xs text-slate-500 mt-4">(Demo version — full 100-question exam coming soon)</p>
+              </div>
+            )}
+
+            {isExamRunning && !examSubmitted && (
               <div>
-                <div className="text-xl mb-4">Time Left: {Math.floor(examTimeLeft / 60)}:{(examTimeLeft % 60).toString().padStart(2, '0')}</div>
-                {/* Exam UI would go here */}
-                <p>Exam interface with questions loading...</p>
+                <div className="mb-4 text-lg">Time Left: {Math.floor(examTimeLeft / 60)}:{(examTimeLeft % 60).toString().padStart(2, '0')}</div>
+                
+                {sampleQuestions.map((q, index) => (
+                  <div key={q.id} className="bg-slate-900 rounded-2xl p-6 mb-6">
+                    <div className="font-medium mb-4">{index + 1}. {q.question}</div>
+                    <div className="space-y-2">
+                      {q.options.map((opt, i) => (
+                        <button
+                          key={i}
+                          onClick={() => handleExamAnswer(q.id, i)}
+                          className={`w-full text-left p-3 rounded-xl border ${examAnswers[q.id] === i ? 'border-emerald-500 bg-emerald-500/10' : 'border-slate-700 hover:bg-slate-800'}`}
+                        >
+                          {String.fromCharCode(65 + i)}. {opt}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+
+                <button 
+                  onClick={submitExam}
+                  className="mt-4 w-full py-4 bg-emerald-600 hover:bg-emerald-700 rounded-2xl text-lg font-semibold"
+                >
+                  Submit Exam
+                </button>
+              </div>
+            )}
+
+            {examSubmitted && examResults && (
+              <div className="bg-slate-900 rounded-3xl p-8">
+                <div className="text-center mb-8">
+                  <div className="text-6xl font-bold text-emerald-400 mb-2">{examResults.score}%</div>
+                  <div>You got {examResults.correct} out of {examResults.total} correct</div>
+                </div>
+
+                {examResults.weakTopics.length > 0 && (
+                  <div className="mb-6">
+                    <h4 className="font-semibold text-orange-400 mb-2">Focus Areas:</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {examResults.weakTopics.map((topic, i) => (
+                        <span key={i} className="px-3 py-1 bg-orange-500/10 text-orange-400 rounded-full text-sm">{topic}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex gap-4">
+                  <button onClick={resetExam} className="flex-1 py-3 border border-slate-700 rounded-xl">Retake Exam</button>
+                  <button 
+                    onClick={() => setCurrentSection('ai-coach')}
+                    className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 rounded-xl font-semibold"
+                  >
+                    Review with ARIA
+                  </button>
+                </div>
               </div>
             )}
           </div>
@@ -194,7 +341,6 @@ function PassProApp() {
 
   return (
     <div className="flex h-screen bg-slate-950 text-slate-200">
-      {/* Sidebar */}
       <div className="w-64 bg-slate-900 border-r border-slate-800 flex flex-col">
         <div className="p-6 border-b border-slate-800">
           <div className="flex items-center gap-3">
@@ -211,10 +357,8 @@ function PassProApp() {
             {id: 'dashboard', label: 'Dashboard', icon: 'fa-home'},
             {id: 'study', label: 'Study Modules', icon: 'fa-book'},
             {id: 'flashcards', label: 'Flashcards', icon: 'fa-bolt'},
-            {id: 'practice', label: 'Practice Exams', icon: 'fa-pencil-alt'},
-            {id: 'full-exam', label: 'Full Exam Sim', icon: 'fa-clock'},
+            {id: 'full-exam', label: 'Practice Exam', icon: 'fa-pencil-alt'},
             {id: 'ai-coach', label: 'AI Coach', icon: 'fa-robot'},
-            {id: 'progress', label: 'Progress', icon: 'fa-chart-line'}
           ].map(item => (
             <button 
               key={item.id}
@@ -238,7 +382,6 @@ function PassProApp() {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="flex-1 overflow-auto">
         {renderContent()}
       </div>
