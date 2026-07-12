@@ -89,7 +89,11 @@ export function Content() {
         <Link className="text-gold-400 underline" to="/blog/wisconsin-free-look-period">
           Wisconsin free look period breakdown
         </Link>{' '}
-        for the other half of this comparison, or the full{' '}
+        for the other half of this comparison, the{' '}
+        <Link className="text-gold-400 underline" to="/blog/wisconsin-incontestability-period">
+          incontestability period breakdown
+        </Link>{' '}
+        for the two-year rule, or the full{' '}
         <Link className="text-gold-400 underline" to="/blog/wisconsin-life-health-exam-study-guide">
           Wisconsin Life &amp; Health Insurance Exam study guide
         </Link>{' '}

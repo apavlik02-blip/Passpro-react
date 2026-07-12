@@ -2,6 +2,7 @@ import { Content as WisconsinExamStudyGuide } from '../content/blog/wisconsin-ex
 import { Content as WisconsinGracePeriod } from '../content/blog/wisconsin-grace-period.jsx'
 import { Content as WisconsinFreeLookPeriod } from '../content/blog/wisconsin-free-look-period.jsx'
 import { Content as WisconsinTwistingChurningRebating } from '../content/blog/wisconsin-twisting-churning-rebating.jsx'
+import { Content as WisconsinIncontestabilityPeriod } from '../content/blog/wisconsin-incontestability-period.jsx'
 
 // Add new posts here — the Content import above and a metadata entry below.
 export const BLOG_POSTS = [
@@ -40,6 +41,15 @@ export const BLOG_POSTS = [
     date: '2026-07-12',
     readingMinutes: 4,
     Content: WisconsinTwistingChurningRebating,
+  },
+  {
+    slug: 'wisconsin-incontestability-period',
+    title: 'Wisconsin Incontestability Period: 2 Years, Explained',
+    description:
+      "Wisconsin's life insurance incontestability period is 2 years from issue. After that, the insurer generally can't contest the policy over a misstatement in the original application.",
+    date: '2026-07-12',
+    readingMinutes: 3,
+    Content: WisconsinIncontestabilityPeriod,
   },
 ].sort((a, b) => (a.date < b.date ? 1 : -1))
 
