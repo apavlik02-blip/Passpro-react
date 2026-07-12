@@ -1,13 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '@clerk/clerk-react'
+import { supabaseFunctionUrl } from '../lib/supabaseFunctions.js'
 
 function ariaFunctionUrl() {
-  const explicit = import.meta.env.VITE_ARIA_FUNCTION_URL
-  if (explicit) return explicit
-
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-  if (!supabaseUrl) return null
-  return `${supabaseUrl.replace(/\/$/, '')}/functions/v1/aria`
+  return import.meta.env.VITE_ARIA_FUNCTION_URL ?? supabaseFunctionUrl('aria')
 }
 
 export function useAriaProgress() {

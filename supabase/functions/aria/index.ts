@@ -12,7 +12,7 @@
 // SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY are injected automatically by Supabase.
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.4'
-import { verifyClerkToken } from './clerk.ts'
+import { verifyClerkToken } from '../_shared/clerk.ts'
 import {
   calculateNewReadiness,
   getDefaultProgress,

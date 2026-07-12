@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react'
 import { useAuth } from '@clerk/clerk-react'
+import { supabaseFunctionUrl } from '../lib/supabaseFunctions.js'
 
 const ARIA_QUICK_STARTERS = [
   'Give me a practice quiz',
@@ -9,12 +10,7 @@ const ARIA_QUICK_STARTERS = [
 ]
 
 function ariaFunctionUrl() {
-  const explicit = import.meta.env.VITE_ARIA_FUNCTION_URL
-  if (explicit) return explicit
-
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-  if (!supabaseUrl) return null
-  return `${supabaseUrl.replace(/\/$/, '')}/functions/v1/aria`
+  return import.meta.env.VITE_ARIA_FUNCTION_URL ?? supabaseFunctionUrl('aria')
 }
 
 function suggestionsFor(reply) {

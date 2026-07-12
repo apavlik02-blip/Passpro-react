@@ -1,6 +1,14 @@
 import { SignedIn, SignedOut } from '@clerk/clerk-react'
-import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom'
+import {
+  BrowserRouter,
+  Navigate,
+  Outlet,
+  Route,
+  Routes,
+  useOutletContext,
+} from 'react-router-dom'
 import { useLearningContent } from './hooks/useLearningContent.js'
+import { useEntitlement } from './hooks/useEntitlement.js'
 import { MemberLayout } from './components/layout/MemberLayout.jsx'
 import { MissingClerkConfiguration } from './components/config/MissingClerkConfiguration.jsx'
 import { MissingSupabaseConfiguration } from './components/config/MissingSupabaseConfiguration.jsx'
@@ -30,6 +38,25 @@ function ProtectedRoute({ clerkEnabled }) {
 
 function SupabaseRoute({ supabaseConfigured }) {
   return supabaseConfigured ? <Outlet /> : <MissingSupabaseConfiguration />
+}
+
+function PaywallRoute() {
+  const { hasPaid, loading, configured } = useEntitlement()
+  // Outlet resets context unless explicitly forwarded — MemberLayout passes
+  // `openAria` down via outlet context, and DashboardPage reads it.
+  const outletContext = useOutletContext()
+
+  if (configured && loading) {
+    return (
+      <div className="font-mono text-sm text-muted">Checking your access...</div>
+    )
+  }
+
+  if (configured && !hasPaid) {
+    return <Navigate to="/account" replace />
+  }
+
+  return <Outlet context={outletContext} />
 }
 
 function App({ clerkEnabled, stripePaymentLinkUrl }) {
@@ -80,52 +107,54 @@ function App({ clerkEnabled, stripePaymentLinkUrl }) {
             <Route
               element={<MemberLayout stripePaymentLinkUrl={stripePaymentLinkUrl} />}
             >
-              <Route
-                path="/dashboard"
-                element={
-                  <DashboardPage
-                    categories={categories}
-                    error={error}
-                    loading={loading}
-                    questionBank={questionBank}
-                    studyModules={studyModules}
-                    totalEstimatedMinutes={totalEstimatedMinutes}
-                  />
-                }
-              />
-              <Route
-                path="/study"
-                element={
-                  <StudyPage
-                    error={error}
-                    loading={loading}
-                    studyModules={studyModules}
-                  />
-                }
-              />
-              <Route
-                path="/practice-exam"
-                element={
-                  <PracticeExamPage
-                    error={error}
-                    loading={loading}
-                    questionBank={questionBank}
-                  />
-                }
-              />
-              <Route
-                path="/progress"
-                element={
-                  <ProgressPage
-                    categories={categories}
-                    error={error}
-                    loading={loading}
-                    questionBank={questionBank}
-                    studyModules={studyModules}
-                    totalEstimatedMinutes={totalEstimatedMinutes}
-                  />
-                }
-              />
+              <Route element={<PaywallRoute />}>
+                <Route
+                  path="/dashboard"
+                  element={
+                    <DashboardPage
+                      categories={categories}
+                      error={error}
+                      loading={loading}
+                      questionBank={questionBank}
+                      studyModules={studyModules}
+                      totalEstimatedMinutes={totalEstimatedMinutes}
+                    />
+                  }
+                />
+                <Route
+                  path="/study"
+                  element={
+                    <StudyPage
+                      error={error}
+                      loading={loading}
+                      studyModules={studyModules}
+                    />
+                  }
+                />
+                <Route
+                  path="/practice-exam"
+                  element={
+                    <PracticeExamPage
+                      error={error}
+                      loading={loading}
+                      questionBank={questionBank}
+                    />
+                  }
+                />
+                <Route
+                  path="/progress"
+                  element={
+                    <ProgressPage
+                      categories={categories}
+                      error={error}
+                      loading={loading}
+                      questionBank={questionBank}
+                      studyModules={studyModules}
+                      totalEstimatedMinutes={totalEstimatedMinutes}
+                    />
+                  }
+                />
+              </Route>
               <Route
                 path="/account"
                 element={<AccountPage stripePaymentLinkUrl={stripePaymentLinkUrl} />}
