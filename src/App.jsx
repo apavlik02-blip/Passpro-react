@@ -13,6 +13,8 @@ import { MemberLayout } from './components/layout/MemberLayout.jsx'
 import { MissingClerkConfiguration } from './components/config/MissingClerkConfiguration.jsx'
 import { MissingSupabaseConfiguration } from './components/config/MissingSupabaseConfiguration.jsx'
 import { HomePage } from './pages/HomePage.jsx'
+import { BlogIndexPage } from './pages/BlogIndexPage.jsx'
+import { BlogPostPage } from './pages/BlogPostPage.jsx'
 import { DashboardPage } from './pages/DashboardPage.jsx'
 import { StudyPage } from './pages/StudyPage.jsx'
 import { PracticeExamPage } from './pages/PracticeExamPage.jsx'
@@ -102,6 +104,8 @@ function App({ clerkEnabled, stripePaymentLinkUrl }) {
             />
           }
         />
+        <Route path="/blog" element={<BlogIndexPage />} />
+        <Route path="/blog/:slug" element={<BlogPostPage />} />
         <Route element={<ProtectedRoute clerkEnabled={clerkEnabled} />}>
           <Route element={<SupabaseRoute supabaseConfigured={supabaseConfigured} />}>
             <Route

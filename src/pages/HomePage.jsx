@@ -37,7 +37,12 @@ export function HomePage({
     <main className="min-h-screen bg-ink-950 text-paper">
       <div className="flex items-center justify-between border-b border-line px-6 py-3 font-mono text-[11px] tracking-widest text-muted uppercase sm:px-10">
         <span>PassPro</span>
-        <span className="text-gold-500">Wisconsin Life &amp; Health Exam Prep</span>
+        <div className="flex items-center gap-5">
+          <NavLink className="hover:text-paper" to="/blog">
+            Study Guides
+          </NavLink>
+          <span className="text-gold-500">Wisconsin Life &amp; Health Exam Prep</span>
+        </div>
       </div>
 
       <header className="flex flex-wrap items-start justify-end gap-4 px-6 pt-6 sm:px-10">

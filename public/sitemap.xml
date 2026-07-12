@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Manually maintained — add a <url> entry here whenever a new post is
+     added to src/lib/blogPosts.js. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://passpro-react.vercel.app/</loc>
+  </url>
+  <url>
+    <loc>https://passpro-react.vercel.app/blog</loc>
+  </url>
+  <url>
+    <loc>https://passpro-react.vercel.app/blog/wisconsin-life-health-exam-study-guide</loc>
+  </url>
+</urlset>
