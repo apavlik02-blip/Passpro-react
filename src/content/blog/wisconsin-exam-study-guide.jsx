@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 function FactTable({ title, rows }) {
   return (
     <div className="my-6 border border-line bg-ink-900">
@@ -105,10 +107,11 @@ export function Content() {
       <p className="mb-5 text-paper">
         The grace period is the single most commonly missed number on the exam — most generic
         study guides default to 30 days, but Wisconsin uses <strong className="text-gold-400">31</strong>.{' '}
-        <strong className="text-gold-400">Twisting, churning, and rebating</strong> are all
-        explicitly prohibited unfair trade practices under Wisconsin law — expect at least one
-        question distinguishing between them (twisting = misrepresentation to induce replacement;
-        churning = excessive replacement volume for commission).
+        <Link className="text-gold-400 underline" to="/blog/wisconsin-twisting-churning-rebating">
+          Twisting, churning, and rebating
+        </Link>{' '}
+        are all explicitly prohibited unfair trade practices under Wisconsin law — expect at
+        least one question distinguishing between them.
       </p>
 
       <h2 className="mt-10 mb-4 font-serif text-2xl font-medium">How to actually prepare</h2>

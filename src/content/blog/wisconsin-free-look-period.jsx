@@ -57,8 +57,11 @@ export function Content() {
         of a new one — is where Wisconsin's unfair trade practice rules concentrate the most
         scrutiny. A longer free look period on replacements gives the policyholder more time to
         compare the new policy against the one they're giving up, and it's a direct regulatory
-        response to <strong className="text-gold-400">twisting</strong> (misrepresenting a policy
-        to induce a replacement) as a recognized risk.
+        response to{' '}
+        <Link className="text-gold-400 underline" to="/blog/wisconsin-twisting-churning-rebating">
+          twisting
+        </Link>{' '}
+        (misrepresenting a policy to induce a replacement) as a recognized risk.
       </p>
 
       <blockquote className="my-7 max-w-[58ch] border-l-2 border-gold-500 py-1 pl-5 font-serif text-lg text-paper italic">

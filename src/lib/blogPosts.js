@@ -1,6 +1,7 @@
 import { Content as WisconsinExamStudyGuide } from '../content/blog/wisconsin-exam-study-guide.jsx'
 import { Content as WisconsinGracePeriod } from '../content/blog/wisconsin-grace-period.jsx'
 import { Content as WisconsinFreeLookPeriod } from '../content/blog/wisconsin-free-look-period.jsx'
+import { Content as WisconsinTwistingChurningRebating } from '../content/blog/wisconsin-twisting-churning-rebating.jsx'
 
 // Add new posts here — the Content import above and a metadata entry below.
 export const BLOG_POSTS = [
@@ -30,6 +31,15 @@ export const BLOG_POSTS = [
     date: '2026-07-12',
     readingMinutes: 3,
     Content: WisconsinFreeLookPeriod,
+  },
+  {
+    slug: 'wisconsin-twisting-churning-rebating',
+    title: 'Twisting vs. Churning vs. Rebating: Wisconsin Insurance Law Explained',
+    description:
+      "Twisting, churning, and rebating are three separate unfair trade practices under Wisconsin insurance law. Here's how to tell them apart for the licensing exam.",
+    date: '2026-07-12',
+    readingMinutes: 4,
+    Content: WisconsinTwistingChurningRebating,
   },
 ].sort((a, b) => (a.date < b.date ? 1 : -1))
 
