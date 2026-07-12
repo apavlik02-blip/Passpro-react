@@ -1,5 +1,6 @@
 import { Content as WisconsinExamStudyGuide } from '../content/blog/wisconsin-exam-study-guide.jsx'
 import { Content as WisconsinGracePeriod } from '../content/blog/wisconsin-grace-period.jsx'
+import { Content as WisconsinFreeLookPeriod } from '../content/blog/wisconsin-free-look-period.jsx'
 
 // Add new posts here — the Content import above and a metadata entry below.
 export const BLOG_POSTS = [
@@ -20,6 +21,15 @@ export const BLOG_POSTS = [
     date: '2026-07-12',
     readingMinutes: 3,
     Content: WisconsinGracePeriod,
+  },
+  {
+    slug: 'wisconsin-free-look-period',
+    title: 'Wisconsin Free Look Period: 10 Days, or 20–30 for Replacements',
+    description:
+      "Wisconsin's free look period is 10 days for a new individual life policy, but 20-30 days if it's replacing an existing one. Here's the distinction and why the exam tests it.",
+    date: '2026-07-12',
+    readingMinutes: 3,
+    Content: WisconsinFreeLookPeriod,
   },
 ].sort((a, b) => (a.date < b.date ? 1 : -1))
 

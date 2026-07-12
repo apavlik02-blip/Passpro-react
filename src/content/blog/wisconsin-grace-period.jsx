@@ -85,7 +85,11 @@ export function Content() {
       <h2 className="mt-10 mb-4 font-serif text-2xl font-medium">Studying this for the exam</h2>
       <p className="mb-5 text-paper">
         This is one fact out of dozens of Wisconsin-specific numbers and rules tested across the
-        exam's content outline — see the full{' '}
+        exam's content outline — see the{' '}
+        <Link className="text-gold-400 underline" to="/blog/wisconsin-free-look-period">
+          Wisconsin free look period breakdown
+        </Link>{' '}
+        for the other half of this comparison, or the full{' '}
         <Link className="text-gold-400 underline" to="/blog/wisconsin-life-health-exam-study-guide">
           Wisconsin Life &amp; Health Insurance Exam study guide
         </Link>{' '}
