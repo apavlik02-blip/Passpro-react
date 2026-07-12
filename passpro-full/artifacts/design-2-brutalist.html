@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PassPro — design-2-brutalist</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>* { box-sizing: border-box; margin: 0; padding: 0; } body { background: #06060c; } #root { min-height: 100vh; }</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const STUDENT = { name: "Amanda", readiness: 74, streak: 7, xp: 2840, daysLeft: 41, hours: 8.5, weak: ["Annuities", "Tax Treatment", "WI Security Fund"] };
+
+function NeoBrutalist() {
+  const [activeNav, setActiveNav] = useState("DASHBOARD");
+  const [hoveredCard, setHoveredCard] = useState(null);
+
+  return (
+    <div style={{ fontFamily: "'Space Grotesk', system-ui, sans-serif", background: "#f0ede6", minHeight: "100vh", color: "#0a0a0a" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        .brut { transition: transform 0.08s, box-shadow 0.08s; cursor: default; }
+        .brut:hover { transform: translate(-3px,-3px); box-shadow: 6px 6px 0 #0a0a0a !important; }
+        .nav-btn { cursor: pointer; border: none; transition: all 0.1s; font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px; }
+        .nav-btn:hover { background: #0a0a0a !important; color: #00ff88 !important; }
+        .drill-btn { cursor: pointer; border: none; transition: all 0.1s; }
+        .drill-btn:hover { background: #0a0a0a !important; color: #00ff88 !important; }
+        .stat-cell { transition: background 0.1s; cursor: default; }
+        .stat-cell:hover { filter: brightness(1.05); }
+        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-thumb { background: #0a0a0a; }
+      `}</style>
+
+      {/* ── MEGA HEADER ── */}
+      <div style={{ background: "#0a0a0a", borderBottom: "4px solid #0a0a0a" }}>
+        {/* Top strip */}
+        <div style={{ background: "#00ff88", padding: "6px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "3px solid #0a0a0a" }}>
+          <div style={{ fontFamily: "'Bebas Neue'", fontSize: 13, letterSpacing: 3, color: "#0a0a0a" }}>WISCONSIN LIFE INSURANCE PRE-LICENSING · PSI SERIES 22-01</div>
+          <div style={{ fontFamily: "'Space Grotesk'", fontSize: 11, fontWeight: 700, color: "#0a0a0a" }}>OCI APPROVED PROVIDER · {STUDENT.hours}h / 20h LOGGED</div>
+        </div>
+
+        {/* Main header */}
+        <div style={{ padding: "20px 24px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ fontFamily: "'Bebas Neue'", fontSize: 36, color: "#00ff88", letterSpacing: 4 }}>PASSPRO</div>
+          <nav style={{ display: "flex", gap: 4 }}>
+            {["DASHBOARD", "STUDY", "PRACTICE", "AI COACH", "PROGRESS"].map(item => (
+              <button key={item} className="nav-btn" onClick={() => setActiveNav(item)} style={{ padding: "8px 16px", fontFamily: "'Bebas Neue'", fontSize: 15, letterSpacing: 2, background: activeNav === item ? "#00ff88" : "transparent", color: activeNav === item ? "#0a0a0a" : "rgba(255,255,255,0.5)", border: "2px solid", borderColor: activeNav === item ? "#00ff88" : "rgba(255,255,255,0.15)" }}>
+                {item}
+              </button>
+            ))}
+          </nav>
+        </div>
+      </div>
+
+      {/* ── HERO MARQUEE ── */}
+      <div style={{ background: "#0a0a0a", borderBottom: "3px solid #0a0a0a", overflow: "hidden", padding: "0" }}>
+        <div style={{ display: "flex", alignItems: "center", padding: "0 24px", gap: 0 }}>
+          {[
+            { label: "READINESS", value: `${STUDENT.readiness}%`, bg: "#00ff88", tc: "#0a0a0a" },
+            { label: "STREAK", value: `${STUDENT.streak} DAYS`, bg: "#0a0a0a", tc: "#00ff88" },
+            { label: "XP", value: "2,840", bg: "#f0ede6", tc: "#0a0a0a" },
+            { label: "EXAM IN", value: `${STUDENT.daysLeft}D`, bg: "#0a0a0a", tc: "#ffcc00" },
+            { label: "HOURS", value: `${STUDENT.hours}H`, bg: "#f0ede6", tc: "#0a0a0a" },
+          ].map((s, i) => (
+            <div key={i} className="stat-cell" style={{ background: s.bg, borderRight: "3px solid #333", padding: "16px 24px", textAlign: "center", flex: 1 }}>
+              <div style={{ fontFamily: "'Bebas Neue'", fontSize: 38, color: s.tc, letterSpacing: 2, lineHeight: 1 }}>{s.value}</div>
+              <div style={{ fontFamily: "'Space Grotesk'", fontSize: 9, color: s.tc === "#0a0a0a" ? "rgba(0,0,0,0.4)" : "rgba(255,255,255,0.35)", fontWeight: 700, letterSpacing: 3, marginTop: 3 }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── MAIN GRID ── */}
+      <div style={{ padding: "24px", display: "grid", gridTemplateColumns: "2fr 1fr", gap: 20 }}>
+
+        {/* LEFT COLUMN */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+
+          {/* Greeting block */}
+          <div className="brut" style={{ background: "#0a0a0a", border: "3px solid #0a0a0a", padding: "28px 28px", boxShadow: "5px 5px 0 #00ff88", position: "relative", overflow: "hidden" }}>
+            <div style={{ position: "absolute", top: 0, right: 0, background: "#00ff88", padding: "6px 14px", fontFamily: "'Bebas Neue'", fontSize: 14, color: "#0a0a0a", letterSpacing: 2 }}>PRO PLAN</div>
+            <div style={{ fontFamily: "'Bebas Neue'", fontSize: 56, color: "#f0ede6", lineHeight: 0.9, letterSpacing: 2, marginBottom: 14 }}>
+              MORNING,<br /><span style={{ color: "#00ff88", WebkitTextStroke: "1px #00ff88" }}>{STUDENT.name.toUpperCase()}.</span>
+            </div>
+            <div style={{ fontFamily: "'Space Grotesk'", fontSize: 14, color: "rgba(255,255,255,0.55)", marginBottom: 20, lineHeight: 1.6 }}>
+              Your Wisconsin Life Insurance exam is in <strong style={{ color: "#ffcc00" }}>{STUDENT.daysLeft} days</strong>. You need <strong style={{ color: "#f87171" }}>11.5 more hours</strong> for OCI compliance. Let's get to work.
+            </div>
+            <div style={{ display: "flex", gap: 10 }}>
+              <button className="drill-btn" style={{ background: "#00ff88", color: "#0a0a0a", border: "3px solid #00ff88", padding: "10px 24px", fontFamily: "'Bebas Neue'", fontSize: 18, letterSpacing: 2, cursor: "pointer" }}>CONTINUE STUDYING →</button>
+              <button className="drill-btn" style={{ background: "transparent", color: "#00ff88", border: "3px solid #00ff88", padding: "10px 20px", fontFamily: "'Bebas Neue'", fontSize: 18, letterSpacing: 2, cursor: "pointer" }}>ASK COACH</button>
+            </div>
+          </div>
+
+          {/* Curriculum */}
+          <div className="brut" style={{ background: "#fff", border: "3px solid #0a0a0a", padding: "22px", boxShadow: "4px 4px 0 #0a0a0a" }}>
+            <div style={{ fontFamily: "'Bebas Neue'", fontSize: 24, letterSpacing: 2, borderBottom: "3px solid #0a0a0a", paddingBottom: 12, marginBottom: 16, display: "flex", justifyContent: "space-between" }}>
+              <span>CURRICULUM STATUS</span>
+              <span style={{ fontSize: 14, color: "rgba(0,0,0,0.4)" }}>WI LIFE LICENSE</span>
+            </div>
+            {[
+              ["01 — FOUNDATIONS OF LIFE INSURANCE", 100, "#00ff88"],
+              ["02 — TYPES OF LIFE INSURANCE POLICIES", 100, "#00ff88"],
+              ["03 — POLICY PROVISIONS & RIDERS", 62, "#ffcc00"],
+              ["04 — ANNUITIES", 30, "#f87171"],
+              ["05 — UNDERWRITING & PREMIUMS", 0, "#e5e5e5"],
+              ["08 — WISCONSIN STATE REGULATIONS", 35, "#c084fc"],
+            ].map(([name, pct, color], i) => (
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 0, marginBottom: 10, border: "2px solid #0a0a0a", overflow: "hidden" }}>
+                <div style={{ background: color === "#e5e5e5" ? "#f0ede6" : color, width: 36, minWidth: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Bebas Neue'", fontSize: 14, borderRight: "2px solid #0a0a0a", color: pct === 0 ? "#999" : "#0a0a0a" }}>
+                  {pct === 100 ? "✓" : `${pct}`}
+                </div>
+                <div style={{ flex: 1, padding: "0 12px", fontFamily: "'Space Grotesk'", fontSize: 11, fontWeight: 600, letterSpacing: 0.5, color: pct === 0 ? "#999" : "#0a0a0a", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{name}</div>
+                <div style={{ width: 120, height: "100%", background: "#f0ede6", borderLeft: "2px solid #0a0a0a", padding: "4px 6px" }}>
+                  <div style={{ height: 10, background: "#e5e5e5", border: "1.5px solid #0a0a0a", overflow: "hidden" }}>
+                    <div style={{ height: "100%", width: `${pct}%`, background: color }} />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* OCI compliance */}
+          <div className="brut" style={{ background: "#0a0a0a", border: "3px solid #0a0a0a", padding: "20px", boxShadow: "4px 4px 0 #c084fc" }}>
+            <div style={{ fontFamily: "'Bebas Neue'", fontSize: 20, color: "#c084fc", letterSpacing: 2, marginBottom: 12 }}>🏛 OCI COMPLIANCE TRACKER</div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div>
+                <div style={{ fontFamily: "'Bebas Neue'", fontSize: 42, color: "#c084fc", lineHeight: 1 }}>{STUDENT.hours}H</div>
+                <div style={{ fontFamily: "'Space Grotesk'", fontSize: 11, color: "rgba(255,255,255,0.4)", letterSpacing: 1 }}>LOGGED OF 20H REQUIRED</div>
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                <div style={{ height: 16, background: "rgba(255,255,255,0.08)", border: "2px solid rgba(192,132,252,0.4)", marginBottom: 8 }}>
+                  <div style={{ height: "100%", width: `${(STUDENT.hours / 20) * 100}%`, background: "#c084fc" }} />
+                </div>
+                <div style={{ fontFamily: "'Space Grotesk'", fontSize: 11, color: "#f87171", fontWeight: 700 }}>⚠ {(20 - STUDENT.hours).toFixed(1)}H REMAINING BEFORE EXAM UNLOCK</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        {/* RIGHT COLUMN */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+
+          {/* AI Coach */}
+          <div className="brut" style={{ background: "#0a0a0a", border: "3px solid #0a0a0a", padding: "22px", boxShadow: "4px 4px 0 #00ff88" }}>
+            <div style={{ fontFamily: "'Bebas Neue'", fontSize: 22, color: "#00ff88", letterSpacing: 2, marginBottom: 4 }}>AI COACH</div>
+            <div style={{ fontFamily: "'Space Grotesk'", fontSize: 10, color: "rgba(0,255,136,0.5)", letterSpacing: 2, marginBottom: 16 }}>ONLINE · READY TO DRILL</div>
+            <div style={{ border: "2px solid rgba(0,255,136,0.3)", padding: "14px", marginBottom: 16 }}>
+              <div style={{ fontFamily: "'Space Grotesk'", fontSize: 13, color: "rgba(255,255,255,0.7)", lineHeight: 1.65 }}>
+                <strong style={{ color: "#00ff88" }}>ANNUITIES</strong> is your weakest topic at 45% mastery. A focused 15-minute session today can get you to 60%+.
+              </div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {["▶ START ANNUITY DRILL", "💬 ASK A QUESTION", "📋 VIEW STUDY PLAN"].map((c, i) => (
+                <button key={i} className="drill-btn" style={{ background: i === 0 ? "#00ff88" : "transparent", color: i === 0 ? "#0a0a0a" : "#00ff88", border: "2px solid #00ff88", padding: "10px", fontFamily: "'Bebas Neue'", fontSize: 16, letterSpacing: 1.5 }}>{c}</button>
+              ))}
+            </div>
+          </div>
+
+          {/* Weak areas */}
+          <div className="brut" style={{ background: "#f87171", border: "3px solid #0a0a0a", padding: "20px", boxShadow: "4px 4px 0 #0a0a0a" }}>
+            <div style={{ fontFamily: "'Bebas Neue'", fontSize: 22, letterSpacing: 2, marginBottom: 14 }}>⚠ WEAK AREAS</div>
+            {STUDENT.weak.map((t, i) => (
+              <div key={i} style={{ background: i === 0 ? "#0a0a0a" : "rgba(0,0,0,0.1)", border: "2px solid #0a0a0a", padding: "10px 14px", marginBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <span style={{ fontFamily: "'Space Grotesk'", fontSize: 12, fontWeight: 600, color: i === 0 ? "#00ff88" : "#0a0a0a" }}>{t.toUpperCase()}</span>
+                <span style={{ fontFamily: "'Bebas Neue'", fontSize: 14, color: i === 0 ? "#00ff88" : "#0a0a0a", letterSpacing: 1 }}>DRILL→</span>
+              </div>
+            ))}
+          </div>
+
+          {/* XP Block */}
+          <div className="brut" style={{ background: "#ffcc00", border: "3px solid #0a0a0a", padding: "20px", boxShadow: "4px 4px 0 #0a0a0a" }}>
+            <div style={{ fontFamily: "'Bebas Neue'", fontSize: 16, color: "#0a0a0a", letterSpacing: 2, marginBottom: 4 }}>TOTAL XP EARNED</div>
+            <div style={{ fontFamily: "'Bebas Neue'", fontSize: 52, color: "#0a0a0a", lineHeight: 1 }}>2,840</div>
+            <div style={{ fontFamily: "'Space Grotesk'", fontSize: 11, fontWeight: 700, color: "rgba(0,0,0,0.5)", marginTop: 4 }}>RANK: SILVER II · +15 XP PER SESSION</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(NeoBrutalist));
+</script>
+</body>
+</html>

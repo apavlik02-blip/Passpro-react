@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PassPro — 13-lesson-module</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>* { box-sizing: border-box; margin: 0; padding: 0; } body { background: #06060c; } #root { min-height: 100vh; }</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const lesson = {
+  unit: 1,
+  module: "1.2",
+  moduleTitle: "The Insurance Contract",
+  lessonNum: 3,
+  lessonTitle: "Utmost Good Faith & Representations",
+  duration: "8 min",
+  xp: 75,
+  state: "WI",
+  stateColor: "#c084fc",
+  sections: [
+    {
+      type: "intro",
+      content: "Every insurance contract is built on a principle called **utmost good faith** — or *uberrimae fidei* in legal Latin. This means both the applicant and the insurer must be completely honest with each other. No hiding, no misleading, no half-truths.",
+    },
+    {
+      type: "concept",
+      title: "What is a Representation?",
+      content: "A **representation** is a statement made by the applicant during the application process. It's considered true *to the best of the applicant's knowledge* — not an absolute guarantee of fact. This is important: if you state your age incorrectly by accident, that's a misrepresentation, not fraud.",
+      keyTerms: [
+        { term: "Representation", def: "A statement believed to be true at the time it's made. Not a guarantee." },
+        { term: "Material Representation", def: "A statement that, if false, would have caused the insurer to decline or change the policy." },
+        { term: "Misrepresentation", def: "A false statement of material fact that voids the policy if the insurer relied on it." },
+      ],
+    },
+    {
+      type: "comparison",
+      title: "Representations vs. Warranties",
+      left: { label: "Representation", color: "#38bdf8", points: ["Statement believed true at time of application", "Only material misrepresentations void the policy", "Most statements on an application are representations", "Standard in modern life insurance contracts"] },
+      right: { label: "Warranty", color: "#f59e0b", points: ["Guaranteed to be absolutely true", "Any breach — even minor — can void the policy", "Rare in modern life insurance", "More common in property/casualty insurance"] },
+    },
+    {
+      type: "stateNote",
+      state: "WI",
+      content: "Under **Wisconsin Statute § 631.11**, misrepresentation only voids a policy if it was made with intent to deceive, OR if it materially affected the insurer's decision to accept the risk. Wisconsin gives more protection to the insured than some other states.",
+    },
+    {
+      type: "scenario",
+      title: "Real-World Scenario",
+      scenario: "Patricia applies for a $500,000 term life policy. On the application, she says she's never been treated for heart disease. Six months after the policy is issued, Patricia has a heart attack and dies. The insurer discovers she had been treated for heart disease 3 years ago.",
+      question: "Can the insurer deny the claim?",
+      options: [
+        { text: "Yes — Patricia misrepresented her health history, voiding the policy.", correct: true, explanation: "Correct. Patricia made a material misrepresentation — she knew about her heart condition and concealed it. This is grounds to void the policy and deny the claim." },
+        { text: "No — the policy was already issued, so it can't be contested.", correct: false, explanation: "Incorrect. The incontestability clause only kicks in after 2 years. Since Patricia died within 6 months, the insurer can investigate and contest the claim." },
+        { text: "No — she may have simply forgotten, so intent matters.", correct: false, explanation: "Partly correct reasoning, but not the best answer. While intent matters in Wisconsin, the misrepresentation was clearly material — heart disease directly affects insurability." },
+        { text: "It depends on whether the policy has an incontestability clause.", correct: false, explanation: "Incontestability clauses do apply here, but since the death occurred within the contestability period (2 years), the insurer still has the right to investigate." },
+      ],
+    },
+    {
+      type: "summary",
+      points: [
+        "Utmost good faith requires both parties to be completely honest",
+        "A representation is a belief — not a warranty or guarantee",
+        "Only material misrepresentations can void a policy",
+        "In Wisconsin, intent to deceive OR material effect on risk acceptance is required",
+        "The 2-year incontestability clause limits the insurer's ability to contest after that period",
+      ],
+    },
+  ],
+};
+
+function LessonModule() {
+  const [currentSection, setCurrentSection] = useState(0);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [showResult, setShowResult] = useState(false);
+  const [completed, setCompleted] = useState(new Set());
+
+  const section = lesson.sections[currentSection];
+  const progress = ((currentSection + 1) / lesson.sections.length) * 100;
+  const isLast = currentSection === lesson.sections.length - 1;
+
+  const advance = () => {
+    setCompleted(prev => new Set([...prev, currentSection]));
+    if (!isLast) {
+      setCurrentSection(prev => prev + 1);
+      setSelectedAnswer(null);
+      setShowResult(false);
+    }
+  };
+
+  const renderSection = () => {
+    switch (section.type) {
+      case "intro":
+        return (
+          <div style={{ maxWidth: 680 }}>
+            <div style={{ fontSize: 16, color: "rgba(255,255,255,0.75)", lineHeight: 1.85 }} dangerouslySetInnerHTML={{ __html: section.content.replace(/\*\*(.*?)\*\*/g, '<strong style="color:#fff">$1</strong>').replace(/\*(.*?)\*/g, '<em style="color:#00c896">$1</em>') }} />
+          </div>
+        );
+
+      case "concept":
+        return (
+          <div style={{ maxWidth: 700 }}>
+            <p style={{ fontSize: 15, color: "rgba(255,255,255,0.7)", lineHeight: 1.8, marginBottom: 28 }} dangerouslySetInnerHTML={{ __html: section.content.replace(/\*\*(.*?)\*\*/g, '<strong style="color:#fff">$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>') }} />
+            <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "rgba(255,255,255,0.25)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 12 }}>Key Terms</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {section.keyTerms.map((kt, i) => (
+                <div key={i} style={{ display: "flex", gap: 0, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 10, overflow: "hidden" }}>
+                  <div style={{ width: 4, background: "#00c896", flexShrink: 0 }} />
+                  <div style={{ padding: "14px 18px" }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: "#00c896", marginBottom: 4 }}>{kt.term}</div>
+                    <div style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", lineHeight: 1.5 }}>{kt.def}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+
+      case "comparison":
+        return (
+          <div style={{ maxWidth: 720 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+              {[section.left, section.right].map((side, si) => (
+                <div key={si} style={{ background: `${side.color}08`, border: `1px solid ${side.color}25`, borderRadius: 12, padding: 22 }}>
+                  <div style={{ fontFamily: "'Syne'", fontSize: 16, fontWeight: 800, color: side.color, marginBottom: 16, paddingBottom: 12, borderBottom: `1px solid ${side.color}20` }}>{side.label}</div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                    {side.points.map((pt, pi) => (
+                      <div key={pi} style={{ display: "flex", gap: 10, fontSize: 13, color: "rgba(255,255,255,0.6)", lineHeight: 1.5 }}>
+                        <span style={{ color: side.color, flexShrink: 0, marginTop: 2 }}>→</span> {pt}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+
+      case "stateNote":
+        return (
+          <div style={{ maxWidth: 680, background: `${lesson.stateColor}08`, border: `1px solid ${lesson.stateColor}25`, borderLeft: `3px solid ${lesson.stateColor}`, borderRadius: 10, padding: "20px 24px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+              <div style={{ background: `${lesson.stateColor}20`, color: lesson.stateColor, padding: "3px 10px", borderRadius: 10, fontSize: 11, fontFamily: "'JetBrains Mono'" }}>🏛 {section.state} STATE RULE</div>
+            </div>
+            <p style={{ fontSize: 14, color: "rgba(255,255,255,0.7)", lineHeight: 1.75 }} dangerouslySetInnerHTML={{ __html: section.content.replace(/\*\*(.*?)\*\*/g, '<strong style="color:#fff">$1</strong>') }} />
+          </div>
+        );
+
+      case "scenario":
+        return (
+          <div style={{ maxWidth: 700 }}>
+            <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: "20px 24px", marginBottom: 20 }}>
+              <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "#f59e0b", letterSpacing: 2, textTransform: "uppercase", marginBottom: 10 }}>📋 Scenario</div>
+              <p style={{ fontSize: 14, color: "rgba(255,255,255,0.7)", lineHeight: 1.8 }}>{section.scenario}</p>
+            </div>
+            <div style={{ fontFamily: "'Syne'", fontSize: 16, fontWeight: 700, marginBottom: 14 }}>{section.question}</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {section.options.map((opt, oi) => {
+                const isSelected = selectedAnswer === oi;
+                const isCorrect = opt.correct;
+                let bg = "rgba(255,255,255,0.03)";
+                let border = "rgba(255,255,255,0.07)";
+                let color = "rgba(255,255,255,0.7)";
+                if (showResult && isSelected && isCorrect) { bg = "rgba(0,200,150,0.1)"; border = "#00c896"; color = "#fff"; }
+                if (showResult && isSelected && !isCorrect) { bg = "rgba(248,113,113,0.1)"; border = "#f87171"; color = "#fff"; }
+                if (showResult && !isSelected && isCorrect) { bg = "rgba(0,200,150,0.06)"; border = "rgba(0,200,150,0.3)"; }
+                return (
+                  <div key={oi}>
+                    <div onClick={() => !showResult && setSelectedAnswer(oi)} style={{ padding: "14px 18px", background: isSelected && !showResult ? "rgba(56,189,248,0.08)" : bg, border: `1px solid ${isSelected && !showResult ? "#38bdf8" : border}`, borderRadius: 10, fontSize: 14, color: isSelected && !showResult ? "#fff" : color, cursor: showResult ? "default" : "pointer", transition: "all 0.15s", lineHeight: 1.5 }}>
+                      <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+                        <div style={{ width: 22, height: 22, borderRadius: "50%", background: isSelected && !showResult ? "#38bdf8" : "rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 600, color: isSelected && !showResult ? "#000" : "rgba(255,255,255,0.3)", flexShrink: 0, marginTop: 1 }}>{String.fromCharCode(65 + oi)}</div>
+                        {opt.text}
+                      </div>
+                    </div>
+                    {showResult && isSelected && (
+                      <div style={{ padding: "10px 16px", background: isCorrect ? "rgba(0,200,150,0.08)" : "rgba(248,113,113,0.08)", borderRadius: "0 0 8px 8px", fontSize: 13, color: isCorrect ? "#00c896" : "#f87171", lineHeight: 1.6, marginTop: -4 }}>
+                        {isCorrect ? "✓ " : "✗ "}{opt.explanation}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            {selectedAnswer !== null && !showResult && (
+              <button onClick={() => setShowResult(true)} style={{ marginTop: 14, background: "#38bdf8", color: "#000", border: "none", padding: "10px 24px", borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "'DM Sans'" }}>Check Answer</button>
+            )}
+          </div>
+        );
+
+      case "summary":
+        return (
+          <div style={{ maxWidth: 640 }}>
+            <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "rgba(255,255,255,0.25)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 14 }}>Lesson Summary</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {section.points.map((pt, i) => (
+                <div key={i} style={{ display: "flex", gap: 12, padding: "12px 16px", background: "rgba(0,200,150,0.05)", border: "1px solid rgba(0,200,150,0.12)", borderRadius: 9 }}>
+                  <span style={{ color: "#00c896", fontWeight: 700, flexShrink: 0 }}>✓</span>
+                  <span style={{ fontSize: 14, color: "rgba(255,255,255,0.7)", lineHeight: 1.5 }}>{pt}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+    }
+  };
+
+  return (
+    <div style={{ fontFamily: "'DM Sans', system-ui, sans-serif", background: "#0a0a0f", minHeight: "100vh", color: "#fff", display: "flex", flexDirection: "column" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        .nav-step { cursor: pointer; transition: all 0.15s; }
+        .nav-step:hover { opacity: 0.8; }
+        .next-btn { cursor: pointer; border: none; transition: all 0.15s; }
+        .next-btn:hover { transform: translateX(3px); }
+      `}</style>
+
+      {/* Top bar */}
+      <div style={{ padding: "12px 28px", background: "#0d0d16", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", gap: 16 }}>
+        <div style={{ fontFamily: "'Syne'", fontSize: 15, fontWeight: 800 }}>Pass<span style={{ color: "#00c896" }}>Pro</span></div>
+        <div style={{ width: 1, height: 18, background: "rgba(255,255,255,0.1)" }} />
+        <div style={{ fontSize: 12, color: "rgba(255,255,255,0.35)" }}>Unit {lesson.unit} · Module {lesson.module}</div>
+        <div style={{ flex: 1, height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 4, overflow: "hidden", maxWidth: 240 }}>
+          <div style={{ height: "100%", width: `${progress}%`, background: "#00c896", borderRadius: 4, transition: "width 0.4s ease" }} />
+        </div>
+        <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", fontFamily: "'JetBrains Mono'" }}>{currentSection + 1}/{lesson.sections.length}</div>
+        <div style={{ background: `${lesson.stateColor}15`, border: `1px solid ${lesson.stateColor}25`, color: lesson.stateColor, padding: "3px 10px", borderRadius: 10, fontSize: 10, fontFamily: "'JetBrains Mono'" }}>🏛 {lesson.state}</div>
+        <div style={{ background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.2)", color: "#f59e0b", padding: "3px 10px", borderRadius: 10, fontSize: 10, fontFamily: "'JetBrains Mono'" }}>+{lesson.xp} XP</div>
+      </div>
+
+      <div style={{ display: "flex", flex: 1 }}>
+        {/* Left nav */}
+        <div style={{ width: 220, background: "#0d0d16", borderRight: "1px solid rgba(255,255,255,0.05)", padding: "24px 14px", flexShrink: 0 }}>
+          <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.2)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 14, padding: "0 8px" }}>Lesson Sections</div>
+          {lesson.sections.map((sec, i) => {
+            const isDone = completed.has(i);
+            const isActive = currentSection === i;
+            const labels = ["Introduction", "Key Concept", "Comparison", "Wisconsin Rule", "Scenario", "Summary"];
+            return (
+              <div key={i} className="nav-step" onClick={() => setCurrentSection(i)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 8, background: isActive ? "rgba(0,200,150,0.1)" : "transparent", marginBottom: 2 }}>
+                <div style={{ width: 22, height: 22, borderRadius: "50%", background: isDone ? "#00c896" : isActive ? "rgba(0,200,150,0.2)" : "rgba(255,255,255,0.05)", border: `1.5px solid ${isDone ? "#00c896" : isActive ? "#00c896" : "rgba(255,255,255,0.1)"}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: isDone ? "#000" : isActive ? "#00c896" : "rgba(255,255,255,0.2)", fontWeight: 700, flexShrink: 0 }}>{isDone ? "✓" : i + 1}</div>
+                <span style={{ fontSize: 12, color: isActive ? "#00c896" : isDone ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.3)" }}>{labels[i]}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Main content */}
+        <div style={{ flex: 1, padding: "40px 48px", overflowY: "auto" }}>
+          <div style={{ marginBottom: 32 }}>
+            <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "rgba(255,255,255,0.25)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 8 }}>
+              {lesson.moduleTitle} · Lesson {lesson.lessonNum} · {lesson.duration}
+            </div>
+            <h1 style={{ fontFamily: "'Syne'", fontSize: "clamp(22px,3vw,34px)", fontWeight: 800, letterSpacing: -1, marginBottom: 4 }}>{lesson.lessonTitle}</h1>
+            {section.title && <h2 style={{ fontFamily: "'Syne'", fontSize: 18, fontWeight: 700, color: "rgba(255,255,255,0.5)", marginTop: 8 }}>{section.title}</h2>}
+          </div>
+
+          {renderSection()}
+
+          {/* Next button */}
+          <div style={{ marginTop: 40, display: "flex", alignItems: "center", gap: 16 }}>
+            {currentSection > 0 && (
+              <button onClick={() => setCurrentSection(prev => prev - 1)} style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.5)", padding: "10px 20px", borderRadius: 8, fontSize: 13, cursor: "pointer", fontFamily: "'DM Sans'" }}>← Back</button>
+            )}
+            {section.type !== "scenario" || showResult ? (
+              <button className="next-btn" onClick={advance} style={{ background: isLast ? "#00c896" : "rgba(0,200,150,0.15)", border: `1px solid ${isLast ? "#00c896" : "rgba(0,200,150,0.3)"}`, color: isLast ? "#000" : "#00c896", padding: "10px 28px", borderRadius: 8, fontSize: 14, fontWeight: 600, fontFamily: "'DM Sans'" }}>
+                {isLast ? `Complete Lesson · Earn ${lesson.xp} XP ✦` : "Continue →"}
+              </button>
+            ) : null}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(LessonModule));
+</script>
+</body>
+</html>

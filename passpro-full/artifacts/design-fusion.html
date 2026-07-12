@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PassPro — design-fusion</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>* { box-sizing: border-box; margin: 0; padding: 0; } body { background: #06060c; } #root { min-height: 100vh; }</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const STUDENT = {
+  name: "Amanda", state: "WI", readiness: 74, streak: 7, xp: 2840,
+  daysLeft: 41, hours: 8.5, level: "Silver II",
+  weak: ["Annuities", "Tax Treatment", "WI Security Fund"],
+  modules: [
+    { name: "Foundations of Life Insurance", pct: 100, color: "#c8a96e" },
+    { name: "Types of Life Insurance", pct: 100, color: "#c8a96e" },
+    { name: "Policy Provisions & Riders", pct: 62, color: "#f59e0b" },
+    { name: "Annuities", pct: 30, color: "#f87171" },
+    { name: "Underwriting & Premiums", pct: 0, color: "#60a5fa" },
+    { name: "Tax Treatment", pct: 0, color: "#f87171" },
+    { name: "Wisconsin Regulations", pct: 35, color: "#c084fc" },
+  ]
+};
+
+const NAV = [
+  { icon: "◼", label: "Dashboard" },
+  { icon: "📚", label: "Study", section: "LEARN" },
+  { icon: "📝", label: "Practice" },
+  { icon: "🃏", label: "Flashcards" },
+  { icon: "🤖", label: "AI Coach", section: "AI TOOLS" },
+  { icon: "🎭", label: "Roleplay Sim" },
+  { icon: "📊", label: "Progress", section: "TRACK" },
+  { icon: "🏛", label: "Compliance" },
+  { icon: "🏢", label: "Agency" },
+];
+
+function FusionDesignV2() {
+  const [active, setActive] = useState("Dashboard");
+  const [hoveredStat, setHoveredStat] = useState(null);
+  const [hoveredMod, setHoveredMod] = useState(null);
+
+  return (
+    <div style={{ fontFamily: "'Space Grotesk', system-ui, sans-serif", background: "#04030a", minHeight: "100vh", color: "#f0e6d0", position: "relative", overflow: "hidden" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        .orb1 { animation: d1 12s ease-in-out infinite; }
+        .orb2 { animation: d2 16s ease-in-out infinite; }
+        .orb3 { animation: d3 9s ease-in-out infinite; }
+        @keyframes d1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(28px,-18px) scale(1.06)} }
+        @keyframes d2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-22px,16px) scale(0.94)} }
+        @keyframes d3 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(14px,22px) scale(1.04)} }
+        .gold-card { background: rgba(200,169,110,0.04); border: 1.5px solid rgba(200,169,110,0.18); transition: all 0.18s cubic-bezier(0.16,1,0.3,1); cursor: default; position: relative; overflow: hidden; }
+        .gold-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(200,169,110,0.05) 0%, transparent 60%); opacity: 0; transition: opacity 0.3s; }
+        .gold-card:hover::before { opacity: 1; }
+        .gold-card:hover { border-color: rgba(200,169,110,0.45); transform: translate(-3px,-3px); box-shadow: 4px 4px 0 rgba(200,169,110,0.22), 0 0 30px rgba(200,169,110,0.07); }
+        .stat-card { border: 1.5px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.025); transition: all 0.15s cubic-bezier(0.16,1,0.3,1); cursor: default; position: relative; overflow: hidden; }
+        .nav-btn { cursor: pointer; border: none; background: none; transition: all 0.15s; width: 100%; text-align: left; display: flex; align-items: center; gap: 10px; padding: 9px 16px; font-family: 'Space Grotesk'; font-size: 12px; font-weight: 500; letter-spacing: 0.3px; border-left: 2px solid transparent; color: rgba(240,230,208,0.35); }
+        .nav-btn:hover { background: rgba(200,169,110,0.05); border-left-color: rgba(200,169,110,0.35); color: rgba(240,230,208,0.7); }
+        .nav-btn.active { background: rgba(200,169,110,0.08); border-left-color: #c8a96e; color: #c8a96e !important; }
+        .section-label { font-family: 'Bebas Neue'; letter-spacing: 3px; font-size: 9px; padding: 12px 16px 4px; color: rgba(200,169,110,0.22); display: block; }
+        .btn-gold { background: linear-gradient(135deg, #c8a96e, #a07840); color: #04030a; border: none; font-family: 'Bebas Neue'; font-size: 16px; letter-spacing: 2.5px; padding: 11px 28px; cursor: pointer; transition: all 0.15s; clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)); }
+        .btn-gold:hover { background: linear-gradient(135deg, #dfc07e, #b08840); transform: translate(-2px,-2px); box-shadow: 4px 4px 0 rgba(200,169,110,0.3); }
+        .btn-ghost { background: transparent; color: #c8a96e; border: 1.5px solid rgba(200,169,110,0.4); font-family: 'Bebas Neue'; font-size: 16px; letter-spacing: 2.5px; padding: 11px 22px; cursor: pointer; transition: all 0.15s; }
+        .btn-ghost:hover { background: rgba(200,169,110,0.08); border-color: #c8a96e; transform: translate(-2px,-2px); box-shadow: 4px 4px 0 rgba(200,169,110,0.2); }
+        .drill-chip { cursor: pointer; border: 1.5px solid rgba(200,169,110,0.3); background: rgba(200,169,110,0.05); color: #c8a96e; font-family: 'Space Grotesk'; font-weight: 600; font-size: 11px; letter-spacing: 0.5px; padding: 7px 14px; transition: all 0.12s; }
+        .drill-chip:hover { background: rgba(200,169,110,0.14); border-color: #c8a96e; transform: translate(-2px,-2px); box-shadow: 3px 3px 0 rgba(200,169,110,0.25); }
+        .weak-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; margin-bottom: 7px; cursor: pointer; border: 1px solid rgba(248,113,113,0.12); background: rgba(248,113,113,0.04); transition: all 0.12s; }
+        .weak-row:hover { border-color: #c8a96e; background: rgba(200,169,110,0.06); transform: translateX(4px); }
+        .pulse { animation: gp 2.5s ease-in-out infinite; }
+        @keyframes gp { 0%,100%{opacity:0.5;transform:scale(1)} 50%{opacity:1;transform:scale(1.3)} }
+        .gold-line { height: 1px; background: linear-gradient(90deg, transparent, rgba(200,169,110,0.4), transparent); }
+        ::-webkit-scrollbar { width: 3px; }
+        ::-webkit-scrollbar-thumb { background: rgba(200,169,110,0.2); }
+      `}</style>
+
+      {/* Aurora background — warm gold/violet/teal */}
+      <div style={{ position: "fixed", inset: 0, zIndex: 0, overflow: "hidden", pointerEvents: "none" }}>
+        <div className="orb1" style={{ position: "absolute", width: 750, height: 750, borderRadius: "50%", background: "radial-gradient(circle, rgba(200,140,40,0.14) 0%, rgba(180,100,20,0.06) 40%, transparent 70%)", top: -220, left: -180 }} />
+        <div className="orb2" style={{ position: "absolute", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(120,60,200,0.11) 0%, transparent 65%)", bottom: -120, right: -100 }} />
+        <div className="orb3" style={{ position: "absolute", width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle, rgba(0,160,140,0.08) 0%, transparent 65%)", top: "38%", right: "18%" }} />
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(200,169,110,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(200,169,110,0.03) 1px, transparent 1px)", backgroundSize: "56px 56px" }} />
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "repeating-linear-gradient(45deg, rgba(200,169,110,0.012) 0px, rgba(200,169,110,0.012) 1px, transparent 1px, transparent 44px)" }} />
+      </div>
+
+      {/* Top marquee strip */}
+      <div style={{ position: "relative", zIndex: 10, borderBottom: "1px solid rgba(200,169,110,0.2)", background: "rgba(200,169,110,0.05)", backdropFilter: "blur(10px)", padding: "6px 24px", display: "flex", justifyContent: "space-between" }}>
+        <div style={{ fontFamily: "'Bebas Neue'", fontSize: 10, letterSpacing: 3, color: "rgba(200,169,110,0.55)" }}>
+          WISCONSIN LIFE INSURANCE PRE-LICENSING · PSI SERIES 22-01 · OCI APPROVED PROVIDER
+        </div>
+        <div style={{ fontFamily: "'Bebas Neue'", fontSize: 10, letterSpacing: 3, color: "rgba(200,169,110,0.55)" }}>
+          {STUDENT.hours}H / 20H LOGGED · {STUDENT.daysLeft} DAYS TO EXAM · AI COACH ONLINE
+        </div>
+      </div>
+
+      {/* Layout grid */}
+      <div style={{ position: "relative", zIndex: 1, display: "grid", gridTemplateColumns: "216px 1fr", minHeight: "calc(100vh - 33px)" }}>
+
+        {/* Sidebar */}
+        <div style={{ background: "rgba(2,1,8,0.92)", backdropFilter: "blur(32px)", borderRight: "1px solid rgba(200,169,110,0.14)", display: "flex", flexDirection: "column" }}>
+
+          {/* Wordmark */}
+          <div style={{ padding: "22px 18px 18px", borderBottom: "1px solid rgba(200,169,110,0.1)" }}>
+            <div style={{ fontFamily: "'Bebas Neue'", fontSize: 32, letterSpacing: 4, lineHeight: 1, color: "#f0e6d0" }}>
+              PASS<span style={{ color: "#c8a96e", textShadow: "0 0 24px rgba(200,169,110,0.5)" }}>PRO</span>
+            </div>
+            <div style={{ fontFamily: "'Cormorant Garamond'", fontSize: 11, color: "rgba(200,169,110,0.4)", letterSpacing: 2, marginTop: 3, fontStyle: "italic" }}>Wisconsin Life License</div>
+          </div>
+
+          {/* Student identity card */}
+          <div style={{ margin: "14px 12px", padding: "14px 14px", background: "rgba(200,169,110,0.05)", border: "1px solid rgba(200,169,110,0.18)", position: "relative", overflow: "hidden" }}>
+            <div style={{ position: "absolute", top: 0, right: 0, width: 0, height: 0, borderStyle: "solid", borderWidth: "0 18px 18px 0", borderColor: "transparent rgba(200,169,110,0.3) transparent transparent" }} />
+            <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 10 }}>
+              <div style={{ width: 36, height: 36, background: "linear-gradient(135deg, #c8a96e, #8a6030)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Bebas Neue'", fontSize: 20, color: "#04030a", flexShrink: 0, clipPath: "polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px))" }}>
+                {STUDENT.name[0]}
+              </div>
+              <div>
+                <div style={{ fontFamily: "'Bebas Neue'", fontSize: 15, letterSpacing: 1.5, color: "#f0e6d0" }}>{STUDENT.name.toUpperCase()}</div>
+                <div style={{ fontFamily: "'Space Grotesk'", fontSize: 9, color: "#c8a96e", letterSpacing: 1.5, fontWeight: 600 }}>PRO · {STUDENT.state} · {STUDENT.level.toUpperCase()}</div>
+              </div>
+            </div>
+            <div style={{ height: 2, background: "rgba(255,255,255,0.05)", marginBottom: 5 }}>
+              <div style={{ height: "100%", width: `${STUDENT.readiness}%`, background: "linear-gradient(90deg, #c8a96e, #f0c878)", boxShadow: "0 0 8px rgba(200,169,110,0.5)" }} />
+            </div>
+            <div style={{ fontFamily: "'Space Grotesk'", fontSize: 9, color: "rgba(200,169,110,0.5)", letterSpacing: 1.5 }}>{STUDENT.readiness}% EXAM READY</div>
+          </div>
+
+          {/* Nav */}
+          <div style={{ flex: 1, padding: "4px 0 8px" }}>
+            {NAV.map((item, i) => (
+              <div key={i}>
+                {item.section && <span className="section-label">{item.section}</span>}
+                <button className={`nav-btn${active === item.label ? " active" : ""}`} onClick={() => setActive(item.label)}>
+                  <span style={{ fontSize: 13, width: 18, textAlign: "center", opacity: active === item.label ? 1 : 0.6 }}>{item.icon}</span>
+                  <span>{item.label}</span>
+                  {active === item.label && <div style={{ marginLeft: "auto", width: 4, height: 4, borderRadius: "50%", background: "#c8a96e", boxShadow: "0 0 6px rgba(200,169,110,0.8)" }} />}
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* OCI compliance */}
+          <div style={{ margin: "0 12px 14px", padding: "13px 14px", background: "rgba(192,132,252,0.05)", border: "1px solid rgba(192,132,252,0.16)" }}>
+            <div style={{ fontFamily: "'Bebas Neue'", fontSize: 9, letterSpacing: 3, color: "rgba(192,132,252,0.5)", marginBottom: 7 }}>🏛 OCI COMPLIANCE</div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 }}>
+              <div style={{ fontFamily: "'Bebas Neue'", fontSize: 22, color: "#c084fc", letterSpacing: 1 }}>{STUDENT.hours}H</div>
+              <div style={{ fontFamily: "'Space Grotesk'", fontSize: 9, color: "rgba(192,132,252,0.4)" }}>/ 20H REQUIRED</div>
+            </div>
+            <div style={{ height: 3, background: "rgba(192,132,252,0.08)", border: "1px solid rgba(192,132,252,0.1)", marginBottom: 6 }}>
+              <div style={{ height: "100%", width: `${(STUDENT.hours / 20) * 100}%`, background: "linear-gradient(90deg, #9060dc, #c084fc)", boxShadow: "0 0 8px rgba(192,132,252,0.4)" }} />
+            </div>
+            <div style={{ fontFamily: "'Space Grotesk'", fontSize: 9, color: "#f87171", fontWeight: 600, letterSpacing: 1 }}>⚠ {(20 - STUDENT.hours).toFixed(1)}H TO UNLOCK EXAM</div>
+          </div>
+        </div>
+
+        {/* Main content */}
+        <div style={{ overflowY: "auto", padding: "30px 34px" }}>
+
+          {/* Hero */}
+          <div style={{ marginBottom: 28 }}>
+            <div style={{ fontFamily: "'Cormorant Garamond'", fontSize: 13, color: "rgba(200,169,110,0.5)", letterSpacing: 3, marginBottom: 10, fontStyle: "italic" }}>
+              Good morning — {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 20, flexWrap: "wrap" }}>
+              <div>
+                <h1 style={{ fontFamily: "'Bebas Neue'", fontSize: "clamp(52px,6.5vw,88px)", letterSpacing: 2, lineHeight: 0.88, marginBottom: 14 }}>
+                  <span style={{ color: "#f0e6d0" }}>EXAM IN </span>
+                  <span style={{ background: "linear-gradient(135deg, #f0c878, #c8a96e)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", filter: "drop-shadow(0 0 20px rgba(200,169,110,0.4))" }}>{STUDENT.daysLeft}</span>
+                  <span style={{ color: "#f0e6d0" }}> DAYS</span>
+                </h1>
+                <p style={{ fontFamily: "'Cormorant Garamond'", fontSize: 17, color: "rgba(240,230,208,0.5)", lineHeight: 1.65, maxWidth: 460 }}>
+                  At <span style={{ color: "#c8a96e", fontWeight: 600 }}>{STUDENT.readiness}% readiness</span>, you're on track — but Annuities needs your attention before July 15th.
+                </p>
+              </div>
+              <div style={{ display: "flex", gap: 10, flexShrink: 0 }}>
+                <button className="btn-gold">CONTINUE STUDYING</button>
+                <button className="btn-ghost">ASK COACH</button>
+              </div>
+            </div>
+            <div className="gold-line" style={{ marginTop: 24 }} />
+          </div>
+
+          {/* Stat cards */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, marginBottom: 24 }}>
+            {[
+              { label: "READINESS", value: `${STUDENT.readiness}%`, sub: "+3% THIS WEEK", color: "#c8a96e", accent: "rgba(200,169,110,0.35)", barW: 74 },
+              { label: "STREAK", value: `${STUDENT.streak}`, unit: "DAYS 🔥", sub: "CONSECUTIVE", color: "#f59e0b", accent: "rgba(245,158,11,0.3)", barW: 58 },
+              { label: "XP EARNED", value: "2,840", unit: "✦", sub: STUDENT.level.toUpperCase(), color: "#c084fc", accent: "rgba(192,132,252,0.3)", barW: 70 },
+              { label: "SEAT TIME", value: `${STUDENT.hours}`, unit: "H", sub: "OF 20H REQUIRED", color: "#60a5fa", accent: "rgba(96,165,250,0.25)", barW: 42 },
+            ].map((s, i) => (
+              <div key={i} className="stat-card" onMouseEnter={() => setHoveredStat(i)} onMouseLeave={() => setHoveredStat(null)}
+                style={{ padding: "20px 18px", borderColor: hoveredStat === i ? s.color : "rgba(255,255,255,0.07)", transform: hoveredStat === i ? "translate(-3px,-3px)" : "none", boxShadow: hoveredStat === i ? `4px 4px 0 ${s.accent}` : "none", background: hoveredStat === i ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.025)", transition: "all 0.14s" }}>
+                <div style={{ position: "absolute", top: 0, right: 0, width: 0, height: 0, borderStyle: "solid", borderWidth: `0 ${hoveredStat === i ? "16px" : "10px"} ${hoveredStat === i ? "16px" : "10px"} 0`, borderColor: `transparent ${s.color} transparent transparent`, opacity: hoveredStat === i ? 0.55 : 0.18, transition: "all 0.14s" }} />
+                <div style={{ fontFamily: "'Bebas Neue'", fontSize: 9, color: `${s.color}70`, letterSpacing: 3, marginBottom: 10 }}>{s.label}</div>
+                <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 4 }}>
+                  <div style={{ fontFamily: "'Bebas Neue'", fontSize: 44, color: s.color, letterSpacing: 1, lineHeight: 1, textShadow: hoveredStat === i ? `0 0 20px ${s.accent}` : "none", transition: "text-shadow 0.2s" }}>{s.value}</div>
+                  {s.unit && <div style={{ fontFamily: "'Bebas Neue'", fontSize: 18, color: `${s.color}70`, letterSpacing: 1 }}>{s.unit}</div>}
+                </div>
+                <div style={{ fontFamily: "'Space Grotesk'", fontSize: 9, color: "rgba(240,230,208,0.22)", letterSpacing: 1.5, marginBottom: 14 }}>{s.sub}</div>
+                <div style={{ height: 2, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.05)" }}>
+                  <div style={{ height: "100%", width: `${s.barW}%`, background: `linear-gradient(90deg, ${s.color}60, ${s.color})`, boxShadow: hoveredStat === i ? `0 0 8px ${s.accent}` : "none", transition: "box-shadow 0.2s" }} />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Main grid */}
+          <div style={{ display: "grid", gridTemplateColumns: "1.45fr 1fr", gap: 16, marginBottom: 16 }}>
+
+            {/* Curriculum */}
+            <div className="gold-card" style={{ padding: "24px 26px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 6 }}>
+                <div style={{ fontFamily: "'Bebas Neue'", fontSize: 22, letterSpacing: 2, color: "#f0e6d0" }}>CURRICULUM STATUS</div>
+                <div style={{ fontFamily: "'Cormorant Garamond'", fontSize: 11, color: "rgba(200,169,110,0.4)", letterSpacing: 2, fontStyle: "italic" }}>WI Life License</div>
+              </div>
+              <div className="gold-line" style={{ marginBottom: 18 }} />
+              {STUDENT.modules.map((m, i) => (
+                <div key={i} onMouseEnter={() => setHoveredMod(i)} onMouseLeave={() => setHoveredMod(null)}
+                  style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 11, padding: "8px 10px", background: hoveredMod === i ? "rgba(200,169,110,0.05)" : "transparent", borderLeft: `2px solid ${hoveredMod === i ? m.color : "transparent"}`, transition: "all 0.15s" }}>
+                  <div style={{ width: 22, height: 22, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", background: m.pct === 100 ? "rgba(200,169,110,0.14)" : "rgba(255,255,255,0.04)", border: `1.5px solid ${m.pct === 100 ? "rgba(200,169,110,0.45)" : "rgba(255,255,255,0.08)"}`, clipPath: "polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100% - 4px))" }}>
+                    <span style={{ fontFamily: "'Bebas Neue'", fontSize: 10, color: m.pct === 100 ? "#c8a96e" : "rgba(255,255,255,0.22)" }}>{m.pct === 100 ? "✓" : m.pct > 0 ? "▶" : "—"}</span>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontFamily: "'Space Grotesk'", fontSize: 12, color: m.pct === 0 ? "rgba(240,230,208,0.2)" : "rgba(240,230,208,0.7)", fontWeight: 500, marginBottom: 5 }}>{m.name}</div>
+                    <div style={{ height: 3, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.05)" }}>
+                      <div style={{ height: "100%", width: `${m.pct}%`, background: m.pct === 100 ? "linear-gradient(90deg, #c8a96e, #f0c878)" : m.color, boxShadow: m.pct > 0 ? `0 0 5px ${m.color}50` : "none", transition: "width 1s cubic-bezier(0.16,1,0.3,1)" }} />
+                    </div>
+                  </div>
+                  <div style={{ fontFamily: "'Bebas Neue'", fontSize: 16, letterSpacing: 1, color: m.pct === 100 ? "#c8a96e" : m.pct > 0 ? m.color : "rgba(255,255,255,0.14)", minWidth: 40, textAlign: "right" }}>
+                    {m.pct === 100 ? "DONE" : m.pct > 0 ? `${m.pct}%` : "—"}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Right column */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+
+              {/* AI Coach */}
+              <div className="gold-card" style={{ padding: "22px", background: "rgba(200,169,110,0.04)", borderColor: "rgba(200,169,110,0.22)", flex: 1 }}>
+                <div style={{ display: "flex", gap: 11, alignItems: "center", marginBottom: 14 }}>
+                  <div style={{ width: 38, height: 38, flexShrink: 0, background: "linear-gradient(135deg, #c8a96e 0%, #8a6030 100%)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, boxShadow: "0 0 18px rgba(200,169,110,0.35)", clipPath: "polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 7px 100%, 0 calc(100% - 7px))" }}>🎓</div>
+                  <div>
+                    <div style={{ fontFamily: "'Bebas Neue'", fontSize: 18, letterSpacing: 2, color: "#c8a96e" }}>AI COACH</div>
+                    <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
+                      <div className="pulse" style={{ width: 5, height: 5, borderRadius: "50%", background: "#c8a96e" }} />
+                      <span style={{ fontFamily: "'Space Grotesk'", fontSize: 9, color: "rgba(200,169,110,0.5)", letterSpacing: 1.5, fontWeight: 600 }}>ONLINE · READY</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="gold-line" style={{ marginBottom: 14 }} />
+                <div style={{ position: "relative", padding: "13px 15px", marginBottom: 16, background: "rgba(200,169,110,0.05)", borderLeft: "2.5px solid rgba(200,169,110,0.35)" }}>
+                  <div style={{ fontFamily: "'Cormorant Garamond'", fontSize: 15, color: "rgba(240,230,208,0.7)", lineHeight: 1.7, fontStyle: "italic" }}>
+                    "Your <span style={{ color: "#c8a96e", fontWeight: 700 }}>Annuities</span> mastery is 45% — below passing. A focused 15-minute drill today will push you past 65%."
+                  </div>
+                </div>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                  {["▶ START DRILL", "💬 ASK ANYTHING", "📋 VIEW PLAN"].map((c, i) => (
+                    <button key={i} className="drill-chip">{c}</button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Weak areas */}
+              <div style={{ background: "rgba(248,113,113,0.04)", border: "1.5px solid rgba(248,113,113,0.16)", padding: "18px 20px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+                  <div style={{ fontFamily: "'Bebas Neue'", fontSize: 18, letterSpacing: 2, color: "#f87171" }}>WEAK AREAS</div>
+                  <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, rgba(248,113,113,0.3), transparent)" }} />
+                  <div style={{ fontFamily: "'Space Grotesk'", fontSize: 9, color: "rgba(248,113,113,0.45)", letterSpacing: 2 }}>3 TOPICS</div>
+                </div>
+                {STUDENT.weak.map((t, i) => (
+                  <div key={i} className="weak-row">
+                    <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                      <div style={{ width: 4, height: 4, borderRadius: "50%", background: i === 0 ? "#f87171" : "rgba(248,113,113,0.45)" }} />
+                      <span style={{ fontFamily: "'Space Grotesk'", fontSize: 12, color: "rgba(240,230,208,0.6)", fontWeight: 500 }}>{t}</span>
+                    </div>
+                    <span style={{ fontFamily: "'Bebas Neue'", fontSize: 13, color: "#c8a96e", letterSpacing: 1.5 }}>DRILL →</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom row */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 14 }}>
+
+            {/* XP */}
+            <div className="gold-card" style={{ padding: "22px", background: "rgba(192,132,252,0.04)", borderColor: "rgba(192,132,252,0.16)" }}>
+              <div style={{ fontFamily: "'Bebas Neue'", fontSize: 9, letterSpacing: 3, color: "rgba(192,132,252,0.45)", marginBottom: 10 }}>XP EARNED</div>
+              <div style={{ fontFamily: "'Bebas Neue'", fontSize: 48, color: "#c084fc", letterSpacing: 1, lineHeight: 1, textShadow: "0 0 24px rgba(192,132,252,0.35)", marginBottom: 4 }}>2,840</div>
+              <div style={{ fontFamily: "'Cormorant Garamond'", fontSize: 12, color: "rgba(192,132,252,0.45)", fontStyle: "italic", marginBottom: 14 }}>Silver II · +15 per session</div>
+              <div className="gold-line" style={{ background: "linear-gradient(90deg, transparent, rgba(192,132,252,0.3), transparent)", marginBottom: 8 }} />
+              <div style={{ height: 3, background: "rgba(192,132,252,0.07)" }}>
+                <div style={{ height: "100%", width: "72%", background: "linear-gradient(90deg, #9060dc, #c084fc)", boxShadow: "0 0 8px rgba(192,132,252,0.4)" }} />
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between", marginTop: 5, fontFamily: "'Space Grotesk'", fontSize: 9, color: "rgba(192,132,252,0.3)", letterSpacing: 1.5 }}>
+                <span>SILVER II</span><span>GOLD →</span>
+              </div>
+            </div>
+
+            {/* Countdown */}
+            <div className="gold-card" style={{ padding: "22px", background: "rgba(200,169,110,0.04)", borderColor: "rgba(200,169,110,0.22)", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+              <div>
+                <div style={{ fontFamily: "'Bebas Neue'", fontSize: 9, letterSpacing: 3, color: "rgba(200,169,110,0.45)", marginBottom: 8 }}>EXAM COUNTDOWN</div>
+                <div style={{ fontFamily: "'Bebas Neue'", fontSize: 72, color: "#c8a96e", letterSpacing: 1, lineHeight: 0.88, textShadow: "0 0 30px rgba(200,169,110,0.4)", marginBottom: 6 }}>{STUDENT.daysLeft}</div>
+                <div style={{ fontFamily: "'Cormorant Garamond'", fontSize: 14, color: "rgba(200,169,110,0.5)", fontStyle: "italic" }}>days remaining</div>
+              </div>
+              <div>
+                <div className="gold-line" style={{ marginBottom: 8 }} />
+                <div style={{ height: 3, background: "rgba(200,169,110,0.07)", marginBottom: 6 }}>
+                  <div style={{ height: "100%", width: "62%", background: "linear-gradient(90deg, #a07840, #f0c878)", boxShadow: "0 0 8px rgba(200,169,110,0.45)" }} />
+                </div>
+                <div style={{ fontFamily: "'Space Grotesk'", fontSize: 9, color: "rgba(200,169,110,0.38)", letterSpacing: 1.5 }}>JUL 15, 2026 · PSI TESTING CENTER</div>
+              </div>
+            </div>
+
+            {/* Recent activity */}
+            <div className="gold-card" style={{ padding: "22px" }}>
+              <div style={{ fontFamily: "'Bebas Neue'", fontSize: 9, letterSpacing: 3, color: "rgba(200,169,110,0.45)", marginBottom: 10 }}>RECENT ACTIVITY</div>
+              <div className="gold-line" style={{ marginBottom: 14 }} />
+              {[
+                { icon: "📝", text: "Passed Module 3 Quiz — 84%", time: "2h ago" },
+                { icon: "🔥", text: "7-day streak reached", time: "Today" },
+                { icon: "🤖", text: "AI Coach — Annuities session", time: "Yesterday" },
+                { icon: "🃏", text: "24 flashcards reviewed", time: "Yesterday" },
+              ].map((a, i) => (
+                <div key={i} style={{ display: "flex", gap: 9, alignItems: "flex-start", marginBottom: 10, paddingBottom: 10, borderBottom: i < 3 ? "1px solid rgba(200,169,110,0.07)" : "none" }}>
+                  <span style={{ fontSize: 13, flexShrink: 0 }}>{a.icon}</span>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontFamily: "'Space Grotesk'", fontSize: 11, color: "rgba(240,230,208,0.55)", lineHeight: 1.4 }}>{a.text}</div>
+                    <div style={{ fontFamily: "'Space Grotesk'", fontSize: 9, color: "rgba(240,230,208,0.22)", marginTop: 2 }}>{a.time}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(FusionDesignV2));
+</script>
+</body>
+</html>

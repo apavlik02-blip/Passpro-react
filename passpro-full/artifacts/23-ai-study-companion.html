@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PassPro — 23-ai-study-companion</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>* { box-sizing: border-box; margin: 0; padding: 0; } body { background: #06060c; } #root { min-height: 100vh; }</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const STUDENT = {
+  name: "Amanda",
+  state: "WI",
+  examDate: "July 15, 2026",
+  daysUntil: 41,
+  readiness: 74,
+  weakTopics: ["Annuities", "Tax Treatment", "WI Security Fund"],
+  currentModule: "4.1 — Annuity Fundamentals",
+  streakDays: 7,
+  xp: 2840,
+};
+
+const SYSTEM_PROMPT = `You are Coach — an expert, warm, and encouraging insurance licensing tutor inside the PassPro platform. You help students pass the Wisconsin Life Insurance pre-licensing exam (PSI Series 22-01, 100 questions, 2-hour limit, 70% to pass).
+
+STUDENT CONTEXT:
+- Name: ${STUDENT.name}
+- State: Wisconsin (WI)
+- Exam date: ${STUDENT.examDate} (${STUDENT.daysUntil} days away)
+- Current module: ${STUDENT.currentModule}
+- Weak topics: ${STUDENT.weakTopics.join(", ")}
+- Exam readiness: ${STUDENT.readiness}%
+- Study streak: ${STUDENT.streakDays} days
+
+CURRICULUM KNOWLEDGE (Wisconsin Life Insurance):
+You have deep expertise in all PSI Series 22-01 exam topics:
+- Insurance contracts, insurable interest, utmost good faith
+- Term, whole, universal, variable life insurance
+- Policy provisions, riders, nonforfeiture options, dividend options
+- Annuities (fixed, variable, indexed, settlement options)
+- Underwriting, premiums, risk classification
+- Life insurance needs analysis, business uses
+- Federal tax treatment, MECs, 7-pay test, exclusion ratio
+- Wisconsin OCI regulations, ch. 646 Security Fund, s. Ins 2.17 illustrations
+- Wisconsin licensing: 20-hour requirement, 24 CE hours, OCI rules
+- Life settlements, STOLI, beneficiary designations, agency law
+
+BEHAVIOR RULES:
+- Use the Socratic method — ask guiding questions before explaining when appropriate
+- Use real-world analogies and relatable scenarios (family protection, business situations)
+- Keep responses concise — under 120 words unless a complex concept demands more
+- End with a follow-up question OR offer a drill/quiz
+- If student is frustrated or confused, acknowledge feelings before explaining
+- Flag Wisconsin-specific rules with 🏛 and the relevant statute
+- Never be condescending — be the great teacher everyone wishes they had
+- Use encouraging language — this exam is passable and you believe in them
+- When relevant, connect topics to ${STUDENT.name}'s weak areas (${STUDENT.weakTopics.join(", ")})
+- Occasionally remind them of their streak and progress to keep motivation high
+
+TONE: Warm, direct, confident, human. Like a knowledgeable friend who happens to be an insurance expert. Never robotic, never lecture-heavy.`;
+
+const QUICK_PROMPTS = [
+  { label: "Explain annuities simply", icon: "📈" },
+  { label: "What's the 7-pay test?", icon: "💡" },
+  { label: "WI free look periods", icon: "🏛" },
+  { label: "Quiz me on my weak areas", icon: "🎯" },
+  { label: "Nonforfeiture options", icon: "📋" },
+  { label: "How does MEC taxation work?", icon: "💰" },
+  { label: "Difference: term vs whole life", icon: "🛡️" },
+  { label: "I'm stressed about my exam", icon: "😰" },
+];
+
+const OPENING_MESSAGE = {
+  role: "assistant",
+  content: `Hey ${STUDENT.name}! 👋 Great to see you back — that 7-day streak is impressive. 🔥
+
+You're currently working through **${STUDENT.currentModule}**, and I noticed annuities are one of your weak spots. Want to tackle that head-on today, or is there something else on your mind?
+
+I'm here for whatever you need — explanations, quizzes, WI-specific rules, or just talking through something that's not clicking. What's up?`,
+  timestamp: new Date(),
+};
+
+const formatTime = (date) =>
+  date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true });
+
+const TypingIndicator = () => (
+  <div style={{ display: "flex", gap: 10, alignItems: "flex-end", padding: "4px 0" }}>
+    <div style={{ width: 32, height: 32, borderRadius: "50%", background: "linear-gradient(135deg, #00c896, #00a07a)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, flexShrink: 0 }}>🎓</div>
+    <div style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "12px 12px 12px 4px", padding: "12px 16px", display: "flex", gap: 5, alignItems: "center" }}>
+      {[0, 1, 2].map(i => (
+        <div key={i} style={{ width: 7, height: 7, borderRadius: "50%", background: "#00c896", animation: `bounce 1.2s ease-in-out ${i * 0.2}s infinite` }} />
+      ))}
+    </div>
+  </div>
+);
+
+const MessageBubble = ({ msg }) => {
+  const isUser = msg.role === "user";
+  const parts = msg.content.split(/(\*\*.*?\*\*|🏛.*?(?:\n|$)|`.*?`)/g);
+
+  const renderContent = (text) => {
+    return text.split(/(\*\*(.*?)\*\*|🏛[^\n]*|`([^`]*)`)/g).map((part, i) => {
+      if (part?.startsWith("**") && part?.endsWith("**")) {
+        return <strong key={i} style={{ color: isUser ? "#fff" : "#fff", fontWeight: 600 }}>{part.slice(2, -2)}</strong>;
+      }
+      if (part?.startsWith("🏛")) {
+        return <span key={i} style={{ background: "rgba(192,132,252,0.15)", color: "#c084fc", padding: "1px 6px", borderRadius: 5, fontSize: "0.9em", fontWeight: 500 }}>{part}</span>;
+      }
+      if (part?.startsWith("`") && part?.endsWith("`")) {
+        return <code key={i} style={{ background: "rgba(255,255,255,0.1)", padding: "1px 5px", borderRadius: 4, fontFamily: "'JetBrains Mono'", fontSize: "0.85em" }}>{part.slice(1, -1)}</code>;
+      }
+      return part;
+    });
+  };
+
+  return (
+    <div style={{ display: "flex", gap: 10, alignItems: "flex-end", justifyContent: isUser ? "flex-end" : "flex-start", padding: "2px 0" }}>
+      {!isUser && (
+        <div style={{ width: 32, height: 32, borderRadius: "50%", background: "linear-gradient(135deg, #00c896, #00a07a)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, flexShrink: 0 }}>🎓</div>
+      )}
+      <div style={{ maxWidth: "78%", display: "flex", flexDirection: "column", gap: 4, alignItems: isUser ? "flex-end" : "flex-start" }}>
+        <div style={{ padding: "12px 16px", borderRadius: isUser ? "14px 14px 4px 14px" : "14px 14px 14px 4px", background: isUser ? "rgba(0,200,150,0.15)" : "rgba(255,255,255,0.06)", border: `1px solid ${isUser ? "rgba(0,200,150,0.3)" : "rgba(255,255,255,0.08)"}`, fontSize: 14, color: "rgba(255,255,255,0.88)", lineHeight: 1.65, whiteSpace: "pre-wrap" }}>
+          {renderContent(msg.content)}
+        </div>
+        <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.2)", letterSpacing: 0.5 }}>
+          {isUser ? "You" : "Coach"} · {formatTime(msg.timestamp)}
+        </div>
+      </div>
+      {isUser && (
+        <div style={{ width: 32, height: 32, borderRadius: "50%", background: "linear-gradient(135deg, #a78bfa, #7c5cbf)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Syne'", fontSize: 13, fontWeight: 800, color: "#fff", flexShrink: 0 }}>
+          {STUDENT.name[0]}
+        </div>
+      )}
+    </div>
+  );
+};
+
+function AIStudyCompanion() {
+  const [messages, setMessages] = useState([OPENING_MESSAGE]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [showQuick, setShowQuick] = useState(true);
+  const [sessionXP, setSessionXP] = useState(0);
+  const [msgCount, setMsgCount] = useState(0);
+  const bottomRef = useRef(null);
+  const inputRef = useRef(null);
+  const abortRef = useRef(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, loading]);
+
+  const sendMessage = async (text) => {
+    const userText = (text || input).trim();
+    if (!userText || loading) return;
+
+    setInput("");
+    setShowQuick(false);
+    setError(null);
+
+    const userMsg = { role: "user", content: userText, timestamp: new Date() };
+    const newMessages = [...messages, userMsg];
+    setMessages(newMessages);
+    setLoading(true);
+    setMsgCount(c => c + 1);
+
+    try {
+      const apiMessages = newMessages.map(m => ({ role: m.role, content: m.content }));
+
+      const res = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 1000,
+          system: SYSTEM_PROMPT,
+          messages: apiMessages,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data?.error?.message || "API error");
+
+      const reply = data.content?.map(b => b.text || "").join("") || "Sorry, I didn't get a response. Try again!";
+
+      setMessages(prev => [...prev, { role: "assistant", content: reply, timestamp: new Date() }]);
+      setSessionXP(xp => xp + 15);
+    } catch (e) {
+      setError("Coach is temporarily unavailable. Check your connection and try again.");
+      setMessages(prev => prev.filter(m => m !== userMsg));
+      setInput(userText);
+    } finally {
+      setLoading(false);
+      setTimeout(() => inputRef.current?.focus(), 100);
+    }
+  };
+
+  const handleKey = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
+
+  const clearChat = () => {
+    setMessages([OPENING_MESSAGE]);
+    setShowQuick(true);
+    setSessionXP(0);
+    setMsgCount(0);
+    setError(null);
+  };
+
+  return (
+    <div style={{ fontFamily: "'DM Sans', system-ui, sans-serif", background: "#07090e", height: "100vh", display: "flex", flexDirection: "column", color: "#fff" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        textarea { resize: none; outline: none; font-family: inherit; }
+        textarea::placeholder { color: rgba(255,255,255,0.22); }
+        .quick-chip { cursor: pointer; border: none; transition: all 0.15s; }
+        .quick-chip:hover { transform: translateY(-2px); background: rgba(0,200,150,0.15) !important; border-color: rgba(0,200,150,0.4) !important; color: #00c896 !important; }
+        .send-btn { cursor: pointer; border: none; transition: all 0.15s; }
+        .send-btn:hover:not(:disabled) { transform: scale(1.06); }
+        .send-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+        .icon-btn { cursor: pointer; border: none; background: none; transition: opacity 0.15s; }
+        .icon-btn:hover { opacity: 0.6; }
+        @keyframes bounce { 0%,80%,100% { transform: scale(0.7); opacity:0.5; } 40% { transform: scale(1); opacity:1; } }
+        .msg-in { animation: msgIn 0.3s cubic-bezier(0.16,1,0.3,1) both; }
+        @keyframes msgIn { from { opacity:0; transform: translateY(10px) scale(0.97); } to { opacity:1; transform: none; } }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+      `}</style>
+
+      {/* ── HEADER ── */}
+      <div style={{ padding: "14px 20px", background: "#0d0d18", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", gap: 12 }}>
+        {/* Coach avatar */}
+        <div style={{ position: "relative" }}>
+          <div style={{ width: 42, height: 42, borderRadius: "50%", background: "linear-gradient(135deg, #00c896, #00a07a)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>🎓</div>
+          <div style={{ position: "absolute", bottom: 1, right: 1, width: 10, height: 10, borderRadius: "50%", background: "#00c896", border: "2px solid #0d0d18" }} />
+        </div>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontFamily: "'Syne'", fontSize: 15, fontWeight: 800 }}>Coach <span style={{ color: "#00c896" }}>AI</span></div>
+          <div style={{ fontSize: 11, color: "rgba(255,255,255,0.35)" }}>Your personal WI Life Insurance tutor · Online</div>
+        </div>
+
+        {/* Stats pills */}
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <div style={{ background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.2)", borderRadius: 20, padding: "4px 10px", display: "flex", alignItems: "center", gap: 5 }}>
+            <span style={{ fontSize: 12 }}>🔥</span>
+            <span style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: "#f59e0b" }}>{STUDENT.streakDays} day streak</span>
+          </div>
+          <div style={{ background: "rgba(0,200,150,0.08)", border: "1px solid rgba(0,200,150,0.15)", borderRadius: 20, padding: "4px 10px", display: "flex", alignItems: "center", gap: 5 }}>
+            <span style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: "#00c896" }}>{STUDENT.readiness}% ready</span>
+          </div>
+          {sessionXP > 0 && (
+            <div style={{ background: "rgba(167,139,250,0.1)", border: "1px solid rgba(167,139,250,0.2)", borderRadius: 20, padding: "4px 10px" }}>
+              <span style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: "#a78bfa" }}>+{sessionXP} XP</span>
+            </div>
+          )}
+          <button className="icon-btn" onClick={clearChat} title="Clear chat" style={{ color: "rgba(255,255,255,0.25)", fontSize: 16, padding: "4px" }}>↺</button>
+        </div>
+      </div>
+
+      {/* ── EXAM COUNTDOWN BANNER ── */}
+      <div style={{ padding: "10px 20px", background: "rgba(245,158,11,0.06)", borderBottom: "1px solid rgba(245,158,11,0.1)", display: "flex", alignItems: "center", gap: 12 }}>
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4, fontSize: 11 }}>
+            <span style={{ fontFamily: "'JetBrains Mono'", color: "rgba(255,255,255,0.3)", letterSpacing: 1 }}>EXAM READINESS</span>
+            <span style={{ fontFamily: "'JetBrains Mono'", color: "#f59e0b" }}>📅 {STUDENT.daysUntil} days until exam</span>
+          </div>
+          <div style={{ height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 4, overflow: "hidden" }}>
+            <div style={{ height: "100%", width: `${STUDENT.readiness}%`, background: "linear-gradient(to right, #f59e0b, #00c896)", borderRadius: 4 }} />
+          </div>
+        </div>
+      </div>
+
+      {/* ── MESSAGES ── */}
+      <div style={{ flex: 1, overflowY: "auto", padding: "20px 20px 8px" }}>
+        <div style={{ maxWidth: 740, margin: "0 auto", display: "flex", flexDirection: "column", gap: 16 }}>
+
+          {messages.map((msg, i) => (
+            <div key={i} className="msg-in" style={{ animationDelay: `${Math.min(i * 0.05, 0.3)}s` }}>
+              <MessageBubble msg={msg} />
+            </div>
+          ))}
+
+          {loading && (
+            <div className="msg-in">
+              <TypingIndicator />
+            </div>
+          )}
+
+          {error && (
+            <div style={{ padding: "10px 14px", background: "rgba(248,113,113,0.08)", border: "1px solid rgba(248,113,113,0.2)", borderRadius: 10, fontSize: 13, color: "#f87171", display: "flex", gap: 8, alignItems: "center" }}>
+              <span>⚠️</span> {error}
+              <button onClick={() => setError(null)} style={{ marginLeft: "auto", background: "none", border: "none", color: "#f87171", cursor: "pointer", fontSize: 16 }}>✕</button>
+            </div>
+          )}
+
+          {/* Quick prompts — shown at start */}
+          {showQuick && messages.length === 1 && (
+            <div style={{ padding: "8px 0" }}>
+              <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.2)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 12, paddingLeft: 42 }}>Suggested questions</div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, paddingLeft: 42 }}>
+                {QUICK_PROMPTS.map((qp, i) => (
+                  <button key={i} className="quick-chip" onClick={() => sendMessage(qp.label)} style={{ padding: "8px 14px", borderRadius: 20, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.6)", fontSize: 13, display: "flex", alignItems: "center", gap: 6 }}>
+                    <span>{qp.icon}</span> {qp.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div ref={bottomRef} />
+        </div>
+      </div>
+
+      {/* ── WEAK TOPICS BAR ── */}
+      <div style={{ padding: "10px 20px", borderTop: "1px solid rgba(255,255,255,0.04)", background: "#0a0a14" }}>
+        <div style={{ maxWidth: 740, margin: "0 auto", display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+          <span style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.2)", letterSpacing: 1, flexShrink: 0 }}>WEAK AREAS:</span>
+          {STUDENT.weakTopics.map((t, i) => (
+            <button key={i} className="quick-chip" onClick={() => sendMessage(`Can you help me understand ${t} better? It's one of my weak areas.`)} style={{ padding: "4px 10px", borderRadius: 20, background: "rgba(248,113,113,0.08)", border: "1px solid rgba(248,113,113,0.15)", color: "#f87171", fontSize: 11, fontFamily: "'JetBrains Mono'" }}>
+              ⚡ {t}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* ── INPUT ── */}
+      <div style={{ padding: "12px 20px 16px", background: "#0d0d18", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+        <div style={{ maxWidth: 740, margin: "0 auto" }}>
+          <div style={{ display: "flex", gap: 10, alignItems: "flex-end", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 14, padding: "10px 14px", transition: "border-color 0.2s" }}>
+            <textarea
+              ref={inputRef}
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={handleKey}
+              placeholder="Ask Coach anything about your exam..."
+              rows={1}
+              style={{ flex: 1, background: "none", border: "none", color: "#fff", fontSize: 14, lineHeight: 1.5, maxHeight: 120, overflowY: "auto" }}
+              onInput={e => { e.target.style.height = "auto"; e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px"; }}
+            />
+            <button
+              className="send-btn"
+              onClick={() => sendMessage()}
+              disabled={!input.trim() || loading}
+              style={{ width: 36, height: 36, borderRadius: 10, background: input.trim() && !loading ? "#00c896" : "rgba(255,255,255,0.08)", color: input.trim() && !loading ? "#000" : "rgba(255,255,255,0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0 }}>
+              {loading ? <div style={{ width: 14, height: 14, border: "2px solid rgba(255,255,255,0.3)", borderTop: "2px solid #fff", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} /> : "↑"}
+            </button>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6, fontSize: 11, color: "rgba(255,255,255,0.15)", fontFamily: "'JetBrains Mono'" }}>
+            <span>↵ to send · Shift+↵ for new line</span>
+            <span>{msgCount} messages this session</span>
+          </div>
+        </div>
+      </div>
+
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(AIStudyCompanion));
+</script>
+</body>
+</html>

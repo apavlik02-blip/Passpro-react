@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PassPro — 11-curriculum-map</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>* { box-sizing: border-box; margin: 0; padding: 0; } body { background: #06060c; } #root { min-height: 100vh; }</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const curriculum = [
+  {
+    unit: 1,
+    title: "Foundations of Life Insurance",
+    color: "#00c896",
+    estimatedHours: 2.5,
+    examWeight: "10–15%",
+    modules: [
+      {
+        id: "1.1",
+        title: "What Is Life Insurance?",
+        type: "core",
+        duration: "12 min",
+        lessons: [
+          { title: "The basic concept of risk and indemnity", type: "lesson" },
+          { title: "Why people buy life insurance", type: "lesson" },
+          { title: "How insurance companies work (risk pooling)", type: "lesson" },
+          { title: "Key parties: insured, owner, beneficiary, insurer", type: "lesson" },
+          { title: "Knowledge check — 5 questions", type: "quiz" },
+        ],
+      },
+      {
+        id: "1.2",
+        title: "The Insurance Contract",
+        type: "core",
+        duration: "15 min",
+        lessons: [
+          { title: "Elements of a valid insurance contract", type: "lesson" },
+          { title: "Offer, acceptance, and consideration", type: "lesson" },
+          { title: "Utmost good faith and representations", type: "lesson" },
+          { title: "Warranties vs. representations", type: "lesson" },
+          { title: "Adhesion, aleatory, and unilateral contracts", type: "lesson" },
+          { title: "Knowledge check — 8 questions", type: "quiz" },
+        ],
+      },
+      {
+        id: "1.3",
+        title: "Insurable Interest",
+        type: "core",
+        duration: "10 min",
+        lessons: [
+          { title: "What constitutes insurable interest", type: "lesson" },
+          { title: "When insurable interest must exist", type: "lesson" },
+          { title: "Business insurable interest", type: "lesson" },
+          { title: "Knowledge check — 5 questions", type: "quiz" },
+        ],
+      },
+    ],
+  },
+  {
+    unit: 2,
+    title: "Types of Life Insurance Policies",
+    color: "#38bdf8",
+    estimatedHours: 4.0,
+    examWeight: "20–25%",
+    modules: [
+      {
+        id: "2.1",
+        title: "Term Life Insurance",
+        type: "core",
+        duration: "18 min",
+        lessons: [
+          { title: "Level term — how it works", type: "lesson" },
+          { title: "Decreasing term and mortgage protection", type: "lesson" },
+          { title: "Increasing term", type: "lesson" },
+          { title: "Renewable and convertible term", type: "lesson" },
+          { title: "Return of premium term", type: "lesson" },
+          { title: "Real-world scenario: comparing term quotes", type: "scenario" },
+          { title: "Knowledge check — 10 questions", type: "quiz" },
+        ],
+      },
+      {
+        id: "2.2",
+        title: "Whole Life Insurance",
+        type: "core",
+        duration: "22 min",
+        lessons: [
+          { title: "Permanent coverage explained", type: "lesson" },
+          { title: "Cash value accumulation", type: "lesson" },
+          { title: "Ordinary (straight) life", type: "lesson" },
+          { title: "Limited pay whole life (10-pay, 20-pay, paid-up at 65)", type: "lesson" },
+          { title: "Single premium whole life", type: "lesson" },
+          { title: "Modified whole life", type: "lesson" },
+          { title: "Real-world scenario: term vs. whole life", type: "scenario" },
+          { title: "Knowledge check — 12 questions", type: "quiz" },
+        ],
+      },
+      {
+        id: "2.3",
+        title: "Universal Life Insurance",
+        type: "core",
+        duration: "20 min",
+        lessons: [
+          { title: "Flexible premiums and adjustable death benefit", type: "lesson" },
+          { title: "Cost of insurance charges", type: "lesson" },
+          { title: "Interest crediting and minimum guarantees", type: "lesson" },
+          { title: "Indexed universal life (IUL)", type: "lesson" },
+          { title: "Variable universal life overview", type: "lesson" },
+          { title: "Knowledge check — 10 questions", type: "quiz" },
+        ],
+      },
+      {
+        id: "2.4",
+        title: "Variable Life Insurance",
+        type: "core",
+        duration: "15 min",
+        lessons: [
+          { title: "Separate accounts and investment risk", type: "lesson" },
+          { title: "Variable life vs. variable universal life", type: "lesson" },
+          { title: "Securities licensing requirements", type: "lesson" },
+          { title: "Knowledge check — 8 questions", type: "quiz" },
+        ],
+      },
+      {
+        id: "2.5",
+        title: "Other Policy Types",
+        type: "core",
+        duration: "12 min",
+        lessons: [
+          { title: "Endowment policies", type: "lesson" },
+          { title: "Juvenile life insurance", type: "lesson" },
+          { title: "Credit life insurance", type: "lesson" },
+          { title: "Group life insurance overview", type: "lesson" },
+          { title: "Knowledge check — 8 questions", type: "quiz" },
+        ],
+      },
+    ],
+  },
+  {
+    unit: 3,
+    title: "Policy Provisions, Riders & Options",
+    color: "#a78bfa",
+    estimatedHours: 3.5,
+    examWeight: "15–20%",
+    modules: [
+      {
+        id: "3.1",
+        title: "Standard Policy Provisions",
+        type: "core",
+        duration: "20 min",
+        lessons: [
+          { title: "Free look period", type: "lesson" },
+          { title: "Grace period", type: "lesson" },
+          { title: "Reinstatement provision", type: "lesson" },
+          { title: "Incontestability clause", type: "lesson" },
+          { title: "Misstatement of age/sex provision", type: "lesson" },
+          { title: "Entire contract provision", type: "lesson" },
+          { title: "Knowledge check — 12 questions", type: "quiz" },
+        ],
+      },
+      {
+        id: "3.2",
+        title: "Nonforfeiture Options",
+        type: "core",
+        duration: "15 min",
+        lessons: [
+          { title: "Cash surrender value", type: "lesson" },
+          { title: "Reduced paid-up insurance", type: "lesson" },
+          { title: "Extended term insurance", type: "lesson" },
+          { title: "Automatic premium loan", type: "lesson" },
+          { title: "Knowledge check — 8 questions", type: "quiz" },
+        ],
+      },
+      {
+        id: "3.3",
+        title: "Dividend Options",
+        type: "core",
+        duration: "12 min",
+        lessons: [
+          { title: "Cash dividends", type: "lesson" },
+          { title: "Reduce premium", type: "lesson" },
+          { title: "Accumulate at interest", type: "lesson" },
+          { title: "Paid-up additions", type: "lesson" },
+          { title: "One-year term option", type: "lesson" },
+          { title: "Knowledge check — 6 questions", type: "quiz" },
+        ],
+      },
+      {
+        id: "3.4",
+        title: "Policy Riders",
+        type: "core",
+        duration: "18 min",
+        lessons: [
+          { title: "Waiver of premium rider", type: "lesson" },
+          { title: "Accidental death benefit (double indemnity)", type: "lesson" },
+          { title: "Guaranteed insurability rider", type: "lesson" },
+          { title: "Payor benefit rider", type: "lesson" },
+          { title: "Long-term care rider", type: "lesson" },
+          { title: "Accelerated death benefit rider", type: "lesson" },
+          { title: "Knowledge check — 10 questions", type: "quiz" },
+        ],
+      },
+    ],
+  },
+  {
+    unit: 4,
+    title: "Annuities",
+    color: "#f59e0b",
+    estimatedHours: 3.0,
+    examWeight: "10–15%",
+    modules: [
+      {
+        id: "4.1",
+        title: "Annuity Fundamentals",
+        type: "core",
+        duration: "15 min",
+        lessons: [
+          { title: "What is an annuity?", type: "lesson" },
+          { title: "Accumulation vs. annuitization phase", type: "lesson" },
+          { title: "Annuitant, owner, beneficiary", type: "lesson" },
+          { title: "Surrender charges explained", type: "lesson" },
+          { title: "Knowledge check — 8 questions", type: "quiz" },
+        ],
+      },
+      {
+        id: "4.2",
+        title: "Types of Annuities",
+        type: "core",
+        duration: "20 min",
+        lessons: [
+          { title: "Fixed annuities", type: "lesson" },
+          { title: "Variable annuities", type: "lesson" },
+          { title: "Indexed annuities", type: "lesson" },
+          { title: "Immediate vs. deferred annuities", type: "lesson" },
+          { title: "Single premium vs. flexible premium", type: "lesson" },
+          { title: "Knowledge check — 10 questions", type: "quiz" },
+        ],
+      },
+      {
+        id: "4.3",
+        title: "Annuity Settlement Options",
+        type: "core",
+        duration: "12 min",
+        lessons: [
+          { title: "Life only (straight life)", type: "lesson" },
+          { title: "Life with period certain", type: "lesson" },
+          { title: "Joint and survivor", type: "lesson" },
+          { title: "Fixed amount / fixed period", type: "lesson" },
+          { title: "Knowledge check — 6 questions", type: "quiz" },
+        ],
+      },
+    ],
+  },
+  {
+    unit: 5,
+    title: "Life Insurance Underwriting & Premiums",
+    color: "#f87171",
+    estimatedHours: 2.5,
+    examWeight: "10–12%",
+    modules: [
+      {
+        id: "5.1",
+        title: "Underwriting Basics",
+        type: "core",
+        duration: "15 min",
+        lessons: [
+          { title: "Purpose of underwriting", type: "lesson" },
+          { title: "Medical vs. non-medical applications", type: "lesson" },
+          { title: "Risk classification: standard, substandard, preferred", type: "lesson" },
+          { title: "Rating and flat extra premiums", type: "lesson" },
+          { title: "Knowledge check — 8 questions", type: "quiz" },
+        ],
+      },
+      {
+        id: "5.2",
+        title: "Premium Calculations",
+        type: "core",
+        duration: "14 min",
+        lessons: [
+          { title: "Net single premium vs. net level premium", type: "lesson" },
+          { title: "Mortality tables and actuarial principles", type: "lesson" },
+          { title: "Loading for expenses", type: "lesson" },
+          { title: "Mode of premium payment", type: "lesson" },
+          { title: "Knowledge check — 8 questions", type: "quiz" },
+        ],
+      },
+    ],
+  },
+  {
+    unit: 6,
+    title: "Life Insurance Needs & Planning",
+    color: "#4ade80",
+    estimatedHours: 2.0,
+    examWeight: "8–10%",
+    modules: [
+      {
+        id: "6.1",
+        title: "Needs-Based Selling",
+        type: "core",
+        duration: "14 min",
+        lessons: [
+          { title: "Human life value approach", type: "lesson" },
+          { title: "Needs analysis approach", type: "lesson" },
+          { title: "Income replacement calculation", type: "lesson" },
+          { title: "Real-world scenario: family needs analysis", type: "scenario" },
+          { title: "Knowledge check — 8 questions", type: "quiz" },
+        ],
+      },
+      {
+        id: "6.2",
+        title: "Business Life Insurance",
+        type: "core",
+        duration: "16 min",
+        lessons: [
+          { title: "Key person insurance", type: "lesson" },
+          { title: "Buy-sell agreements", type: "lesson" },
+          { title: "Split-dollar life insurance", type: "lesson" },
+          { title: "Executive bonus plans (Section 162)", type: "lesson" },
+          { title: "Knowledge check — 8 questions", type: "quiz" },
+        ],
+      },
+    ],
+  },
+  {
+    unit: 7,
+    title: "Taxes, Retirement & Social Security",
+    color: "#fb923c",
+    estimatedHours: 2.5,
+    examWeight: "8–10%",
+    modules: [
+      {
+        id: "7.1",
+        title: "Tax Treatment of Life Insurance",
+        type: "core",
+        duration: "16 min",
+        lessons: [
+          { title: "Income tax on death benefits", type: "lesson" },
+          { title: "Estate tax considerations", type: "lesson" },
+          { title: "Tax-deferred cash value growth", type: "lesson" },
+          { title: "Policy loans and surrenders", type: "lesson" },
+          { title: "1035 exchanges", type: "lesson" },
+          { title: "Knowledge check — 10 questions", type: "quiz" },
+        ],
+      },
+      {
+        id: "7.2",
+        title: "Qualified Retirement Plans",
+        type: "core",
+        duration: "14 min",
+        lessons: [
+          { title: "Traditional and Roth IRAs", type: "lesson" },
+          { title: "401(k) and 403(b) basics", type: "lesson" },
+          { title: "SEP and SIMPLE plans", type: "lesson" },
+          { title: "Knowledge check — 8 questions", type: "quiz" },
+        ],
+      },
+      {
+        id: "7.3",
+        title: "Social Security Benefits",
+        type: "core",
+        duration: "10 min",
+        lessons: [
+          { title: "Survivor benefits overview", type: "lesson" },
+          { title: "Integration with life insurance planning", type: "lesson" },
+          { title: "Knowledge check — 5 questions", type: "quiz" },
+        ],
+      },
+    ],
+  },
+  {
+    unit: 8,
+    title: "Wisconsin State Regulations",
+    color: "#c084fc",
+    estimatedHours: 3.0,
+    examWeight: "20–25%",
+    stateSpecific: true,
+    state: "WI",
+    modules: [
+      {
+        id: "8.1",
+        title: "Wisconsin OCI & Licensing",
+        type: "state",
+        duration: "18 min",
+        lessons: [
+          { title: "Office of the Commissioner of Insurance (OCI) structure and authority", type: "lesson" },
+          { title: "Wisconsin resident license requirements", type: "lesson" },
+          { title: "Pre-licensing education requirements (20 hours life)", type: "lesson" },
+          { title: "Exam requirements and approved providers", type: "lesson" },
+          { title: "License application and background check process", type: "lesson" },
+          { title: "Non-resident licensing and reciprocity", type: "lesson" },
+          { title: "Knowledge check — 10 questions", type: "quiz" },
+        ],
+      },
+      {
+        id: "8.2",
+        title: "Wisconsin License Maintenance",
+        type: "state",
+        duration: "14 min",
+        lessons: [
+          { title: "License renewal — 2-year cycle", type: "lesson" },
+          { title: "Continuing education: 24 hours per cycle (3 hrs ethics)", type: "lesson" },
+          { title: "Approved CE providers in Wisconsin", type: "lesson" },
+          { title: "Late renewal and reinstatement", type: "lesson" },
+          { title: "Reporting address changes within 30 days", type: "lesson" },
+          { title: "Knowledge check — 8 questions", type: "quiz" },
+        ],
+      },
+      {
+        id: "8.3",
+        title: "Wisconsin Market Conduct & Ethics",
+        type: "state",
+        duration: "16 min",
+        lessons: [
+          { title: "Unfair trade practices under Wis. Stat. Ch. 628", type: "lesson" },
+          { title: "Misrepresentation and fraud", type: "lesson" },
+          { title: "Rebating rules in Wisconsin", type: "lesson" },
+          { title: "Twisting and churning prohibitions", type: "lesson" },
+          { title: "Replacement regulations — Wisconsin requirements", type: "lesson" },
+          { title: "Knowledge check — 10 questions", type: "quiz" },
+        ],
+      },
+      {
+        id: "8.4",
+        title: "Wisconsin Policy Requirements",
+        type: "state",
+        duration: "14 min",
+        lessons: [
+          { title: "Wisconsin free look period — 10 days (life), 30 days (annuity)", type: "lesson" },
+          { title: "Required policy provisions under Wisconsin law", type: "lesson" },
+          { title: "Grace period requirements — 31 days", type: "lesson" },
+          { title: "Incontestability — 2-year rule", type: "lesson" },
+          { title: "Suicide exclusion — 2-year rule in Wisconsin", type: "lesson" },
+          { title: "Knowledge check — 10 questions", type: "quiz" },
+        ],
+      },
+      {
+        id: "8.5",
+        title: "Wisconsin Consumer Protections",
+        type: "state",
+        duration: "12 min",
+        lessons: [
+          { title: "Wisconsin Life Insurance Guaranty Association (WLGA)", type: "lesson" },
+          { title: "WLGA coverage limits — $300K death benefit", type: "lesson" },
+          { title: "Privacy and GLBA requirements", type: "lesson" },
+          { title: "Senior/elder consumer protections", type: "lesson" },
+          { title: "Knowledge check — 8 questions", type: "quiz" },
+        ],
+      },
+    ],
+  },
+];
+
+const lessonTypeStyle = {
+  lesson: { bg: "rgba(56,189,248,0.1)", color: "#38bdf8", label: "Lesson" },
+  quiz: { bg: "rgba(245,158,11,0.1)", color: "#f59e0b", label: "Quiz" },
+  scenario: { bg: "rgba(0,200,150,0.1)", color: "#00c896", label: "Scenario" },
+};
+
+function CurriculumMap() {
+  const [expandedUnit, setExpandedUnit] = useState(null);
+  const [expandedModule, setExpandedModule] = useState(null);
+  const [view, setView] = useState("map");
+
+  const totalModules = curriculum.reduce((a, u) => a + u.modules.length, 0);
+  const totalLessons = curriculum.reduce((a, u) => u.modules.reduce((b, m) => b + m.lessons.length, a), 0);
+  const totalHours = curriculum.reduce((a, u) => a + u.estimatedHours, 0);
+
+  return (
+    <div style={{ fontFamily: "'DM Sans', system-ui, sans-serif", background: "#0c0c0c", minHeight: "100vh", color: "#fff" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        .unit-row { cursor: pointer; transition: all 0.2s; }
+        .unit-row:hover { filter: brightness(1.05); }
+        .module-row { cursor: pointer; transition: background 0.15s; border-radius: 8px; }
+        .module-row:hover { background: rgba(255,255,255,0.04); }
+        .tab-btn { cursor: pointer; border: none; transition: all 0.2s; }
+        .lesson-row { animation: slideIn 0.2s ease both; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: none; } }
+        .stat-pill { transition: transform 0.2s; }
+        .stat-pill:hover { transform: scale(1.04); }
+      `}</style>
+
+      {/* Header */}
+      <div style={{ background: "linear-gradient(135deg, #0c0c0c 0%, #111820 100%)", padding: "48px 40px 32px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: "#00c896", letterSpacing: 3, textTransform: "uppercase", marginBottom: 14 }}>PassPro — Curriculum Architecture</div>
+        <h1 style={{ fontFamily: "'Syne'", fontSize: "clamp(36px,5vw,64px)", fontWeight: 800, letterSpacing: -2.5, lineHeight: 0.95, marginBottom: 20 }}>
+          Life Insurance<br /><span style={{ color: "#00c896" }}>Curriculum Map</span>
+        </h1>
+        <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 28 }}>
+          {[
+            { label: "Units", value: curriculum.length },
+            { label: "Modules", value: totalModules },
+            { label: "Lessons & Quizzes", value: totalLessons },
+            { label: "Study Hours", value: `${totalHours}h` },
+          ].map((s, i) => (
+            <div key={i} className="stat-pill" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, padding: "10px 18px", display: "flex", gap: 10, alignItems: "baseline" }}>
+              <span style={{ fontFamily: "'Syne'", fontSize: 22, fontWeight: 800, color: "#00c896" }}>{s.value}</span>
+              <span style={{ fontSize: 12, color: "rgba(255,255,255,0.4)" }}>{s.label}</span>
+            </div>
+          ))}
+        </div>
+        <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+          <div style={{ background: "rgba(192,132,252,0.1)", border: "1px solid rgba(192,132,252,0.3)", borderRadius: 20, padding: "5px 14px", fontSize: 12, color: "#c084fc", fontFamily: "'JetBrains Mono'" }}>🏛 Wisconsin (WI) — Active State</div>
+          <div style={{ background: "rgba(0,200,150,0.08)", border: "1px solid rgba(0,200,150,0.2)", borderRadius: 20, padding: "5px 14px", fontSize: 12, color: "#00c896", fontFamily: "'JetBrains Mono'" }}>Life Insurance License</div>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div style={{ display: "flex", gap: 4, padding: "0 40px", borderBottom: "1px solid rgba(255,255,255,0.06)", background: "#0c0c0c" }}>
+        {[["map", "Curriculum Map"], ["overview", "Unit Overview"], ["state", "WI State Layer"]].map(([val, label]) => (
+          <button key={val} className="tab-btn" onClick={() => setView(val)} style={{ padding: "13px 20px", fontSize: 13, fontFamily: "'DM Sans'", background: "transparent", color: view === val ? "#00c896" : "rgba(255,255,255,0.35)", borderBottom: view === val ? "2px solid #00c896" : "2px solid transparent" }}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ padding: "32px 40px" }}>
+
+        {/* CURRICULUM MAP */}
+        {view === "map" && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {curriculum.map((unit, ui) => (
+              <div key={ui} style={{ border: `1px solid ${expandedUnit === ui ? unit.color + "35" : "rgba(255,255,255,0.06)"}`, borderRadius: 14, overflow: "hidden", transition: "border-color 0.2s" }}>
+                {/* Unit header */}
+                <div className="unit-row" onClick={() => setExpandedUnit(expandedUnit === ui ? null : ui)} style={{ padding: "18px 24px", background: expandedUnit === ui ? `${unit.color}0d` : "rgba(255,255,255,0.02)", display: "flex", alignItems: "center", gap: 16 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: 10, background: `${unit.color}18`, border: `1.5px solid ${unit.color}40`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <span style={{ fontFamily: "'Syne'", fontSize: 15, fontWeight: 800, color: unit.color }}>{unit.unit}</span>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3 }}>
+                      <span style={{ fontFamily: "'Syne'", fontSize: 16, fontWeight: 700 }}>{unit.title}</span>
+                      {unit.stateSpecific && <span style={{ background: "rgba(192,132,252,0.15)", color: "#c084fc", padding: "2px 8px", borderRadius: 10, fontSize: 10, fontFamily: "'JetBrains Mono'" }}>WI SPECIFIC</span>}
+                    </div>
+                    <div style={{ display: "flex", gap: 16, fontSize: 12, color: "rgba(255,255,255,0.3)" }}>
+                      <span>{unit.modules.length} modules</span>
+                      <span>{unit.estimatedHours}h estimated</span>
+                    </div>
+                  </div>
+                  <div style={{ background: `${unit.color}15`, border: `1px solid ${unit.color}25`, color: unit.color, padding: "4px 12px", borderRadius: 20, fontSize: 11, fontFamily: "'JetBrains Mono'" }}>{unit.examWeight} of exam</div>
+                  <span style={{ color: "rgba(255,255,255,0.2)", marginLeft: 8, fontSize: 13 }}>{expandedUnit === ui ? "▲" : "▼"}</span>
+                </div>
+
+                {/* Modules */}
+                {expandedUnit === ui && (
+                  <div style={{ padding: "8px 16px 16px", background: `${unit.color}06` }}>
+                    {unit.modules.map((mod, mi) => (
+                      <div key={mi}>
+                        <div className="module-row" onClick={() => setExpandedModule(expandedModule === `${ui}-${mi}` ? null : `${ui}-${mi}`)} style={{ padding: "12px 14px", display: "flex", alignItems: "center", gap: 12, marginTop: 4 }}>
+                          <div style={{ width: 28, height: 28, borderRadius: 7, background: `${unit.color}18`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                            <span style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: unit.color }}>{mod.id}</span>
+                          </div>
+                          <div style={{ flex: 1 }}>
+                            <div style={{ fontSize: 14, fontWeight: 500, color: "rgba(255,255,255,0.85)" }}>{mod.title}</div>
+                            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", marginTop: 2 }}>{mod.lessons.length} items · {mod.duration}</div>
+                          </div>
+                          <div style={{ background: mod.type === "state" ? "rgba(192,132,252,0.1)" : "rgba(255,255,255,0.05)", color: mod.type === "state" ? "#c084fc" : "rgba(255,255,255,0.3)", padding: "3px 10px", borderRadius: 10, fontSize: 10, fontFamily: "'JetBrains Mono'" }}>{mod.type === "state" ? "STATE" : "CORE"}</div>
+                          <span style={{ color: "rgba(255,255,255,0.15)", fontSize: 12 }}>{expandedModule === `${ui}-${mi}` ? "▲" : "▼"}</span>
+                        </div>
+
+                        {/* Lessons */}
+                        {expandedModule === `${ui}-${mi}` && (
+                          <div style={{ margin: "4px 14px 8px 54px", display: "flex", flexDirection: "column", gap: 4 }}>
+                            {mod.lessons.map((lesson, li) => {
+                              const ts = lessonTypeStyle[lesson.type];
+                              return (
+                                <div key={li} className="lesson-row" style={{ animationDelay: `${li * 0.04}s`, display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)", borderRadius: 7 }}>
+                                  <div style={{ background: ts.bg, color: ts.color, padding: "2px 7px", borderRadius: 6, fontSize: 9, fontFamily: "'JetBrains Mono'", fontWeight: 600, minWidth: 44, textAlign: "center", flexShrink: 0 }}>{ts.label}</div>
+                                  <span style={{ fontSize: 13, color: "rgba(255,255,255,0.6)" }}>{lesson.title}</span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* UNIT OVERVIEW */}
+        {view === "overview" && (
+          <div>
+            <p style={{ fontSize: 14, color: "rgba(255,255,255,0.4)", marginBottom: 28 }}>Exam weight distribution and time estimates across all 8 units.</p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 14 }}>
+              {curriculum.map((unit, i) => (
+                <div key={i} style={{ background: "#111118", border: `1px solid ${unit.color}20`, borderRadius: 14, padding: 22, position: "relative", overflow: "hidden" }}>
+                  <div style={{ position: "absolute", top: 12, right: 16, fontFamily: "'Syne'", fontSize: 56, fontWeight: 800, color: unit.color, opacity: 0.06, lineHeight: 1 }}>{unit.unit}</div>
+                  <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: unit.color, letterSpacing: 2, textTransform: "uppercase", marginBottom: 8 }}>Unit {unit.unit}</div>
+                  <div style={{ fontFamily: "'Syne'", fontSize: 15, fontWeight: 700, marginBottom: 14, lineHeight: 1.3 }}>{unit.title}</div>
+                  <div style={{ display: "flex", gap: 10, marginBottom: 14, flexWrap: "wrap" }}>
+                    <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 8, padding: "6px 10px", fontSize: 12, color: "rgba(255,255,255,0.5)" }}>{unit.modules.length} modules</div>
+                    <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 8, padding: "6px 10px", fontSize: 12, color: "rgba(255,255,255,0.5)" }}>{unit.estimatedHours}h</div>
+                    {unit.stateSpecific && <div style={{ background: "rgba(192,132,252,0.1)", border: "1px solid rgba(192,132,252,0.2)", borderRadius: 8, padding: "6px 10px", fontSize: 11, color: "#c084fc", fontFamily: "'JetBrains Mono'" }}>WI Only</div>}
+                  </div>
+                  <div style={{ height: 6, background: "rgba(255,255,255,0.06)", borderRadius: 4, overflow: "hidden" }}>
+                    <div style={{ height: "100%", width: `${(unit.estimatedHours / totalHours) * 100}%`, background: unit.color, borderRadius: 4 }} />
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6 }}>
+                    <span style={{ fontSize: 11, color: "rgba(255,255,255,0.25)" }}>{((unit.estimatedHours / totalHours) * 100).toFixed(0)}% of total time</span>
+                    <span style={{ fontSize: 11, color: unit.color, fontFamily: "'JetBrains Mono'" }}>{unit.examWeight} exam</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* STATE LAYER */}
+        {view === "state" && (
+          <div>
+            <div style={{ background: "rgba(192,132,252,0.07)", border: "1px solid rgba(192,132,252,0.2)", borderLeft: "3px solid #c084fc", borderRadius: 10, padding: "18px 24px", marginBottom: 28 }}>
+              <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "#c084fc", letterSpacing: 2, marginBottom: 6 }}>WISCONSIN STATE REGULATION LAYER</div>
+              <p style={{ fontSize: 14, color: "rgba(255,255,255,0.6)", lineHeight: 1.7 }}>
+                Unit 8 is <strong style={{ color: "#fff" }}>100% Wisconsin-specific</strong>. When a student selects WI at signup, this content is automatically injected into their curriculum. Units 1–7 are universal core content that applies to all states, with <strong style={{ color: "#c084fc" }}>Wisconsin-specific callouts</strong> embedded within relevant lessons.
+              </p>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {curriculum.find(u => u.stateSpecific)?.modules.map((mod, i) => (
+                <div key={i} style={{ background: "#111118", border: "1px solid rgba(192,132,252,0.15)", borderRadius: 12, padding: "20px 24px" }}>
+                  <div style={{ display: "flex", alignItems: "flex-start", gap: 14 }}>
+                    <div style={{ width: 36, height: 36, borderRadius: 9, background: "rgba(192,132,252,0.12)", border: "1px solid rgba(192,132,252,0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono'", fontSize: 11, color: "#c084fc", flexShrink: 0 }}>{mod.id}</div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontFamily: "'Syne'", fontSize: 15, fontWeight: 700, marginBottom: 6 }}>{mod.title}</div>
+                      <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", marginBottom: 12 }}>{mod.lessons.length} items · {mod.duration}</div>
+                      <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                        {mod.lessons.map((lesson, li) => {
+                          const ts = lessonTypeStyle[lesson.type];
+                          return (
+                            <div key={li} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "rgba(255,255,255,0.55)" }}>
+                              <div style={{ background: ts.bg, color: ts.color, padding: "1px 7px", borderRadius: 5, fontSize: 9, fontFamily: "'JetBrains Mono'", minWidth: 40, textAlign: "center", flexShrink: 0 }}>{ts.label}</div>
+                              {lesson.title}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(CurriculumMap));
+</script>
+</body>
+</html>

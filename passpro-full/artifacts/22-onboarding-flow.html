@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PassPro — 22-onboarding-flow</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>* { box-sizing: border-box; margin: 0; padding: 0; } body { background: #06060c; } #root { min-height: 100vh; }</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const states = [
+  { abbr: "WI", name: "Wisconsin", available: true, examFee: "$66", questions: 100, passingScore: "70", provider: "PSI", color: "#c084fc" },
+  { abbr: "TX", name: "Texas", available: false, examFee: "$61", questions: 150, passingScore: "70", provider: "PSI", color: "#f59e0b" },
+  { abbr: "FL", name: "Florida", available: false, examFee: "$54", questions: 150, passingScore: "70", provider: "PSI", color: "#38bdf8" },
+  { abbr: "CA", name: "California", available: false, examFee: "$62", questions: 150, passingScore: "70", provider: "PSI", color: "#f87171" },
+  { abbr: "GA", name: "Georgia", available: false, examFee: "$63", questions: 150, passingScore: "70", provider: "PSI", color: "#4ade80" },
+  { abbr: "NY", name: "New York", available: false, examFee: "$40", questions: 150, passingScore: "70", provider: "PSI", color: "#fb923c" },
+];
+
+const licenseTypes = [
+  { id: "life", label: "Life Insurance", icon: "🛡️", desc: "Cover individuals and families with term, whole, and universal life products", available: true },
+  { id: "life_health", label: "Life & Health", icon: "💊", desc: "Life insurance plus medical, disability, and long-term care coverage", available: false },
+  { id: "life_health_annuity", label: "Life, Health & Annuities", icon: "📈", desc: "Full coverage including retirement planning and annuity products", available: false },
+];
+
+const goals = [
+  { id: "new_career", label: "Starting a new career in insurance", icon: "🚀" },
+  { id: "add_license", label: "Adding a license to my existing work", icon: "➕" },
+  { id: "agency_hire", label: "My agency requires this license", icon: "🏢" },
+  { id: "side_income", label: "Building a side income stream", icon: "💰" },
+];
+
+const studyPaces = [
+  { id: "intensive", label: "Intensive", hours: "2–3 hrs/day", days: 14, icon: "⚡", desc: "I want to pass as fast as possible", color: "#f87171" },
+  { id: "steady", label: "Steady", hours: "1 hr/day", days: 30, icon: "🎯", desc: "Consistent daily progress — my sweet spot", color: "#00c896" },
+  { id: "relaxed", label: "Relaxed", hours: "30 min/day", days: 60, icon: "🌿", desc: "Life is busy — I'll fit it in when I can", color: "#38bdf8" },
+];
+
+const getExamDate = (pace, fromDate = new Date()) => {
+  const d = new Date(fromDate);
+  d.setDate(d.getDate() + pace.days + 7);
+  return d;
+};
+
+const fmt = (d) => d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+
+const getDaysUntil = (d) => Math.ceil((new Date(d) - new Date()) / (1000 * 60 * 60 * 24));
+
+const plans = [
+  { id: "basic", name: "Basic", price: 39, period: "one-time", color: "#38bdf8", features: ["Core study modules", "Practice exams", "Knowledge checks", "Progress tracking"], highlight: false },
+  { id: "pro", name: "Pro", price: 79, period: "one-time", color: "#00c896", features: ["Everything in Basic", "AI Study Companion", "Gap analysis engine", "Unlimited retakes", "Streak & XP system"], highlight: true },
+  { id: "elite", name: "Elite", price: 149, period: "one-time", color: "#a78bfa", features: ["Everything in Pro", "AI Roleplay Simulator", "All 50 states access", "Priority support", "Pass guarantee"], highlight: false },
+];
+
+const STEPS = ["Welcome", "State", "License", "Goal", "Exam Date", "Study Pace", "Plan", "Ready"];
+
+function OnboardingFlow() {
+  const [step, setStep] = useState(0);
+  const [data, setData] = useState({
+    name: "",
+    state: null,
+    license: null,
+    goal: null,
+    examDate: null,
+    customDate: false,
+    customDateValue: "",
+    pace: null,
+    plan: null,
+  });
+  const [direction, setDirection] = useState(1);
+
+  const go = (n) => { setDirection(n > step ? 1 : -1); setStep(n); };
+  const next = () => go(step + 1);
+  const back = () => go(step - 1);
+
+  const set = (key, val) => setData(d => ({ ...d, [key]: val }));
+
+  const selectedState = states.find(s => s.abbr === data.state);
+  const selectedPace = studyPaces.find(p => p.id === data.pace);
+  const suggestedDate = selectedPace ? getExamDate(selectedPace) : null;
+  const finalDate = data.customDate && data.customDateValue ? new Date(data.customDateValue) : suggestedDate;
+  const daysLeft = finalDate ? getDaysUntil(finalDate) : null;
+
+  const canContinue = {
+    0: data.name.trim().length > 1,
+    1: !!data.state,
+    2: !!data.license,
+    3: !!data.goal,
+    4: !!(finalDate),
+    5: !!data.pace,
+    6: !!data.plan,
+    7: true,
+  };
+
+  const pct = Math.round((step / (STEPS.length - 1)) * 100);
+
+  return (
+    <div style={{ fontFamily: "'DM Sans', system-ui, sans-serif", background: "#06060c", minHeight: "100vh", color: "#fff", display: "flex", flexDirection: "column" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        .card { cursor: pointer; transition: all 0.18s; }
+        .card:hover { transform: translateY(-3px); }
+        .btn-primary { cursor: pointer; border: none; transition: all 0.18s; }
+        .btn-primary:hover:not(:disabled) { transform: scale(1.02); opacity: 0.92; }
+        .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; }
+        .btn-ghost { cursor: pointer; border: none; transition: all 0.15s; background: none; }
+        .btn-ghost:hover { opacity: 0.7; }
+        input { outline: none; }
+        input::placeholder { color: rgba(255,255,255,0.25); }
+        .slide { animation: slideIn 0.35s cubic-bezier(0.16,1,0.3,1) both; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+        .ping { animation: ping 2s ease-in-out infinite; }
+        @keyframes ping { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+      `}</style>
+
+      {/* Top bar */}
+      <div style={{ padding: "16px 32px", display: "flex", alignItems: "center", gap: 16, borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+        <div style={{ fontFamily: "'Syne'", fontSize: 17, fontWeight: 800 }}>Pass<span style={{ color: "#00c896" }}>Pro</span></div>
+        <div style={{ flex: 1, height: 3, background: "rgba(255,255,255,0.06)", borderRadius: 4, overflow: "hidden" }}>
+          <div style={{ height: "100%", width: `${pct}%`, background: "linear-gradient(to right, #00c896, #38bdf8)", borderRadius: 4, transition: "width 0.5s cubic-bezier(0.16,1,0.3,1)" }} />
+        </div>
+        <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: "rgba(255,255,255,0.25)" }}>{step + 1} / {STEPS.length}</div>
+      </div>
+
+      {/* Step indicators */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 6, padding: "16px 32px 0" }}>
+        {STEPS.map((s, i) => (
+          <div key={i} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <div style={{ width: i < step ? 24 : i === step ? 28 : 20, height: i === step ? 8 : 6, borderRadius: 10, background: i < step ? "#00c896" : i === step ? "#00c896" : "rgba(255,255,255,0.1)", transition: "all 0.3s ease" }} />
+          </div>
+        ))}
+      </div>
+
+      {/* Main content */}
+      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "32px 24px" }}>
+        <div className="slide" key={step} style={{ width: "100%", maxWidth: 620 }}>
+
+          {/* ── STEP 0: Welcome ── */}
+          {step === 0 && (
+            <div>
+              <div style={{ textAlign: "center", marginBottom: 40 }}>
+                <div style={{ fontSize: 48, marginBottom: 16 }}>👋</div>
+                <h1 style={{ fontFamily: "'Syne'", fontSize: "clamp(28px,5vw,48px)", fontWeight: 800, letterSpacing: -2, lineHeight: 1, marginBottom: 14 }}>
+                  Let's get you<br /><span style={{ color: "#00c896" }}>licensed.</span>
+                </h1>
+                <p style={{ fontSize: 15, color: "rgba(255,255,255,0.45)", lineHeight: 1.7, maxWidth: 400, margin: "0 auto" }}>
+                  PassPro will build a personalized study plan based on your exam date, state, and how much time you have. It takes 2 minutes to set up.
+                </p>
+              </div>
+              <div>
+                <label style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "rgba(255,255,255,0.3)", letterSpacing: 2, textTransform: "uppercase", display: "block", marginBottom: 10 }}>Your first name</label>
+                <input
+                  value={data.name}
+                  onChange={e => set("name", e.target.value)}
+                  onKeyDown={e => e.key === "Enter" && canContinue[0] && next()}
+                  placeholder="Enter your first name"
+                  autoFocus
+                  style={{ width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, padding: "16px 20px", fontSize: 18, color: "#fff", fontFamily: "'Syne'", fontWeight: 700, letterSpacing: -0.5 }}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* ── STEP 1: State ── */}
+          {step === 1 && (
+            <div>
+              <h2 style={{ fontFamily: "'Syne'", fontSize: "clamp(24px,4vw,40px)", fontWeight: 800, letterSpacing: -1.5, marginBottom: 8 }}>
+                Which state are you<br /><span style={{ color: "#c084fc" }}>getting licensed in?</span>
+              </h2>
+              <p style={{ fontSize: 14, color: "rgba(255,255,255,0.4)", marginBottom: 28, lineHeight: 1.6 }}>Your curriculum, regulations, and exam details will be customized to your state.</p>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+                {states.map(s => (
+                  <div key={s.abbr} className={s.available ? "card" : ""} onClick={() => s.available && set("state", s.abbr)} style={{ padding: "18px 16px", borderRadius: 14, background: data.state === s.abbr ? `${s.color}15` : "rgba(255,255,255,0.03)", border: `1px solid ${data.state === s.abbr ? s.color + "50" : "rgba(255,255,255,0.07)"}`, opacity: s.available ? 1 : 0.4, cursor: s.available ? "pointer" : "not-allowed", textAlign: "center", position: "relative" }}>
+                    {!s.available && <div style={{ position: "absolute", top: 8, right: 8, fontFamily: "'JetBrains Mono'", fontSize: 8, color: "rgba(255,255,255,0.3)", background: "rgba(255,255,255,0.05)", padding: "2px 6px", borderRadius: 4 }}>SOON</div>}
+                    <div style={{ fontFamily: "'Syne'", fontSize: 22, fontWeight: 800, color: data.state === s.abbr ? s.color : "#fff", marginBottom: 3 }}>{s.abbr}</div>
+                    <div style={{ fontSize: 12, color: "rgba(255,255,255,0.45)" }}>{s.name}</div>
+                    {s.available && (
+                      <div style={{ marginTop: 10, display: "flex", gap: 4, justifyContent: "center", flexWrap: "wrap" }}>
+                        <span style={{ background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.35)", padding: "2px 7px", borderRadius: 6, fontSize: 9, fontFamily: "'JetBrains Mono'" }}>{s.questions}Q</span>
+                        <span style={{ background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.35)", padding: "2px 7px", borderRadius: 6, fontSize: 9, fontFamily: "'JetBrains Mono'" }}>{s.examFee}</span>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+              {selectedState && (
+                <div style={{ marginTop: 16, padding: "12px 16px", background: `${selectedState.color}08`, border: `1px solid ${selectedState.color}20`, borderRadius: 10, display: "flex", gap: 16, flexWrap: "wrap" }}>
+                  {[["Provider", selectedState.provider], ["Questions", selectedState.questions], ["Pass Score", selectedState.passingScore + "%"], ["Exam Fee", selectedState.examFee]].map(([k, v]) => (
+                    <div key={k}>
+                      <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.25)", letterSpacing: 1 }}>{k}</div>
+                      <div style={{ fontFamily: "'Syne'", fontSize: 14, fontWeight: 700, color: selectedState.color }}>{v}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ── STEP 2: License Type ── */}
+          {step === 2 && (
+            <div>
+              <h2 style={{ fontFamily: "'Syne'", fontSize: "clamp(24px,4vw,40px)", fontWeight: 800, letterSpacing: -1.5, marginBottom: 8 }}>
+                What license are<br /><span style={{ color: "#38bdf8" }}>you pursuing?</span>
+              </h2>
+              <p style={{ fontSize: 14, color: "rgba(255,255,255,0.4)", marginBottom: 28 }}>Start with Life — you can always add lines later.</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {licenseTypes.map(l => (
+                  <div key={l.id} className={l.available ? "card" : ""} onClick={() => l.available && set("license", l.id)} style={{ padding: "20px 22px", borderRadius: 14, background: data.license === l.id ? "rgba(56,189,248,0.1)" : "rgba(255,255,255,0.03)", border: `1px solid ${data.license === l.id ? "rgba(56,189,248,0.4)" : "rgba(255,255,255,0.07)"}`, opacity: l.available ? 1 : 0.45, cursor: l.available ? "pointer" : "not-allowed", display: "flex", alignItems: "center", gap: 16, position: "relative" }}>
+                    {!l.available && <div style={{ position: "absolute", top: 10, right: 14, fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.3)", background: "rgba(255,255,255,0.05)", padding: "2px 8px", borderRadius: 4 }}>COMING SOON</div>}
+                    <div style={{ fontSize: 28, flexShrink: 0 }}>{l.icon}</div>
+                    <div>
+                      <div style={{ fontFamily: "'Syne'", fontSize: 16, fontWeight: 700, color: data.license === l.id ? "#38bdf8" : "#fff", marginBottom: 3 }}>{l.label}</div>
+                      <div style={{ fontSize: 13, color: "rgba(255,255,255,0.4)" }}>{l.desc}</div>
+                    </div>
+                    {data.license === l.id && <div style={{ marginLeft: "auto", width: 22, height: 22, borderRadius: "50%", background: "#38bdf8", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, color: "#000", flexShrink: 0 }}>✓</div>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ── STEP 3: Goal ── */}
+          {step === 3 && (
+            <div>
+              <h2 style={{ fontFamily: "'Syne'", fontSize: "clamp(24px,4vw,40px)", fontWeight: 800, letterSpacing: -1.5, marginBottom: 8 }}>
+                What's driving you<br /><span style={{ color: "#f59e0b" }}>to get licensed?</span>
+              </h2>
+              <p style={{ fontSize: 14, color: "rgba(255,255,255,0.4)", marginBottom: 28 }}>This helps us personalize your study materials and AI Coach's tone.</p>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                {goals.map(g => (
+                  <div key={g.id} className="card" onClick={() => set("goal", g.id)} style={{ padding: "20px 18px", borderRadius: 14, background: data.goal === g.id ? "rgba(245,158,11,0.1)" : "rgba(255,255,255,0.03)", border: `1px solid ${data.goal === g.id ? "rgba(245,158,11,0.4)" : "rgba(255,255,255,0.07)"}` }}>
+                    <div style={{ fontSize: 26, marginBottom: 10 }}>{g.icon}</div>
+                    <div style={{ fontSize: 14, fontWeight: 500, color: data.goal === g.id ? "#f59e0b" : "rgba(255,255,255,0.75)", lineHeight: 1.4 }}>{g.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ── STEP 4: Exam Date ── */}
+          {step === 4 && (
+            <div>
+              <h2 style={{ fontFamily: "'Syne'", fontSize: "clamp(24px,4vw,40px)", fontWeight: 800, letterSpacing: -1.5, marginBottom: 8 }}>
+                When's your<br /><span style={{ color: "#a78bfa" }}>exam date?</span>
+              </h2>
+              <p style={{ fontSize: 14, color: "rgba(255,255,255,0.4)", marginBottom: 24 }}>Don't have one yet? We'll suggest a target based on your study pace in the next step.</p>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 }}>
+                <div className="card" onClick={() => { set("customDate", false); set("customDateValue", ""); }} style={{ padding: "18px 20px", borderRadius: 12, background: !data.customDate ? "rgba(167,139,250,0.1)" : "rgba(255,255,255,0.03)", border: `1px solid ${!data.customDate ? "rgba(167,139,250,0.4)" : "rgba(255,255,255,0.07)"}`, display: "flex", alignItems: "center", gap: 14 }}>
+                  <div style={{ width: 20, height: 20, borderRadius: "50%", background: !data.customDate ? "#a78bfa" : "rgba(255,255,255,0.08)", border: `2px solid ${!data.customDate ? "#a78bfa" : "rgba(255,255,255,0.2)"}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    {!data.customDate && <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#000" }} />}
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 14, fontWeight: 500, color: !data.customDate ? "#a78bfa" : "rgba(255,255,255,0.7)" }}>I don't have a date yet — suggest one for me</div>
+                    <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", marginTop: 2 }}>We'll set a target after you choose your study pace</div>
+                  </div>
+                </div>
+                <div className="card" onClick={() => set("customDate", true)} style={{ padding: "18px 20px", borderRadius: 12, background: data.customDate ? "rgba(167,139,250,0.1)" : "rgba(255,255,255,0.03)", border: `1px solid ${data.customDate ? "rgba(167,139,250,0.4)" : "rgba(255,255,255,0.07)"}`, display: "flex", alignItems: "flex-start", gap: 14 }}>
+                  <div style={{ width: 20, height: 20, borderRadius: "50%", background: data.customDate ? "#a78bfa" : "rgba(255,255,255,0.08)", border: `2px solid ${data.customDate ? "#a78bfa" : "rgba(255,255,255,0.2)"}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 2 }}>
+                    {data.customDate && <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#000" }} />}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 14, fontWeight: 500, color: data.customDate ? "#a78bfa" : "rgba(255,255,255,0.7)", marginBottom: 10 }}>I have a specific exam date</div>
+                    {data.customDate && (
+                      <input type="date" value={data.customDateValue} onChange={e => set("customDateValue", e.target.value)} min={new Date().toISOString().split("T")[0]} style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(167,139,250,0.3)", borderRadius: 8, padding: "10px 14px", fontSize: 14, color: "#fff", fontFamily: "'DM Sans'", width: "100%" }} />
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {data.customDate && data.customDateValue && (
+                <div style={{ padding: "14px 18px", background: "rgba(167,139,250,0.08)", border: "1px solid rgba(167,139,250,0.2)", borderRadius: 10 }}>
+                  <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "#a78bfa", letterSpacing: 2, marginBottom: 4 }}>EXAM DATE SET</div>
+                  <div style={{ fontFamily: "'Syne'", fontSize: 18, fontWeight: 800, color: "#fff" }}>{fmt(new Date(data.customDateValue))}</div>
+                  <div style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", marginTop: 2 }}>{getDaysUntil(new Date(data.customDateValue))} days from today</div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ── STEP 5: Study Pace ── */}
+          {step === 5 && (
+            <div>
+              <h2 style={{ fontFamily: "'Syne'", fontSize: "clamp(24px,4vw,40px)", fontWeight: 800, letterSpacing: -1.5, marginBottom: 8 }}>
+                How much time can<br /><span style={{ color: "#00c896" }}>you study each day?</span>
+              </h2>
+              <p style={{ fontSize: 14, color: "rgba(255,255,255,0.4)", marginBottom: 28 }}>We'll build your study plan around this. You can adjust it later.</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 24 }}>
+                {studyPaces.map(p => (
+                  <div key={p.id} className="card" onClick={() => set("pace", p.id)} style={{ padding: "20px 22px", borderRadius: 14, background: data.pace === p.id ? `${p.color}10` : "rgba(255,255,255,0.03)", border: `1px solid ${data.pace === p.id ? p.color + "45" : "rgba(255,255,255,0.07)"}`, display: "flex", alignItems: "center", gap: 16 }}>
+                    <div style={{ fontSize: 26, flexShrink: 0 }}>{p.icon}</div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 3 }}>
+                        <span style={{ fontFamily: "'Syne'", fontSize: 16, fontWeight: 700, color: data.pace === p.id ? p.color : "#fff" }}>{p.label}</span>
+                        <span style={{ background: `${p.color}15`, color: p.color, padding: "2px 8px", borderRadius: 6, fontSize: 11, fontFamily: "'JetBrains Mono'" }}>{p.hours}</span>
+                      </div>
+                      <div style={{ fontSize: 13, color: "rgba(255,255,255,0.4)" }}>{p.desc}</div>
+                    </div>
+                    {data.pace === p.id && !data.customDate && (
+                      <div style={{ textAlign: "right", flexShrink: 0 }}>
+                        <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.25)", letterSpacing: 1, marginBottom: 2 }}>TARGET DATE</div>
+                        <div style={{ fontFamily: "'Syne'", fontSize: 13, fontWeight: 700, color: p.color }}>{fmt(getExamDate(p))}</div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {selectedPace && (
+                <div style={{ padding: "14px 18px", background: `${selectedPace.color}08`, border: `1px solid ${selectedPace.color}20`, borderRadius: 10 }}>
+                  <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: selectedPace.color, letterSpacing: 2, marginBottom: 8 }}>YOUR PERSONALIZED STUDY PLAN</div>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+                    {[
+                      ["Daily Goal", selectedPace.hours],
+                      ["Target Date", data.customDate && data.customDateValue ? fmt(new Date(data.customDateValue)) : fmt(getExamDate(selectedPace))],
+                      ["Days to Prep", data.customDate && data.customDateValue ? getDaysUntil(new Date(data.customDateValue)) : selectedPace.days],
+                    ].map(([k, v]) => (
+                      <div key={k}>
+                        <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.25)", letterSpacing: 1, marginBottom: 3 }}>{k}</div>
+                        <div style={{ fontFamily: "'Syne'", fontSize: 13, fontWeight: 700, color: "#fff" }}>{v}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ── STEP 6: Plan ── */}
+          {step === 6 && (
+            <div>
+              <h2 style={{ fontFamily: "'Syne'", fontSize: "clamp(22px,4vw,38px)", fontWeight: 800, letterSpacing: -1.5, marginBottom: 8 }}>
+                Choose your<br /><span style={{ color: "#a78bfa" }}>PassPro plan.</span>
+              </h2>
+              <p style={{ fontSize: 14, color: "rgba(255,255,255,0.4)", marginBottom: 24 }}>One-time payment. No subscription. Pass guarantee on Elite.</p>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+                {plans.map(p => (
+                  <div key={p.id} className="card" onClick={() => set("plan", p.id)} style={{ padding: "22px 18px", borderRadius: 16, background: data.plan === p.id ? `${p.color}10` : "rgba(255,255,255,0.03)", border: `2px solid ${data.plan === p.id ? p.color : "rgba(255,255,255,0.07)"}`, position: "relative" }}>
+                    {p.highlight && <div style={{ position: "absolute", top: -10, left: "50%", transform: "translateX(-50%)", background: p.color, color: "#000", fontSize: 9, fontFamily: "'JetBrains Mono'", fontWeight: 700, padding: "3px 10px", borderRadius: 20, whiteSpace: "nowrap", letterSpacing: 1 }}>MOST POPULAR</div>}
+                    <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: p.color, letterSpacing: 2, textTransform: "uppercase", marginBottom: 6 }}>{p.name}</div>
+                    <div style={{ display: "flex", alignItems: "baseline", gap: 3, marginBottom: 16 }}>
+                      <span style={{ fontFamily: "'Syne'", fontSize: 32, fontWeight: 800, color: "#fff" }}>${p.price}</span>
+                      <span style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>{p.period}</span>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+                      {p.features.map((f, i) => (
+                        <div key={i} style={{ display: "flex", gap: 7, fontSize: 12, color: "rgba(255,255,255,0.6)", alignItems: "flex-start" }}>
+                          <span style={{ color: p.color, flexShrink: 0, marginTop: 1 }}>✓</span>{f}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ── STEP 7: Ready ── */}
+          {step === 7 && (
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 56, marginBottom: 20 }}>🎉</div>
+              <h1 style={{ fontFamily: "'Syne'", fontSize: "clamp(28px,5vw,52px)", fontWeight: 800, letterSpacing: -2, lineHeight: 1, marginBottom: 16 }}>
+                You're all set,<br /><span style={{ color: "#00c896" }}>{data.name}!</span>
+              </h1>
+              <p style={{ fontSize: 15, color: "rgba(255,255,255,0.5)", marginBottom: 36, lineHeight: 1.7, maxWidth: 420, margin: "0 auto 36px" }}>
+                Your personalized study plan is ready. Here's your path to a {data.state} Life Insurance license.
+              </p>
+
+              {/* Summary card */}
+              <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: "24px 28px", marginBottom: 28, textAlign: "left" }}>
+                <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.25)", letterSpacing: 2, marginBottom: 16 }}>YOUR STUDY PLAN SUMMARY</div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                  {[
+                    ["State", states.find(s => s.abbr === data.state)?.name || data.state],
+                    ["License", licenseTypes.find(l => l.id === data.license)?.label],
+                    ["Daily Goal", studyPaces.find(p => p.id === data.pace)?.hours],
+                    ["Exam Target", finalDate ? fmt(finalDate) : "TBD"],
+                    ["Plan", plans.find(p => p.id === data.plan)?.name],
+                    ["Days to Prep", daysLeft || selectedPace?.days || "—"],
+                  ].map(([k, v]) => (
+                    <div key={k} style={{ padding: "10px 14px", background: "rgba(255,255,255,0.03)", borderRadius: 8 }}>
+                      <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.25)", letterSpacing: 1, marginBottom: 3 }}>{k}</div>
+                      <div style={{ fontFamily: "'Syne'", fontSize: 14, fontWeight: 700, color: "#00c896" }}>{v}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* First steps */}
+              <div style={{ background: "rgba(0,200,150,0.06)", border: "1px solid rgba(0,200,150,0.15)", borderRadius: 14, padding: "20px 24px", textAlign: "left" }}>
+                <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "#00c896", letterSpacing: 2, marginBottom: 12 }}>YOUR FIRST 3 STEPS</div>
+                {[
+                  { num: "1", text: "Complete Unit 1 — Foundations of Life Insurance (2.5 hours)" },
+                  { num: "2", text: "Set up your daily 15-minute streak — consistency beats cramming" },
+                  { num: "3", text: "Meet your AI Study Coach — ask it anything about your exam" },
+                ].map((s, i) => (
+                  <div key={i} style={{ display: "flex", gap: 12, alignItems: "flex-start", marginBottom: i < 2 ? 10 : 0 }}>
+                    <div style={{ width: 24, height: 24, borderRadius: "50%", background: "rgba(0,200,150,0.15)", border: "1px solid rgba(0,200,150,0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Syne'", fontSize: 11, fontWeight: 800, color: "#00c896", flexShrink: 0 }}>{s.num}</div>
+                    <div style={{ fontSize: 13, color: "rgba(255,255,255,0.65)", lineHeight: 1.5, paddingTop: 3 }}>{s.text}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Navigation */}
+          <div style={{ marginTop: 32, display: "flex", gap: 12, alignItems: "center" }}>
+            {step > 0 && (
+              <button className="btn-ghost" onClick={back} style={{ color: "rgba(255,255,255,0.35)", fontSize: 14, padding: "12px 0", fontFamily: "'DM Sans'" }}>← Back</button>
+            )}
+            <button
+              className="btn-primary"
+              onClick={step === 7 ? () => setStep(0) : next}
+              disabled={!canContinue[step]}
+              style={{ flex: 1, background: canContinue[step] ? (step === 7 ? "#00c896" : "rgba(0,200,150,0.15)") : "rgba(255,255,255,0.05)", border: `1px solid ${canContinue[step] ? (step === 7 ? "#00c896" : "rgba(0,200,150,0.3)") : "rgba(255,255,255,0.07)"}`, color: canContinue[step] ? (step === 7 ? "#000" : "#00c896") : "rgba(255,255,255,0.2)", padding: "14px 28px", borderRadius: 12, fontSize: 15, fontWeight: 600, fontFamily: "'Syne'", letterSpacing: -0.3 }}>
+              {step === 0 ? `Let's go, ${data.name || "..."}` : step === 6 ? "Start studying →" : step === 7 ? "Go to Dashboard →" : "Continue →"}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom hint */}
+      <div style={{ padding: "12px 32px 20px", textAlign: "center", fontFamily: "'JetBrains Mono'", fontSize: 10, color: "rgba(255,255,255,0.15)", letterSpacing: 1 }}>
+        {STEPS[step].toUpperCase()} — STEP {step + 1} OF {STEPS.length}
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(OnboardingFlow));
+</script>
+</body>
+</html>

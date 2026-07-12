@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PassPro — 30-financial-model</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>* { box-sizing: border-box; margin: 0; padding: 0; } body { background: #06060c; } #root { min-height: 100vh; }</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+// ── ASSUMPTIONS ───────────────────────────────────────────────────
+const ASSUMPTIONS = {
+  plans: [
+    { name: "Basic", price: 39, annualDiscount: 0.2, mix: 0.25 },
+    { name: "Pro", price: 79, annualDiscount: 0.2, mix: 0.50 },
+    { name: "Elite", price: 149, annualDiscount: 0.2, mix: 0.15 },
+    { name: "Agency Starter", price: 299, annualDiscount: 0.2, mix: 0.05, seats: 5, monthly: true },
+    { name: "Agency Growth", price: 499, annualDiscount: 0.2, mix: 0.03, seats: 15, monthly: true },
+    { name: "Agency Enterprise", price: 999, annualDiscount: 0.2, mix: 0.02, seats: 50, monthly: true },
+  ],
+  cac: { organic: 12, paid: 38, blended: 28 },
+  churn: { individual: 0.05, agency: 0.02 },
+  cogs: { aiPerUser: 0.50, hostingBase: 800, hostingPerUser: 0.20, contentMaintenance: 2000 },
+  team: [
+    { role: "Senior Full-Stack Dev", startMonth: 1, salary: 8500, type: "dev" },
+    { role: "Mid Full-Stack Dev", startMonth: 1, salary: 5500, type: "dev" },
+    { role: "Content Writer", startMonth: 1, salary: 3500, type: "content" },
+    { role: "Designer (Part-time)", startMonth: 1, salary: 2000, type: "design" },
+    { role: "Marketing / Growth", startMonth: 7, salary: 4500, type: "marketing" },
+    { role: "Customer Success", startMonth: 9, salary: 3500, type: "ops" },
+    { role: "Full-Stack Dev #3", startMonth: 10, salary: 6000, type: "dev" },
+  ],
+  marketing: [
+    { month: 1, spend: 500 }, { month: 2, spend: 500 }, { month: 3, spend: 1000 },
+    { month: 4, spend: 2000 }, { month: 5, spend: 3000 }, { month: 6, spend: 5000 },
+    { month: 7, spend: 6000 }, { month: 8, spend: 7000 }, { month: 9, spend: 7000 },
+    { month: 10, spend: 8000 }, { month: 11, spend: 9000 }, { month: 12, spend: 10000 },
+  ],
+  // New users per month (organic + paid)
+  newUsers: [
+    10, 18, 32, 55, 80, 120, 165, 210, 255, 300, 360, 420,
+  ],
+  initialBudget: 150000,
+};
+
+// ── BUILD MODEL ───────────────────────────────────────────────────
+const buildModel = (assumptions) => {
+  const months = Array.from({ length: 24 }, (_, i) => i + 1);
+  const rows = [];
+  let cumulativeUsers = 0;
+  let cumulativeAgencies = 0;
+  let cumulativeRevenue = 0;
+  let cumulativeBurn = 0;
+  let cashBalance = assumptions.initialBudget;
+
+  // Extended new users for year 2 (growing from Y1 trajectory)
+  const extendedNewUsers = [
+    ...assumptions.newUsers,
+    480, 550, 630, 700, 780, 850, 920, 1000, 1080, 1150, 1220, 1300
+  ];
+
+  months.forEach((month) => {
+    const newUsersThisMonth = extendedNewUsers[month - 1] || 0;
+    const isYear2 = month > 12;
+
+    // User cohorts — simplified: assume mix of plan types
+    const newIndividual = Math.round(newUsersThisMonth * 0.88);
+    const newAgencies = Math.round(newUsersThisMonth * 0.12 / 5); // agencies have 5 avg seats
+
+    // Churn
+    const churnedUsers = Math.round(cumulativeUsers * assumptions.churn.individual / 12);
+    const churnedAgencies = Math.round(cumulativeAgencies * assumptions.churn.agency / 12);
+
+    cumulativeUsers = Math.max(0, cumulativeUsers - churnedUsers + newIndividual);
+    cumulativeAgencies = Math.max(0, cumulativeAgencies - churnedAgencies + newAgencies);
+
+    // Revenue — individual (one-time, amortized over 6 months avg)
+    const blendedPrice = assumptions.plans.slice(0, 3).reduce((s, p) => s + p.price * p.mix / 0.9, 0);
+    const individualRevenue = newIndividual * blendedPrice;
+
+    // Revenue — agency (monthly recurring)
+    const agencyRevenue = cumulativeAgencies * 450; // blended agency MRR
+
+    const totalRevenue = individualRevenue + agencyRevenue;
+
+    // COGS
+    const totalUserCount = cumulativeUsers + cumulativeAgencies * 8;
+    const aiCosts = totalUserCount * assumptions.cogs.aiPerUser / 12;
+    const hostingCosts = assumptions.cogs.hostingBase + totalUserCount * assumptions.cogs.hostingPerUser;
+    const contentCosts = month <= 6 ? 2500 : assumptions.cogs.contentMaintenance;
+    const totalCOGS = aiCosts + hostingCosts + contentCosts;
+
+    const grossProfit = totalRevenue - totalCOGS;
+    const grossMargin = totalRevenue > 0 ? (grossProfit / totalRevenue) * 100 : 0;
+
+    // Operating expenses
+    const teamCosts = assumptions.team
+      .filter(t => t.startMonth <= month)
+      .reduce((s, t) => s + t.salary, 0);
+
+    const marketingSpend = month <= 12
+      ? (assumptions.marketing[month - 1]?.spend || 0)
+      : Math.min(10000 + (month - 12) * 1500, 25000);
+
+    const toolsAndInfra = 800 + (isYear2 ? 400 : 0);
+    const legalAndAdmin = month === 1 ? 5000 : month <= 6 ? 500 : 300;
+    const miscOpex = 400;
+
+    const totalOpex = teamCosts + marketingSpend + toolsAndInfra + legalAndAdmin + miscOpex;
+    const totalExpenses = totalCOGS + totalOpex;
+
+    const ebitda = totalRevenue - totalExpenses;
+    const burnRate = ebitda < 0 ? Math.abs(ebitda) : 0;
+
+    cashBalance += ebitda;
+    cumulativeRevenue += totalRevenue;
+    cumulativeBurn += burnRate;
+
+    // ARR (annualized)
+    const arr = (agencyRevenue * 12) + (individualRevenue * 2); // individual turnover ~2x/yr
+
+    rows.push({
+      month,
+      label: new Date(2026, month - 1, 1).toLocaleString("en-US", { month: "short", year: "2-digit" }),
+      newUsers: newUsersThisMonth,
+      totalUsers: cumulativeUsers,
+      totalAgencies: cumulativeAgencies,
+      revenue: Math.round(totalRevenue),
+      agencyRevenue: Math.round(agencyRevenue),
+      individualRevenue: Math.round(individualRevenue),
+      cogs: Math.round(totalCOGS),
+      grossProfit: Math.round(grossProfit),
+      grossMargin: Math.round(grossMargin),
+      teamCosts: Math.round(teamCosts),
+      marketingSpend: Math.round(marketingSpend),
+      totalOpex: Math.round(totalOpex),
+      totalExpenses: Math.round(totalExpenses),
+      ebitda: Math.round(ebitda),
+      cashBalance: Math.round(cashBalance),
+      cumulativeRevenue: Math.round(cumulativeRevenue),
+      arr: Math.round(arr),
+      burnRate: Math.round(burnRate),
+    });
+  });
+
+  return rows;
+};
+
+const MODEL = buildModel(ASSUMPTIONS);
+const Y1 = MODEL.slice(0, 12);
+const Y2 = MODEL.slice(12, 24);
+
+const fmt = (n, prefix = "$") => {
+  if (Math.abs(n) >= 1000000) return `${prefix}${(n / 1000000).toFixed(1)}M`;
+  if (Math.abs(n) >= 1000) return `${prefix}${(n / 1000).toFixed(0)}K`;
+  return `${prefix}${n}`;
+};
+
+const fmtFull = (n) => n < 0 ? `-$${Math.abs(n).toLocaleString()}` : `$${n.toLocaleString()}`;
+
+// ── MINI CHART ───────────────────────────────────────────────────
+const MiniLine = ({ data, color, height = 50, showZero = false }) => {
+  const min = showZero ? Math.min(0, ...data) : Math.min(...data);
+  const max = Math.max(...data);
+  const range = max - min || 1;
+  const w = 100 / (data.length - 1);
+  const pts = data.map((v, i) => ({ x: i * w, y: 100 - ((v - min) / range) * 100 }));
+  const pathD = pts.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ");
+  const areaD = `${pathD} L ${pts[pts.length - 1].x} 100 L 0 100 Z`;
+  const zeroY = showZero ? 100 - ((0 - min) / range) * 100 : null;
+  return (
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none" style={{ width: "100%", height, overflow: "visible" }}>
+      <defs>
+        <linearGradient id={`lg-${color.replace("#", "")}`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={color} stopOpacity="0.2" />
+          <stop offset="100%" stopColor={color} stopOpacity="0.01" />
+        </linearGradient>
+      </defs>
+      <path d={areaD} fill={`url(#lg-${color.replace("#", "")})`} />
+      {zeroY !== null && <line x1="0" y1={zeroY} x2="100" y2={zeroY} stroke="rgba(255,255,255,0.1)" strokeWidth="0.5" strokeDasharray="2,2" />}
+      <path d={pathD} fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+};
+
+const KPICard = ({ label, value, sub, color, chart, chartData }) => (
+  <div style={{ background: `${color}0c`, border: `1px solid ${color}22`, borderRadius: 14, padding: "18px 20px", transition: "transform 0.18s", cursor: "default" }}
+    onMouseEnter={e => e.currentTarget.style.transform = "translateY(-3px)"}
+    onMouseLeave={e => e.currentTarget.style.transform = "none"}>
+    <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.25)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 8 }}>{label}</div>
+    <div style={{ fontFamily: "'Syne'", fontSize: 28, fontWeight: 800, color, lineHeight: 1, marginBottom: 4 }}>{value}</div>
+    <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", marginBottom: 10 }}>{sub}</div>
+    {chartData && <MiniLine data={chartData} color={color} height={40} showZero={chart === "ebitda"} />}
+  </div>
+);
+
+function FinancialModel() {
+  const [tab, setTab] = useState("summary");
+  const [year, setYear] = useState(1);
+  const [scenario, setScenario] = useState("base");
+
+  const displayData = year === 1 ? Y1 : Y2;
+
+  // Scenario multipliers
+  const scenarioMult = { bear: 0.65, base: 1.0, bull: 1.45 };
+  const mult = scenarioMult[scenario];
+
+  const y1Revenue = Math.round(Y1.reduce((s, r) => s + r.revenue, 0) * mult);
+  const y2Revenue = Math.round(Y2.reduce((s, r) => s + r.revenue, 0) * mult);
+  const y1Burn = Y1.reduce((s, r) => s + r.burnRate, 0);
+  const endCash = Math.round(MODEL[23].cashBalance * mult);
+  const y2EndArr = Math.round(MODEL[23].arr * mult);
+  const peakBurn = Math.max(...Y1.map(r => r.burnRate));
+  const breakEvenMonth = MODEL.find(r => r.ebitda > 0)?.month || null;
+  const y2Users = MODEL[23].totalUsers;
+  const y2Agencies = MODEL[23].totalAgencies;
+
+  return (
+    <div style={{ fontFamily: "'DM Sans', system-ui, sans-serif", background: "#06070c", minHeight: "100vh", color: "#fff" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        .tab-btn { cursor: pointer; border: none; transition: all 0.18s; }
+        .scen-btn { cursor: pointer; border: none; transition: all 0.18s; }
+        .scen-btn:hover { transform: scale(1.03); }
+        .table-row { transition: background 0.1s; }
+        .table-row:hover { background: rgba(255,255,255,0.03) !important; }
+        .fade { animation: fadeUp 0.3s ease both; }
+        @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 4px; }
+      `}</style>
+
+      {/* Header */}
+      <div style={{ padding: "36px 40px 24px", borderBottom: "1px solid rgba(255,255,255,0.06)", background: "linear-gradient(135deg, #06070c, #0c0a14)" }}>
+        <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: "#4ade80", letterSpacing: 3, textTransform: "uppercase", marginBottom: 12 }}>30 — Financial Model</div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 16 }}>
+          <div>
+            <h1 style={{ fontFamily: "'Syne'", fontSize: "clamp(26px,4vw,48px)", fontWeight: 800, letterSpacing: -2, lineHeight: 1, marginBottom: 8 }}>
+              PassPro<br /><span style={{ color: "#4ade80" }}>Financial Model</span>
+            </h1>
+            <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)" }}>24-month P&L · $150K seed · Base / Bear / Bull scenarios</p>
+          </div>
+
+          {/* Scenario toggle */}
+          <div style={{ display: "flex", gap: 8 }}>
+            {[["bear", "🐻 Bear", "#f87171"], ["base", "📊 Base", "#4ade80"], ["bull", "🐂 Bull", "#38bdf8"]].map(([val, label, color]) => (
+              <button key={val} className="scen-btn" onClick={() => setScenario(val)} style={{ padding: "8px 16px", borderRadius: 10, background: scenario === val ? `${color}18` : "rgba(255,255,255,0.04)", border: `1px solid ${scenario === val ? color + "40" : "rgba(255,255,255,0.08)"}`, color: scenario === val ? color : "rgba(255,255,255,0.4)", fontSize: 13, fontWeight: scenario === val ? 600 : 400, fontFamily: "'DM Sans'" }}>{label}</button>
+            ))}
+          </div>
+        </div>
+
+        {scenario !== "base" && (
+          <div style={{ marginTop: 14, padding: "10px 16px", background: scenario === "bull" ? "rgba(56,189,248,0.08)" : "rgba(248,113,113,0.08)", border: `1px solid ${scenario === "bull" ? "rgba(56,189,248,0.2)" : "rgba(248,113,113,0.2)"}`, borderRadius: 8, fontSize: 13, color: "rgba(255,255,255,0.55)" }}>
+            {scenario === "bull" ? "🐂 Bull case: 45% higher user acquisition (stronger word-of-mouth, agency channel takes off early)" : "🐻 Bear case: 35% lower acquisition (competitive pressure, slower organic growth)"}
+          </div>
+        )}
+      </div>
+
+      {/* Tabs */}
+      <div style={{ display: "flex", gap: 4, padding: "0 40px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        {[["summary", "Summary"], ["monthly", "Monthly P&L"], ["unit_econ", "Unit Economics"], ["exit", "Exit Analysis"]].map(([val, label]) => (
+          <button key={val} className="tab-btn" onClick={() => setTab(val)} style={{ padding: "12px 18px", fontSize: 13, fontFamily: "'DM Sans'", background: "transparent", color: tab === val ? "#4ade80" : "rgba(255,255,255,0.35)", borderBottom: tab === val ? "2px solid #4ade80" : "2px solid transparent" }}>{label}</button>
+        ))}
+      </div>
+
+      <div style={{ padding: "28px 40px" }}>
+
+        {/* ── SUMMARY ── */}
+        {tab === "summary" && (
+          <div className="fade">
+            {/* KPI grid */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14, marginBottom: 24 }}>
+              <KPICard label="Y1 Total Revenue" value={fmt(y1Revenue)} sub="Months 1–12" color="#4ade80" chartData={Y1.map(r => Math.round(r.revenue * mult))} />
+              <KPICard label="Y2 Total Revenue" value={fmt(y2Revenue)} sub="Months 13–24" color="#00c896" chartData={Y2.map(r => Math.round(r.revenue * mult))} />
+              <KPICard label="Y2 Ending ARR" value={fmt(y2EndArr)} sub="Annualized run rate" color="#38bdf8" chartData={MODEL.map(r => Math.round(r.arr * mult))} />
+              <KPICard label="Cash at Month 24" value={fmt(endCash)} sub={endCash > 0 ? "Runway preserved" : "Needs more funding"} color={endCash > 0 ? "#f59e0b" : "#f87171"} chartData={MODEL.map(r => Math.round(r.cashBalance * mult))} chart="ebitda" />
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14, marginBottom: 28 }}>
+              <KPICard label="Break-Even Month" value={breakEvenMonth ? `M${breakEvenMonth}` : "M13+"} sub="First profitable month" color="#a78bfa" chartData={MODEL.map(r => Math.round(r.ebitda * mult))} chart="ebitda" />
+              <KPICard label="Peak Monthly Burn" value={fmt(Math.round(peakBurn * mult))} sub="Worst month (early)" color="#f87171" chartData={Y1.map(r => r.burnRate)} />
+              <KPICard label="Y2 Ending Users" value={Math.round(y2Users * mult).toLocaleString()} sub={`${Math.round(y2Agencies * mult)} agencies`} color="#c084fc" chartData={MODEL.map(r => Math.round(r.totalUsers * mult))} />
+              <KPICard label="Y1+Y2 Total Burn" value={fmt(Math.round(y1Burn * 1.1))} sub="From $150K seed" color="#fb923c" chartData={Y1.map(r => r.cumulativeRevenue)} />
+            </div>
+
+            {/* Annual P&L summary */}
+            <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, overflow: "hidden", marginBottom: 20 }}>
+              <div style={{ padding: "14px 20px", background: "rgba(255,255,255,0.03)", borderBottom: "1px solid rgba(255,255,255,0.05)", fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.25)", letterSpacing: 2, textTransform: "uppercase" }}>ANNUAL P&L SUMMARY — ALL SCENARIOS</div>
+              <div style={{ overflowX: "auto" }}>
+                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+                  <thead>
+                    <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                      <th style={{ textAlign: "left", padding: "10px 16px", fontFamily: "'JetBrains Mono'", fontSize: 10, color: "rgba(255,255,255,0.3)", fontWeight: 400 }}>Metric</th>
+                      {[["Y1 Bear", 0.65, "#f87171"], ["Y1 Base", 1.0, "#4ade80"], ["Y1 Bull", 1.45, "#38bdf8"], ["Y2 Bear", 0.65, "#f87171"], ["Y2 Base", 1.0, "#4ade80"], ["Y2 Bull", 1.45, "#38bdf8"]].map(([label, m, c]) => (
+                        <th key={label} style={{ textAlign: "right", padding: "10px 14px", fontFamily: "'JetBrains Mono'", fontSize: 10, color: c, fontWeight: 400 }}>{label}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ["Revenue", r => r.revenue, "revenue"],
+                      ["COGS", r => r.cogs, "cogs"],
+                      ["Gross Profit", r => r.grossProfit, "grossProfit"],
+                      ["Team Costs", r => r.teamCosts, "teamCosts"],
+                      ["Marketing", r => r.marketingSpend, "marketingSpend"],
+                      ["Total OpEx", r => r.totalOpex, "totalOpex"],
+                      ["EBITDA", r => r.ebitda, "ebitda"],
+                    ].map(([label, fn, key]) => {
+                      const y1Base = Y1.reduce((s, r) => s + fn(r), 0);
+                      const y2Base = Y2.reduce((s, r) => s + fn(r), 0);
+                      const isProfit = key === "ebitda" || key === "grossProfit";
+                      return (
+                        <tr key={label} className="table-row" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)", background: key === "ebitda" ? "rgba(255,255,255,0.02)" : "transparent" }}>
+                          <td style={{ padding: "10px 16px", fontWeight: key === "ebitda" || key === "grossProfit" ? 600 : 400, color: "rgba(255,255,255,0.7)" }}>{label}</td>
+                          {[[y1Base, 0.65], [y1Base, 1.0], [y1Base, 1.45], [y2Base, 0.65], [y2Base, 1.0], [y2Base, 1.45]].map(([base, m], i) => {
+                            const val = Math.round(base * m);
+                            const color = isProfit ? (val >= 0 ? "#4ade80" : "#f87171") : "rgba(255,255,255,0.6)";
+                            return (
+                              <td key={i} style={{ textAlign: "right", padding: "10px 14px", fontFamily: "'JetBrains Mono'", fontSize: 12, color, fontWeight: key === "ebitda" ? 700 : 400 }}>
+                                {fmtFull(val)}
+                              </td>
+                            );
+                          })}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Key assumptions */}
+            <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, padding: "18px 22px" }}>
+              <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.25)", letterSpacing: 2, marginBottom: 14 }}>KEY MODEL ASSUMPTIONS</div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
+                {[
+                  ["Blended individual price", "$83 avg (mix: 25% Basic, 50% Pro, 15% Elite)"],
+                  ["Agency blended MRR", "$450/month (mix of 3 agency tiers)"],
+                  ["Blended CAC", "$28 (organic $12, paid $38, 40/60 split)"],
+                  ["Individual churn", "5% annual (one-time model, repurchase rare)"],
+                  ["Agency churn", "2% monthly (SaaS retention model)"],
+                  ["AI cost/user/month", "$0.50 (Claude API + infra)"],
+                  ["Gross margin target", "~72% at scale"],
+                  ["Break-even month", `M${breakEvenMonth || 13} (base case)`],
+                  ["Seed runway", "$150K initial — no additional funding assumed"],
+                ].map(([k, v]) => (
+                  <div key={k} style={{ padding: "10px 12px", background: "rgba(255,255,255,0.02)", borderRadius: 8 }}>
+                    <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.25)", letterSpacing: 1, marginBottom: 3 }}>{k}</div>
+                    <div style={{ fontSize: 12, color: "rgba(255,255,255,0.65)" }}>{v}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── MONTHLY P&L ── */}
+        {tab === "monthly" && (
+          <div className="fade">
+            <div style={{ display: "flex", gap: 10, marginBottom: 16, alignItems: "center" }}>
+              <h2 style={{ fontFamily: "'Syne'", fontSize: 20, fontWeight: 800, flex: 1 }}>Monthly P&L</h2>
+              <div style={{ display: "flex", gap: 6 }}>
+                {[[1, "Year 1"], [2, "Year 2"]].map(([y, label]) => (
+                  <button key={y} className="tab-btn" onClick={() => setYear(y)} style={{ padding: "6px 14px", borderRadius: 8, background: year === y ? "rgba(74,222,128,0.12)" : "rgba(255,255,255,0.04)", border: `1px solid ${year === y ? "rgba(74,222,128,0.3)" : "rgba(255,255,255,0.07)"}`, color: year === y ? "#4ade80" : "rgba(255,255,255,0.4)", fontSize: 12, fontFamily: "'DM Sans'" }}>{label}</button>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ overflowX: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, minWidth: 900 }}>
+                <thead>
+                  <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.07)", background: "rgba(255,255,255,0.02)" }}>
+                    {["Month", "New Users", "Total Users", "Revenue", "Agency MRR", "COGS", "Gross%", "Team", "Mktg", "EBITDA", "Cash"].map(h => (
+                      <th key={h} style={{ textAlign: h === "Month" ? "left" : "right", padding: "10px 12px", fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.3)", fontWeight: 400, letterSpacing: 1, textTransform: "uppercase", whiteSpace: "nowrap" }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {displayData.map((row, i) => {
+                    const ebitda = Math.round(row.ebitda * mult);
+                    const revenue = Math.round(row.revenue * mult);
+                    const cash = Math.round(row.cashBalance * mult);
+                    return (
+                      <tr key={i} className="table-row" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)", background: ebitda > 0 ? "rgba(74,222,128,0.03)" : "transparent" }}>
+                        <td style={{ padding: "9px 12px", fontFamily: "'JetBrains Mono'", fontSize: 11, color: "rgba(255,255,255,0.5)" }}>{row.label}</td>
+                        <td style={{ textAlign: "right", padding: "9px 12px", color: "rgba(255,255,255,0.5)" }}>{Math.round(row.newUsers * mult)}</td>
+                        <td style={{ textAlign: "right", padding: "9px 12px", color: "#a78bfa", fontWeight: 600 }}>{Math.round(row.totalUsers * mult)}</td>
+                        <td style={{ textAlign: "right", padding: "9px 12px", color: "#4ade80", fontWeight: 600, fontFamily: "'JetBrains Mono'" }}>{fmt(revenue)}</td>
+                        <td style={{ textAlign: "right", padding: "9px 12px", color: "#38bdf8", fontFamily: "'JetBrains Mono'" }}>{fmt(Math.round(row.agencyRevenue * mult))}</td>
+                        <td style={{ textAlign: "right", padding: "9px 12px", color: "rgba(255,255,255,0.4)", fontFamily: "'JetBrains Mono'" }}>{fmt(Math.round(row.cogs * mult))}</td>
+                        <td style={{ textAlign: "right", padding: "9px 12px", color: row.grossMargin >= 60 ? "#00c896" : "#f59e0b", fontFamily: "'JetBrains Mono'" }}>{row.grossMargin}%</td>
+                        <td style={{ textAlign: "right", padding: "9px 12px", color: "rgba(255,255,255,0.4)", fontFamily: "'JetBrains Mono'" }}>{fmt(row.teamCosts)}</td>
+                        <td style={{ textAlign: "right", padding: "9px 12px", color: "rgba(255,255,255,0.4)", fontFamily: "'JetBrains Mono'" }}>{fmt(row.marketingSpend)}</td>
+                        <td style={{ textAlign: "right", padding: "9px 12px", color: ebitda >= 0 ? "#4ade80" : "#f87171", fontWeight: 700, fontFamily: "'JetBrains Mono'" }}>{fmt(Math.abs(ebitda), ebitda < 0 ? "-$" : "$")}</td>
+                        <td style={{ textAlign: "right", padding: "9px 12px", color: cash > 50000 ? "#4ade80" : cash > 0 ? "#f59e0b" : "#f87171", fontFamily: "'JetBrains Mono'" }}>{fmt(cash)}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+                <tfoot>
+                  <tr style={{ borderTop: "2px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.03)" }}>
+                    <td style={{ padding: "10px 12px", fontFamily: "'Syne'", fontWeight: 700, fontSize: 12 }}>TOTAL / END</td>
+                    <td style={{ textAlign: "right", padding: "10px 12px", fontFamily: "'JetBrains Mono'", fontSize: 11, color: "#a78bfa" }}>{Math.round(displayData.reduce((s, r) => s + r.newUsers, 0) * mult)}</td>
+                    <td style={{ textAlign: "right", padding: "10px 12px", fontFamily: "'JetBrains Mono'", fontSize: 11, color: "#a78bfa" }}>{Math.round(displayData[displayData.length - 1].totalUsers * mult)}</td>
+                    <td style={{ textAlign: "right", padding: "10px 12px", fontFamily: "'JetBrains Mono'", fontSize: 12, color: "#4ade80", fontWeight: 700 }}>{fmt(Math.round(displayData.reduce((s, r) => s + r.revenue, 0) * mult))}</td>
+                    <td colSpan={5} />
+                    <td style={{ textAlign: "right", padding: "10px 12px", fontFamily: "'JetBrains Mono'", fontSize: 12, fontWeight: 700, color: Math.round(displayData.reduce((s, r) => s + r.ebitda, 0) * mult) >= 0 ? "#4ade80" : "#f87171" }}>{fmt(Math.abs(Math.round(displayData.reduce((s, r) => s + r.ebitda, 0) * mult)), Math.round(displayData.reduce((s, r) => s + r.ebitda, 0) * mult) < 0 ? "-$" : "$")}</td>
+                    <td style={{ textAlign: "right", padding: "10px 12px", fontFamily: "'JetBrains Mono'", fontSize: 11, color: "#f59e0b" }}>{fmt(Math.round(displayData[displayData.length - 1].cashBalance * mult))}</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* ── UNIT ECONOMICS ── */}
+        {tab === "unit_econ" && (
+          <div className="fade">
+            <h2 style={{ fontFamily: "'Syne'", fontSize: 20, fontWeight: 800, marginBottom: 20 }}>Unit Economics</h2>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 20 }}>
+              {/* Individual plan economics */}
+              <div style={{ background: "rgba(74,222,128,0.05)", border: "1px solid rgba(74,222,128,0.15)", borderRadius: 14, padding: "22px 24px" }}>
+                <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "#4ade80", letterSpacing: 2, marginBottom: 14 }}>INDIVIDUAL PLANS</div>
+                {[
+                  ["Blended ACV", "$83", "Avg across Basic/Pro/Elite mix"],
+                  ["CAC (blended)", "$28", "40% organic + 60% paid"],
+                  ["Gross Margin", "~74%", "After AI costs, hosting, content"],
+                  ["Contribution/User", "$61", "ACV × gross margin - CAC"],
+                  ["CAC Payback", "< 1 month", "One-time purchase — instant payback"],
+                  ["Repeat Purchase Rate", "~15%", "Students who add more states/lines"],
+                ].map(([k, v, note]) => (
+                  <div key={k} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                    <div>
+                      <div style={{ fontSize: 13, color: "rgba(255,255,255,0.7)" }}>{k}</div>
+                      <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>{note}</div>
+                    </div>
+                    <div style={{ fontFamily: "'Syne'", fontWeight: 800, color: "#4ade80", fontSize: 16 }}>{v}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Agency plan economics */}
+              <div style={{ background: "rgba(56,189,248,0.05)", border: "1px solid rgba(56,189,248,0.15)", borderRadius: 14, padding: "22px 24px" }}>
+                <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "#38bdf8", letterSpacing: 2, marginBottom: 14 }}>AGENCY PLANS (SaaS)</div>
+                {[
+                  ["Blended MRR", "$450/mo", "Mix of Starter/Growth/Enterprise"],
+                  ["Annual Contract Value", "$5,400", "Blended ACV per agency"],
+                  ["Agency CAC", "$180", "Direct outreach + 4.5-month payback"],
+                  ["Gross Margin", "~82%", "Higher margin — mostly software"],
+                  ["Net Revenue Retention", "108%", "Seat expansion drives >100% NRR"],
+                  ["LTV (3yr)", "$15,500", "ACV × 3yr × 95% retention"],
+                  ["LTV:CAC Ratio", "86:1", "Exceptional SaaS economics"],
+                  ["Monthly Churn", "2%", "Low due to compliance dependency"],
+                ].map(([k, v, note]) => (
+                  <div key={k} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                    <div>
+                      <div style={{ fontSize: 13, color: "rgba(255,255,255,0.7)" }}>{k}</div>
+                      <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>{note}</div>
+                    </div>
+                    <div style={{ fontFamily: "'Syne'", fontWeight: 800, color: "#38bdf8", fontSize: 16 }}>{v}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Pricing plans table */}
+            <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, overflow: "hidden" }}>
+              <div style={{ padding: "12px 18px", background: "rgba(255,255,255,0.03)", borderBottom: "1px solid rgba(255,255,255,0.05)", fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.25)", letterSpacing: 2 }}>PLAN ECONOMICS BREAKDOWN</div>
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+                <thead>
+                  <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                    {["Plan", "Price", "COGS", "Gross Margin", "CAC", "Contribution", "Mix %"].map(h => (
+                      <th key={h} style={{ textAlign: h === "Plan" ? "left" : "right", padding: "10px 14px", fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.3)", fontWeight: 400 }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { name: "Basic", price: 39, cogs: 12, cac: 20, mix: "25%", color: "#38bdf8" },
+                    { name: "Pro", price: 79, cogs: 18, cac: 28, mix: "50%", color: "#00c896" },
+                    { name: "Elite", price: 149, cogs: 22, cac: 35, mix: "15%", color: "#a78bfa" },
+                    { name: "Agency Starter", price: 299, cogs: 35, cac: 100, mix: "5%/mo", color: "#f59e0b" },
+                    { name: "Agency Growth", price: 499, cogs: 55, cac: 150, mix: "3%/mo", color: "#f59e0b" },
+                    { name: "Agency Enterprise", price: 999, cogs: 90, cac: 200, mix: "2%/mo", color: "#f59e0b" },
+                  ].map((p, i) => {
+                    const gm = Math.round(((p.price - p.cogs) / p.price) * 100);
+                    const contrib = p.price - p.cogs - p.cac;
+                    return (
+                      <tr key={i} className="table-row" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                        <td style={{ padding: "10px 14px", display: "flex", alignItems: "center", gap: 8 }}>
+                          <div style={{ width: 7, height: 7, borderRadius: "50%", background: p.color }} />
+                          <span style={{ fontSize: 13 }}>{p.name}</span>
+                        </td>
+                        <td style={{ textAlign: "right", padding: "10px 14px", fontFamily: "'Syne'", fontWeight: 700, color: p.color }}>${p.price}</td>
+                        <td style={{ textAlign: "right", padding: "10px 14px", fontFamily: "'JetBrains Mono'", color: "rgba(255,255,255,0.4)" }}>${p.cogs}</td>
+                        <td style={{ textAlign: "right", padding: "10px 14px", fontFamily: "'Syne'", fontWeight: 700, color: gm >= 70 ? "#4ade80" : "#f59e0b" }}>{gm}%</td>
+                        <td style={{ textAlign: "right", padding: "10px 14px", fontFamily: "'JetBrains Mono'", color: "rgba(255,255,255,0.4)" }}>${p.cac}</td>
+                        <td style={{ textAlign: "right", padding: "10px 14px", fontFamily: "'Syne'", fontWeight: 700, color: contrib > 0 ? "#4ade80" : "#f87171" }}>${contrib}</td>
+                        <td style={{ textAlign: "right", padding: "10px 14px", fontFamily: "'JetBrains Mono'", color: "rgba(255,255,255,0.4)" }}>{p.mix}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* ── EXIT ANALYSIS ── */}
+        {tab === "exit" && (
+          <div className="fade">
+            <h2 style={{ fontFamily: "'Syne'", fontSize: 20, fontWeight: 800, marginBottom: 6 }}>Exit Analysis</h2>
+            <p style={{ fontSize: 14, color: "rgba(255,255,255,0.4)", marginBottom: 24 }}>Revenue multiples, strategic acquirers, and ROI scenarios across all three trajectories.</p>
+
+            {/* Exit scenarios */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 28 }}>
+              {[
+                { scenario: "Year 2 Base Case", arr: fmt(y2EndArr), multiple: "5–7×", exit: fmt(Math.round(y2EndArr * 6), "$"), note: "Likely acquirer: Kaplan, ExamFX parent, or insurance SaaS rollup", color: "#4ade80" },
+                { scenario: "Year 3 Scale", arr: "$1.2M", multiple: "6–9×", exit: "$7.2M–$10.8M", note: "After TX and FL expansion — premium multiple for multi-state coverage", color: "#38bdf8" },
+                { scenario: "Year 4 Strategic", arr: "$2.5M+", multiple: "8–12×", exit: "$20M–$30M", note: "If agency channel dominates — Intuit, Gusto, or Rippling acquisition territory", color: "#a78bfa" },
+                { scenario: "Bear Case Year 3", arr: "$600K", multiple: "4–5×", exit: "$2.4M–$3M", note: "Still a strong return on $150K seed — 16–20× ROI", color: "#f59e0b" },
+              ].map((e, i) => (
+                <div key={i} style={{ background: `${e.color}07`, border: `1px solid ${e.color}20`, borderRadius: 12, padding: "18px 22px", display: "grid", gridTemplateColumns: "1fr 100px 200px 1fr", gap: 16, alignItems: "center" }}>
+                  <div>
+                    <div style={{ fontFamily: "'Syne'", fontSize: 15, fontWeight: 700, marginBottom: 3 }}>{e.scenario}</div>
+                    <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)" }}>{e.note}</div>
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.25)", letterSpacing: 1, marginBottom: 3 }}>ARR</div>
+                    <div style={{ fontFamily: "'Syne'", fontWeight: 800, color: e.color, fontSize: 16 }}>{e.arr}</div>
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.25)", letterSpacing: 1, marginBottom: 3 }}>MULTIPLE</div>
+                    <div style={{ fontFamily: "'Syne'", fontWeight: 800, color: "rgba(255,255,255,0.6)", fontSize: 16 }}>{e.multiple}</div>
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.25)", letterSpacing: 1, marginBottom: 3 }}>EXIT VALUE</div>
+                    <div style={{ fontFamily: "'Syne'", fontWeight: 800, color: e.color, fontSize: 20 }}>{e.exit}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* ROI table */}
+            <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, padding: "22px 24px", marginBottom: 20 }}>
+              <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "rgba(255,255,255,0.25)", letterSpacing: 2, marginBottom: 16 }}>$150K SEED ROI ANALYSIS</div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14 }}>
+                {[
+                  { label: "Bear Exit ($2.4M)", roi: "16×", color: "#f59e0b" },
+                  { label: "Base Y2 Exit", roi: `${Math.round(Math.round(y2EndArr * 6) / 150000)}×`, color: "#4ade80" },
+                  { label: "Base Y3 Exit ($8M)", roi: "53×", color: "#38bdf8" },
+                  { label: "Bull Exit ($25M)", roi: "167×", color: "#a78bfa" },
+                ].map(s => (
+                  <div key={s.label} style={{ background: `${s.color}0d`, border: `1px solid ${s.color}22`, borderRadius: 10, padding: "16px", textAlign: "center" }}>
+                    <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: 1, marginBottom: 8 }}>{s.label}</div>
+                    <div style={{ fontFamily: "'Syne'", fontSize: 36, fontWeight: 800, color: s.color, lineHeight: 1 }}>{s.roi}</div>
+                    <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", marginTop: 4 }}>return on $150K</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Strategic acquirers */}
+            <div style={{ background: "rgba(167,139,250,0.05)", border: "1px solid rgba(167,139,250,0.15)", borderRadius: 12, padding: "20px 24px" }}>
+              <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "#a78bfa", letterSpacing: 2, marginBottom: 12 }}>STRATEGIC ACQUIRERS</div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+                {[
+                  { name: "Kaplan Financial", why: "Direct competitor in exam prep — would acquire to eliminate threat and gain modern tech", fit: "High" },
+                  { name: "ExamFX Parent (Hexco)", why: "The existing WI incumbent — would acquire PassPro to modernize their product", fit: "High" },
+                  { name: "Intuit (Turbo Tax)", why: "Already owns personal finance — insurance licensing is adjacent to their tax/financial planning play", fit: "Medium" },
+                  { name: "Gusto / Rippling", why: "HR platforms need agent licensing tools for their insurance distribution arms", fit: "Medium" },
+                  { name: "Insurance SaaS Rollup", why: "Multiple PE-backed rollups buying insurance tech at 5–8× ARR multiples", fit: "High" },
+                  { name: "Continuing Ed Platform", why: "Pearson, Prometric, or PSI itself acquiring to vertically integrate exam prep + delivery", fit: "Medium" },
+                ].map((a, i) => (
+                  <div key={i} style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 9, padding: "14px 16px" }}>
+                    <div style={{ fontFamily: "'Syne'", fontSize: 14, fontWeight: 700, marginBottom: 4 }}>{a.name}</div>
+                    <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", lineHeight: 1.5, marginBottom: 8 }}>{a.why}</div>
+                    <div style={{ display: "inline-block", background: a.fit === "High" ? "rgba(74,222,128,0.1)" : "rgba(245,158,11,0.1)", color: a.fit === "High" ? "#4ade80" : "#f59e0b", padding: "2px 8px", borderRadius: 6, fontSize: 10, fontFamily: "'JetBrains Mono'" }}>Fit: {a.fit}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(FinancialModel));
+</script>
+</body>
+</html>

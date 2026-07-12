@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PassPro — 08-api-reference</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>* { box-sizing: border-box; margin: 0; padding: 0; } body { background: #06060c; } #root { min-height: 100vh; }</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const endpoints = {
+  auth: [
+    { method: "POST", path: "/api/auth/register", desc: "Create new user account", body: { email: "string", password: "string", target_state: "string", plan_id: "string" }, response: { id: "uuid", token: "string", user: "object" } },
+    { method: "POST", path: "/api/auth/login", desc: "Authenticate and return JWT", body: { email: "string", password: "string" }, response: { token: "string", user: "object" } },
+    { method: "POST", path: "/api/auth/refresh", desc: "Refresh expired JWT token", body: { refresh_token: "string" }, response: { token: "string" } },
+    { method: "GET", path: "/api/auth/me", desc: "Get current authenticated user", body: null, response: { id: "uuid", email: "string", plan: "string", streak_days: "integer" } },
+  ],
+  study: [
+    { method: "GET", path: "/api/modules/:state", desc: "Get all modules for a state", body: null, response: { modules: "array", total_progress: "decimal" } },
+    { method: "GET", path: "/api/exam/generate", desc: "Generate adaptive practice exam", body: { state: "string", focus_weak: "boolean", question_count: "number" }, response: { exam_id: "string", questions: "array" } },
+    { method: "POST", path: "/api/exam/submit", desc: "Submit exam + trigger gap analysis", body: { exam_id: "string", answers: "object[]", time_taken_sec: "number" }, response: { score_pct: "decimal", weak_topics: "array", xp_earned: "integer" } },
+    { method: "GET", path: "/api/flashcards/:topic_id", desc: "Get flashcard set for a topic", body: null, response: { cards: "array", topic: "object" } },
+  ],
+  ai: [
+    { method: "POST", path: "/api/ai/companion/message", desc: "Send message to AI study companion", body: { message: "string", session_id: "string", context: "object" }, response: { reply: "string", suggested_actions: "array" } },
+    { method: "POST", path: "/api/ai/companion/start", desc: "Start a new companion session", body: { topic_focus: "string" }, response: { session_id: "string", opening_message: "string" } },
+    { method: "POST", path: "/api/ai/roleplay/start", desc: "Start a roleplay session with persona", body: { persona_id: "string" }, response: { session_id: "string", opening_message: "string" } },
+    { method: "POST", path: "/api/ai/roleplay/message", desc: "Send message in roleplay session", body: { message: "string", session_id: "string", persona_id: "string" }, response: { reply: "string", live_score: "decimal" } },
+    { method: "POST", path: "/api/ai/roleplay/score", desc: "Score and close a roleplay session", body: { session_id: "string" }, response: { score_total: "decimal", score_breakdown: "object", coaching_notes: "string" } },
+  ],
+  progress: [
+    { method: "GET", path: "/api/progress/dashboard", desc: "Get full dashboard stats for user", body: null, response: { readiness_pct: "decimal", streak: "integer", xp: "integer", weak_topics: "array" } },
+    { method: "GET", path: "/api/progress/topics", desc: "Get mastery data for all topics", body: null, response: { topics: "array with mastery_pct" } },
+    { method: "GET", path: "/api/agency/:id/team", desc: "Get all team member progress (admin)", body: null, response: { members: "array", avg_readiness: "decimal", pass_rate: "decimal" } },
+    { method: "PUT", path: "/api/progress/exam-date", desc: "Set or update target exam date", body: { exam_date: "ISO date string" }, response: { updated: "boolean", days_remaining: "integer" } },
+  ],
+};
+
+const methodColors = {
+  GET: { bg: "rgba(0,200,150,0.15)", color: "#00c896" },
+  POST: { bg: "rgba(56,189,248,0.15)", color: "#38bdf8" },
+  PUT: { bg: "rgba(245,158,11,0.15)", color: "#f59e0b" },
+  DELETE: { bg: "rgba(248,113,113,0.15)", color: "#f87171" },
+};
+
+function APIReference() {
+  const [tab, setTab] = useState("auth");
+  const [expanded, setExpanded] = useState(null);
+
+  const currentEndpoints = endpoints[tab];
+
+  return (
+    <div style={{ fontFamily: "'DM Sans', system-ui, sans-serif", background: "#0a0a0f", minHeight: "100vh", color: "#fff" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        .endpoint-row { cursor: pointer; transition: background 0.15s; }
+        .endpoint-row:hover { background: rgba(255,255,255,0.03) !important; }
+        .tab-btn { cursor: pointer; border: none; transition: all 0.2s; }
+        .expand-anim { animation: expandIn 0.2s ease; }
+        @keyframes expandIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+      `}</style>
+
+      <div style={{ padding: "48px 40px 28px", borderBottom: "1px solid rgba(255,255,255,0.06)", background: "linear-gradient(to bottom, #0f1117, #0a0a0f)" }}>
+        <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: "#38bdf8", letterSpacing: 3, textTransform: "uppercase", marginBottom: 12 }}>08 — API Reference</div>
+        <h1 style={{ fontFamily: "'Syne'", fontSize: "clamp(28px,4vw,48px)", fontWeight: 800, letterSpacing: -2, marginBottom: 12 }}>Core API <span style={{ color: "#38bdf8" }}>Endpoints</span></h1>
+        <div style={{ display: "flex", gap: 20, fontSize: 13 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}><div style={{ width: 8, height: 8, borderRadius: 2, background: "#0a0a0f", border: "1px solid rgba(255,255,255,0.2)" }} /><span style={{ color: "rgba(255,255,255,0.4)", fontFamily: "'JetBrains Mono'", fontSize: 11 }}>Base URL: api.passpro.io</span></div>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}><div style={{ width: 8, height: 8, borderRadius: 2, background: "#00c896" }} /><span style={{ color: "rgba(255,255,255,0.4)", fontFamily: "'JetBrains Mono'", fontSize: 11 }}>Auth: Bearer {"{JWT}"}</span></div>
+        </div>
+      </div>
+
+      {/* Method badges */}
+      <div style={{ display: "flex", gap: 8, padding: "16px 40px", borderBottom: "1px solid rgba(255,255,255,0.04)", flexWrap: "wrap" }}>
+        {Object.entries(methodColors).map(([method, { bg, color }]) => (
+          <div key={method} style={{ background: bg, color, padding: "3px 10px", borderRadius: 6, fontFamily: "'JetBrains Mono'", fontSize: 11, fontWeight: 600 }}>{method}</div>
+        ))}
+        <div style={{ marginLeft: "auto", fontFamily: "'JetBrains Mono'", fontSize: 11, color: "rgba(255,255,255,0.2)" }}>Click any endpoint to expand</div>
+      </div>
+
+      {/* Tabs */}
+      <div style={{ display: "flex", gap: 4, padding: "0 40px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        {[["auth", "Auth"], ["study", "Study & Exams"], ["ai", "AI Services"], ["progress", "Progress"]].map(([val, label]) => (
+          <button key={val} className="tab-btn" onClick={() => { setTab(val); setExpanded(null); }} style={{ padding: "12px 18px", fontSize: 13, fontFamily: "'DM Sans'", background: "transparent", color: tab === val ? "#38bdf8" : "rgba(255,255,255,0.35)", borderBottom: tab === val ? "2px solid #38bdf8" : "2px solid transparent" }}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ padding: "24px 40px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          {currentEndpoints.map((ep, i) => {
+            const mc = methodColors[ep.method];
+            const isOpen = expanded === i;
+            return (
+              <div key={i}>
+                <div className="endpoint-row" onClick={() => setExpanded(isOpen ? null : i)} style={{ background: isOpen ? "rgba(255,255,255,0.03)" : "transparent", border: `1px solid ${isOpen ? "rgba(56,189,248,0.2)" : "rgba(255,255,255,0.06)"}`, borderRadius: isOpen ? "10px 10px 0 0" : 10, padding: "14px 16px", display: "flex", alignItems: "center", gap: 14 }}>
+                  <div style={{ background: mc.bg, color: mc.color, padding: "3px 9px", borderRadius: 5, fontFamily: "'JetBrains Mono'", fontSize: 11, fontWeight: 600, minWidth: 44, textAlign: "center", flexShrink: 0 }}>{ep.method}</div>
+                  <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 13, color: "rgba(255,255,255,0.8)", flex: 1 }}>{ep.path}</div>
+                  <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)" }}>{ep.desc}</div>
+                  <div style={{ color: "rgba(255,255,255,0.2)", fontSize: 12, marginLeft: 8 }}>{isOpen ? "▲" : "▼"}</div>
+                </div>
+                {isOpen && (
+                  <div className="expand-anim" style={{ background: "#111118", border: "1px solid rgba(56,189,248,0.2)", borderTop: "none", borderRadius: "0 0 10px 10px", padding: "20px 20px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+                    <div>
+                      <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "rgba(255,255,255,0.25)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 10 }}>Request Body</div>
+                      <div style={{ background: "#0a0a0f", borderRadius: 8, padding: 14 }}>
+                        {ep.body ? (
+                          Object.entries(ep.body).map(([key, type]) => (
+                            <div key={key} style={{ display: "flex", gap: 10, marginBottom: 6, fontFamily: "'JetBrains Mono'", fontSize: 12 }}>
+                              <span style={{ color: "#79b8ff" }}>{key}</span>
+                              <span style={{ color: "rgba(255,255,255,0.3)" }}>:</span>
+                              <span style={{ color: "#a8ff78" }}>{type}</span>
+                            </div>
+                          ))
+                        ) : (
+                          <span style={{ fontFamily: "'JetBrains Mono'", fontSize: 12, color: "rgba(255,255,255,0.25)" }}>No request body required</span>
+                        )}
+                      </div>
+                    </div>
+                    <div>
+                      <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "rgba(255,255,255,0.25)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 10 }}>Response</div>
+                      <div style={{ background: "#0a0a0f", borderRadius: 8, padding: 14 }}>
+                        {Object.entries(ep.response).map(([key, type]) => (
+                          <div key={key} style={{ display: "flex", gap: 10, marginBottom: 6, fontFamily: "'JetBrains Mono'", fontSize: 12 }}>
+                            <span style={{ color: "#79b8ff" }}>{key}</span>
+                            <span style={{ color: "rgba(255,255,255,0.3)" }}>:</span>
+                            <span style={{ color: "#ffd700" }}>{type}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(APIReference));
+</script>
+</body>
+</html>

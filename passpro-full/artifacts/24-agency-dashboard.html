@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PassPro — 24-agency-dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>* { box-sizing: border-box; margin: 0; padding: 0; } body { background: #06060c; } #root { min-height: 100vh; }</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const AGENCY = {
+  name: "Midwest Insurance Group",
+  abbr: "MIG",
+  plan: "Agency Pro",
+  seats: { used: 12, total: 15 },
+  state: "WI",
+  renewalDate: "Dec 1, 2026",
+  passRate: 83,
+  avgReadiness: 71,
+  totalCertificates: 9,
+};
+
+const AGENTS = [
+  { id: 1, name: "Sarah Mitchell", email: "s.mitchell@mig.com", avatar: "SM", color: "#00c896", readiness: 94, hoursLogged: 18.5, hoursRequired: 20, streak: 12, lastStudied: "Today", status: "on_track", examDate: "Jun 20, 2026", daysLeft: 16, modules: 7, totalModules: 8, weakTopics: ["WI Security Fund"], xp: 4200, passed: false },
+  { id: 2, name: "Marcus Johnson", email: "m.johnson@mig.com", avatar: "MJ", color: "#38bdf8", readiness: 88, hoursLogged: 20, hoursRequired: 20, streak: 8, lastStudied: "Today", status: "exam_ready", examDate: "Jun 10, 2026", daysLeft: 6, modules: 8, totalModules: 8, weakTopics: [], xp: 5100, passed: false, certificateIssued: true },
+  { id: 3, name: "Priya Patel", email: "p.patel@mig.com", avatar: "PP", color: "#a78bfa", readiness: 76, hoursLogged: 14.2, hoursRequired: 20, streak: 5, lastStudied: "Yesterday", status: "on_track", examDate: "Jul 1, 2026", daysLeft: 27, modules: 6, totalModules: 8, weakTopics: ["Annuities", "Tax Treatment"], xp: 3100, passed: false },
+  { id: 4, name: "Derek Williams", email: "d.williams@mig.com", avatar: "DW", color: "#f59e0b", readiness: 61, hoursLogged: 9.5, hoursRequired: 20, streak: 0, lastStudied: "4 days ago", status: "at_risk", examDate: "Jun 28, 2026", daysLeft: 24, modules: 4, totalModules: 8, weakTopics: ["Policy Provisions", "Annuities", "WI Regulations"], xp: 1800, passed: false },
+  { id: 5, name: "Amanda Chen", email: "a.chen@mig.com", avatar: "AC", color: "#c084fc", readiness: 74, hoursLogged: 8.5, hoursRequired: 20, streak: 7, lastStudied: "Today", status: "on_track", examDate: "Jul 15, 2026", daysLeft: 41, modules: 5, totalModules: 8, weakTopics: ["Annuities", "Tax Treatment", "WI Security Fund"], xp: 2840, passed: false },
+  { id: 6, name: "James Kowalski", email: "j.kowalski@mig.com", avatar: "JK", color: "#4ade80", readiness: 55, hoursLogged: 6.0, hoursRequired: 20, streak: 2, lastStudied: "2 days ago", status: "at_risk", examDate: "Jul 10, 2026", daysLeft: 36, modules: 3, totalModules: 8, weakTopics: ["Life Insurance Types", "Policy Provisions", "Annuities", "WI Regulations"], xp: 1200, passed: false },
+  { id: 7, name: "Tanya Brown", email: "t.brown@mig.com", avatar: "TB", color: "#f87171", readiness: 42, hoursLogged: 3.5, hoursRequired: 20, streak: 0, lastStudied: "6 days ago", status: "inactive", examDate: "Jul 20, 2026", daysLeft: 46, modules: 2, totalModules: 8, weakTopics: ["All areas"], xp: 650, passed: false },
+  { id: 8, name: "Ryan Torres", email: "r.torres@mig.com", avatar: "RT", color: "#fb923c", readiness: 100, hoursLogged: 20, hoursRequired: 20, streak: 0, lastStudied: "Mar 12, 2026", status: "passed", examDate: "Mar 15, 2026", daysLeft: 0, modules: 8, totalModules: 8, weakTopics: [], xp: 6800, passed: true },
+  { id: 9, name: "Lisa Nguyen", email: "l.nguyen@mig.com", avatar: "LN", color: "#00c896", readiness: 100, hoursLogged: 20, hoursRequired: 20, streak: 0, lastStudied: "Feb 28, 2026", status: "passed", examDate: "Mar 2, 2026", daysLeft: 0, modules: 8, totalModules: 8, weakTopics: [], xp: 7200, passed: true },
+  { id: 10, name: "Kevin Park", email: "k.park@mig.com", avatar: "KP", color: "#38bdf8", readiness: 91, hoursLogged: 20, hoursRequired: 20, streak: 3, lastStudied: "3 days ago", status: "exam_ready", examDate: "Jun 15, 2026", daysLeft: 11, modules: 8, totalModules: 8, weakTopics: ["Tax Treatment"], xp: 4900, passed: false, certificateIssued: true },
+  { id: 11, name: "Nina Davis", email: "n.davis@mig.com", avatar: "ND", color: "#a78bfa", readiness: 79, hoursLogged: 16.5, hoursRequired: 20, streak: 9, lastStudied: "Today", status: "on_track", examDate: "Jun 25, 2026", daysLeft: 21, modules: 7, totalModules: 8, weakTopics: ["Underwriting"], xp: 3600, passed: false },
+  { id: 12, name: "Carlos Reyes", email: "c.reyes@mig.com", avatar: "CR", color: "#f59e0b", readiness: 66, hoursLogged: 11.0, hoursRequired: 20, streak: 1, lastStudied: "Yesterday", status: "on_track", examDate: "Jul 8, 2026", daysLeft: 34, modules: 5, totalModules: 8, weakTopics: ["WI Regulations", "Tax Treatment"], xp: 2100, passed: false },
+];
+
+const statusConfig = {
+  passed: { label: "Passed ✓", color: "#00c896", bg: "rgba(0,200,150,0.1)", border: "rgba(0,200,150,0.25)" },
+  exam_ready: { label: "Exam Ready", color: "#38bdf8", bg: "rgba(56,189,248,0.1)", border: "rgba(56,189,248,0.25)" },
+  on_track: { label: "On Track", color: "#a78bfa", bg: "rgba(167,139,250,0.1)", border: "rgba(167,139,250,0.25)" },
+  at_risk: { label: "At Risk ⚠", color: "#f59e0b", bg: "rgba(245,158,11,0.1)", border: "rgba(245,158,11,0.25)" },
+  inactive: { label: "Inactive 🔴", color: "#f87171", bg: "rgba(248,113,113,0.1)", border: "rgba(248,113,113,0.25)" },
+};
+
+const activityFeed = [
+  { icon: "🏆", text: "Marcus Johnson completed all 8 modules", time: "2h ago", color: "#38bdf8" },
+  { icon: "📜", text: "Kevin Park's compliance certificate issued", time: "5h ago", color: "#00c896" },
+  { icon: "🔥", text: "Sarah Mitchell hit a 12-day study streak", time: "Today", color: "#f59e0b" },
+  { icon: "⚠️", text: "Derek Williams hasn't studied in 4 days", time: "Today", color: "#f59e0b" },
+  { icon: "🎯", text: "Nina Davis scored 91% on Unit 3 Test", time: "Yesterday", color: "#a78bfa" },
+  { icon: "🔴", text: "Tanya Brown hasn't studied in 6 days", time: "Yesterday", color: "#f87171" },
+  { icon: "✅", text: "Amanda Chen passed Module 4 Quiz", time: "Yesterday", color: "#c084fc" },
+  { icon: "📈", text: "Priya Patel improved Annuities score by 18%", time: "2 days ago", color: "#a78bfa" },
+];
+
+const nudgeTemplates = [
+  { id: "gentle", label: "Gentle Nudge", subject: "Quick check-in on your PassPro progress!", body: "Hey [Name], just wanted to check in — you haven't studied in a few days. Even 15 minutes today will keep your momentum going. Your exam is on [ExamDate]. You've got this! 💪" },
+  { id: "urgent", label: "Urgent — Exam Soon", subject: "Your exam is coming up — let's make sure you're ready", body: "Hey [Name], your exam is on [ExamDate] — only [DaysLeft] days away. You're currently at [Readiness]% readiness. Log in to PassPro today and let Coach help you focus on your weak areas." },
+  { id: "compliance", label: "Compliance Hours Reminder", subject: "You need more seat time before your exam", body: "Hey [Name], you still need [HoursLeft] more hours of study time before you can sit for your exam. Wisconsin OCI requires 20 hours. Log in to PassPro and continue where you left off." },
+];
+
+function AgencyDashboard() {
+  const [tab, setTab] = useState("overview");
+  const [selectedAgent, setSelectedAgent] = useState(null);
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [sortBy, setSortBy] = useState("readiness");
+  const [nudgeModal, setNudgeModal] = useState(null);
+  const [nudgeTemplate, setNudgeTemplate] = useState("gentle");
+  const [nudgeSent, setNudgeSent] = useState({});
+  const [search, setSearch] = useState("");
+
+  const filtered = AGENTS
+    .filter(a => filterStatus === "all" || a.status === filterStatus)
+    .filter(a => !search || a.name.toLowerCase().includes(search.toLowerCase()))
+    .sort((a, b) => {
+      if (sortBy === "readiness") return b.readiness - a.readiness;
+      if (sortBy === "hours") return b.hoursLogged - a.hoursLogged;
+      if (sortBy === "name") return a.name.localeCompare(b.name);
+      if (sortBy === "exam") return a.daysLeft - b.daysLeft;
+      return 0;
+    });
+
+  const atRisk = AGENTS.filter(a => a.status === "at_risk" || a.status === "inactive").length;
+  const examReady = AGENTS.filter(a => a.status === "exam_ready").length;
+  const passed = AGENTS.filter(a => a.status === "passed").length;
+  const avgHours = (AGENTS.reduce((s, a) => s + a.hoursLogged, 0) / AGENTS.length).toFixed(1);
+
+  const sendNudge = (agentId) => {
+    setNudgeSent(prev => ({ ...prev, [agentId]: true }));
+    setNudgeModal(null);
+  };
+
+  const agent = selectedAgent ? AGENTS.find(a => a.id === selectedAgent) : null;
+
+  return (
+    <div style={{ fontFamily: "'DM Sans', system-ui, sans-serif", background: "#07080d", minHeight: "100vh", color: "#fff", display: "flex", flexDirection: "column" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        .tab-btn { cursor: pointer; border: none; transition: all 0.18s; }
+        .row-btn { cursor: pointer; transition: background 0.12s; }
+        .row-btn:hover { background: rgba(255,255,255,0.04) !important; }
+        .filter-btn { cursor: pointer; border: none; transition: all 0.15s; }
+        .filter-btn:hover { opacity: 0.85; }
+        .action-btn { cursor: pointer; border: none; transition: all 0.15s; }
+        .action-btn:hover { opacity: 0.8; transform: scale(0.98); }
+        .stat-card { transition: transform 0.18s; }
+        .stat-card:hover { transform: translateY(-3px); }
+        input, select, textarea { outline: none; font-family: inherit; }
+        input::placeholder { color: rgba(255,255,255,0.2); }
+        .slide-in { animation: slideIn 0.3s ease both; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: none; } }
+        .fade-in { animation: fadeIn 0.25s ease both; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 4px; }
+      `}</style>
+
+      {/* ── TOP BAR ── */}
+      <div style={{ padding: "14px 32px", background: "#0d0d18", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", gap: 16 }}>
+        <div style={{ fontFamily: "'Syne'", fontSize: 17, fontWeight: 800 }}>Pass<span style={{ color: "#00c896" }}>Pro</span></div>
+        <div style={{ width: 1, height: 18, background: "rgba(255,255,255,0.1)" }} />
+        <div style={{ fontFamily: "'Syne'", fontSize: 14, fontWeight: 700, color: "rgba(255,255,255,0.7)" }}>{AGENCY.name}</div>
+        <div style={{ background: "rgba(0,200,150,0.1)", border: "1px solid rgba(0,200,150,0.2)", borderRadius: 20, padding: "3px 10px", fontSize: 11, color: "#00c896", fontFamily: "'JetBrains Mono'" }}>{AGENCY.plan}</div>
+        <div style={{ marginLeft: "auto", display: "flex", gap: 10, alignItems: "center" }}>
+          <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: "rgba(255,255,255,0.3)" }}>
+            {AGENCY.seats.used}/{AGENCY.seats.total} seats · Renews {AGENCY.renewalDate}
+          </div>
+          <div style={{ width: 32, height: 32, borderRadius: "50%", background: "linear-gradient(135deg, #a78bfa, #7c5cbf)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Syne'", fontSize: 12, fontWeight: 800 }}>AD</div>
+        </div>
+      </div>
+
+      {/* ── TABS ── */}
+      <div style={{ display: "flex", gap: 4, padding: "0 32px", borderBottom: "1px solid rgba(255,255,255,0.06)", background: "#0d0d18" }}>
+        {[["overview", "📊 Overview"], ["team", "👥 Team"], ["compliance", "🏛 Compliance"], ["activity", "⚡ Activity"]].map(([val, label]) => (
+          <button key={val} className="tab-btn" onClick={() => { setTab(val); setSelectedAgent(null); }} style={{ padding: "12px 18px", fontSize: 13, background: "transparent", color: tab === val ? "#00c896" : "rgba(255,255,255,0.35)", borderBottom: tab === val ? "2px solid #00c896" : "2px solid transparent", fontFamily: "'DM Sans'" }}>{label}</button>
+        ))}
+      </div>
+
+      <div style={{ flex: 1, overflowY: "auto", padding: "28px 32px" }}>
+
+        {/* ── OVERVIEW TAB ── */}
+        {tab === "overview" && (
+          <div className="fade-in">
+            <div style={{ marginBottom: 28 }}>
+              <h1 style={{ fontFamily: "'Syne'", fontSize: "clamp(22px,3vw,36px)", fontWeight: 800, letterSpacing: -1.5, marginBottom: 4 }}>Agency Overview</h1>
+              <p style={{ fontSize: 14, color: "rgba(255,255,255,0.4)" }}>Wisconsin Life Insurance Pre-Licensing · {AGENTS.length} active agents</p>
+            </div>
+
+            {/* Stats row */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 14, marginBottom: 28 }}>
+              {[
+                { label: "Avg Readiness", value: `${AGENCY.avgReadiness}%`, color: "#00c896", sub: "+4% this week" },
+                { label: "Pass Rate", value: `${AGENCY.passRate}%`, color: "#38bdf8", sub: `${passed} agents passed` },
+                { label: "Exam Ready", value: examReady, color: "#a78bfa", sub: "certificate issued" },
+                { label: "At Risk", value: atRisk, color: "#f59e0b", sub: "need attention" },
+                { label: "Avg Hours Logged", value: `${avgHours}h`, color: "#4ade80", sub: "of 20h required" },
+                { label: "Certificates Issued", value: AGENCY.totalCertificates, color: "#c084fc", sub: "OCI compliant" },
+              ].map((s, i) => (
+                <div key={i} className="stat-card" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, padding: "18px 16px" }}>
+                  <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.25)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 8 }}>{s.label}</div>
+                  <div style={{ fontFamily: "'Syne'", fontSize: 28, fontWeight: 800, color: s.color, lineHeight: 1 }}>{s.value}</div>
+                  <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", marginTop: 4 }}>{s.sub}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Status breakdown + at-risk agents */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+              {/* Status breakdown */}
+              <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 14, padding: 22 }}>
+                <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "rgba(255,255,255,0.25)", letterSpacing: 2, marginBottom: 16 }}>TEAM STATUS BREAKDOWN</div>
+                {Object.entries(statusConfig).map(([key, cfg]) => {
+                  const count = AGENTS.filter(a => a.status === key).length;
+                  const pct = Math.round((count / AGENTS.length) * 100);
+                  return (
+                    <div key={key} style={{ marginBottom: 12 }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
+                        <span style={{ fontSize: 13, color: cfg.color }}>{cfg.label}</span>
+                        <span style={{ fontFamily: "'JetBrains Mono'", fontSize: 11, color: "rgba(255,255,255,0.4)" }}>{count} agents</span>
+                      </div>
+                      <div style={{ height: 5, background: "rgba(255,255,255,0.05)", borderRadius: 4, overflow: "hidden" }}>
+                        <div style={{ height: "100%", width: `${pct}%`, background: cfg.color, borderRadius: 4, transition: "width 0.8s ease" }} />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Needs attention */}
+              <div style={{ background: "rgba(248,113,113,0.05)", border: "1px solid rgba(248,113,113,0.15)", borderRadius: 14, padding: 22 }}>
+                <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "#f87171", letterSpacing: 2, marginBottom: 16 }}>⚠ NEEDS ATTENTION</div>
+                {AGENTS.filter(a => a.status === "at_risk" || a.status === "inactive").map((a, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 0", borderBottom: i < atRisk - 1 ? "1px solid rgba(255,255,255,0.05)" : "none" }}>
+                    <div style={{ width: 32, height: 32, borderRadius: "50%", background: `${a.color}20`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Syne'", fontSize: 11, fontWeight: 800, color: a.color, flexShrink: 0 }}>{a.avatar}</div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 13, fontWeight: 500 }}>{a.name}</div>
+                      <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>Last studied: {a.lastStudied} · {a.readiness}% ready · Exam in {a.daysLeft}d</div>
+                    </div>
+                    <button className="action-btn" onClick={() => setNudgeModal(a.id)} style={{ background: nudgeSent[a.id] ? "rgba(0,200,150,0.1)" : "rgba(245,158,11,0.1)", border: `1px solid ${nudgeSent[a.id] ? "rgba(0,200,150,0.3)" : "rgba(245,158,11,0.3)"}`, color: nudgeSent[a.id] ? "#00c896" : "#f59e0b", padding: "5px 12px", borderRadius: 8, fontSize: 11, fontFamily: "'JetBrains Mono'" }}>
+                      {nudgeSent[a.id] ? "✓ Sent" : "📧 Nudge"}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── TEAM TAB ── */}
+        {tab === "team" && !selectedAgent && (
+          <div className="fade-in">
+            <div style={{ display: "flex", gap: 12, marginBottom: 20, flexWrap: "wrap", alignItems: "center" }}>
+              <h2 style={{ fontFamily: "'Syne'", fontSize: 22, fontWeight: 800, letterSpacing: -0.5, flex: "1 1 200px" }}>Team Progress</h2>
+              <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search agents..." style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8, padding: "8px 14px", fontSize: 13, color: "#fff", width: 180 }} />
+              <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} style={{ background: "#111118", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, padding: "8px 12px", fontSize: 13, color: "rgba(255,255,255,0.7)", cursor: "pointer" }}>
+                <option value="all">All Statuses</option>
+                {Object.entries(statusConfig).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
+              </select>
+              <select value={sortBy} onChange={e => setSortBy(e.target.value)} style={{ background: "#111118", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, padding: "8px 12px", fontSize: 13, color: "rgba(255,255,255,0.7)", cursor: "pointer" }}>
+                <option value="readiness">Sort: Readiness</option>
+                <option value="hours">Sort: Hours Logged</option>
+                <option value="exam">Sort: Exam Date</option>
+                <option value="name">Sort: Name</option>
+              </select>
+            </div>
+
+            <div style={{ background: "#0d0d14", borderRadius: 14, overflow: "hidden", border: "1px solid rgba(255,255,255,0.06)" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr 120px", padding: "10px 16px", background: "rgba(255,255,255,0.03)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                {["Agent", "Readiness", "Hours", "Exam Date", "Status", "Actions"].map(h => (
+                  <div key={h} style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: 2, textTransform: "uppercase" }}>{h}</div>
+                ))}
+              </div>
+              {filtered.map((a, i) => {
+                const sc = statusConfig[a.status];
+                const hoursPct = Math.min(100, (a.hoursLogged / a.hoursRequired) * 100);
+                return (
+                  <div key={a.id} className="row-btn" onClick={() => setSelectedAgent(a.id)} style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr 120px", padding: "14px 16px", borderBottom: i < filtered.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none", alignItems: "center" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <div style={{ width: 34, height: 34, borderRadius: "50%", background: `${a.color}20`, border: `1.5px solid ${a.color}40`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Syne'", fontSize: 11, fontWeight: 800, color: a.color, flexShrink: 0 }}>{a.avatar}</div>
+                      <div>
+                        <div style={{ fontSize: 13, fontWeight: 500 }}>{a.name}</div>
+                        <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>Streak: {a.streak}🔥 · {a.lastStudied}</div>
+                      </div>
+                    </div>
+                    <div>
+                      <div style={{ fontFamily: "'Syne'", fontSize: 16, fontWeight: 800, color: a.readiness >= 80 ? "#00c896" : a.readiness >= 60 ? "#f59e0b" : "#f87171" }}>{a.readiness}%</div>
+                      <div style={{ height: 3, background: "rgba(255,255,255,0.06)", borderRadius: 2, overflow: "hidden", marginTop: 4, width: 60 }}>
+                        <div style={{ height: "100%", width: `${a.readiness}%`, background: a.readiness >= 80 ? "#00c896" : a.readiness >= 60 ? "#f59e0b" : "#f87171", borderRadius: 2 }} />
+                      </div>
+                    </div>
+                    <div>
+                      <div style={{ fontFamily: "'Syne'", fontSize: 15, fontWeight: 700, color: hoursPct >= 100 ? "#00c896" : "rgba(255,255,255,0.7)" }}>{a.hoursLogged}h</div>
+                      <div style={{ height: 3, background: "rgba(255,255,255,0.06)", borderRadius: 2, overflow: "hidden", marginTop: 4, width: 60 }}>
+                        <div style={{ height: "100%", width: `${hoursPct}%`, background: hoursPct >= 100 ? "#00c896" : "#38bdf8", borderRadius: 2 }} />
+                      </div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: 12, color: "rgba(255,255,255,0.6)" }}>{a.examDate}</div>
+                      <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>{a.daysLeft > 0 ? `${a.daysLeft} days` : "Completed"}</div>
+                    </div>
+                    <div>
+                      <span style={{ background: sc.bg, border: `1px solid ${sc.border}`, color: sc.color, padding: "3px 9px", borderRadius: 8, fontSize: 10, fontFamily: "'JetBrains Mono'", whiteSpace: "nowrap" }}>{sc.label}</span>
+                    </div>
+                    <div style={{ display: "flex", gap: 6 }} onClick={e => e.stopPropagation()}>
+                      <button className="action-btn" onClick={() => setNudgeModal(a.id)} style={{ padding: "5px 10px", borderRadius: 7, background: nudgeSent[a.id] ? "rgba(0,200,150,0.1)" : "rgba(255,255,255,0.05)", border: `1px solid ${nudgeSent[a.id] ? "rgba(0,200,150,0.2)" : "rgba(255,255,255,0.08)"}`, color: nudgeSent[a.id] ? "#00c896" : "rgba(255,255,255,0.4)", fontSize: 11, fontFamily: "'JetBrains Mono'" }}>
+                        {nudgeSent[a.id] ? "✓" : "📧"}
+                      </button>
+                      <button className="action-btn" onClick={() => setSelectedAgent(a.id)} style={{ padding: "5px 10px", borderRadius: 7, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.4)", fontSize: 11 }}>→</button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* ── AGENT DETAIL ── */}
+        {tab === "team" && selectedAgent && agent && (
+          <div className="slide-in">
+            <button onClick={() => setSelectedAgent(null)} style={{ background: "none", border: "none", color: "rgba(255,255,255,0.4)", fontSize: 14, cursor: "pointer", marginBottom: 20, display: "flex", alignItems: "center", gap: 6, fontFamily: "'DM Sans'" }}>← Back to Team</button>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+              {/* Profile card */}
+              <div style={{ background: `${agent.color}08`, border: `1px solid ${agent.color}20`, borderRadius: 16, padding: 26 }}>
+                <div style={{ display: "flex", gap: 14, alignItems: "center", marginBottom: 24 }}>
+                  <div style={{ width: 52, height: 52, borderRadius: "50%", background: `${agent.color}20`, border: `2px solid ${agent.color}40`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Syne'", fontSize: 18, fontWeight: 800, color: agent.color }}>{agent.avatar}</div>
+                  <div>
+                    <div style={{ fontFamily: "'Syne'", fontSize: 20, fontWeight: 800 }}>{agent.name}</div>
+                    <div style={{ fontSize: 13, color: "rgba(255,255,255,0.4)" }}>{agent.email}</div>
+                  </div>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                  {[
+                    ["Readiness", `${agent.readiness}%`, agent.readiness >= 80 ? "#00c896" : agent.readiness >= 60 ? "#f59e0b" : "#f87171"],
+                    ["Hours Logged", `${agent.hoursLogged}h / 20h`, agent.hoursLogged >= 20 ? "#00c896" : "#38bdf8"],
+                    ["Study Streak", `${agent.streak} days 🔥`, "#f59e0b"],
+                    ["Total XP", agent.xp.toLocaleString(), "#a78bfa"],
+                    ["Exam Date", agent.examDate, agent.color],
+                    ["Days Left", agent.daysLeft > 0 ? `${agent.daysLeft} days` : "Done", agent.color],
+                  ].map(([k, v, c]) => (
+                    <div key={k} style={{ background: "rgba(255,255,255,0.04)", borderRadius: 8, padding: "10px 12px" }}>
+                      <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.25)", letterSpacing: 1, marginBottom: 3 }}>{k}</div>
+                      <div style={{ fontFamily: "'Syne'", fontSize: 14, fontWeight: 700, color: c || "#fff" }}>{v}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Progress & weak areas */}
+              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 14, padding: 20 }}>
+                  <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "rgba(255,255,255,0.25)", letterSpacing: 2, marginBottom: 12 }}>MODULE PROGRESS</div>
+                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                    {Array.from({ length: agent.totalModules }).map((_, i) => (
+                      <div key={i} style={{ width: 36, height: 36, borderRadius: 8, background: i < agent.modules ? `${agent.color}20` : "rgba(255,255,255,0.04)", border: `1px solid ${i < agent.modules ? agent.color + "40" : "rgba(255,255,255,0.07)"}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: i < agent.modules ? agent.color : "rgba(255,255,255,0.2)", fontFamily: "'Syne'", fontWeight: 700 }}>
+                        {i < agent.modules ? "✓" : i + 1}
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ marginTop: 10, fontSize: 12, color: "rgba(255,255,255,0.35)" }}>{agent.modules} of {agent.totalModules} modules complete</div>
+                </div>
+
+                {agent.weakTopics.length > 0 && (
+                  <div style={{ background: "rgba(248,113,113,0.05)", border: "1px solid rgba(248,113,113,0.15)", borderRadius: 14, padding: 20 }}>
+                    <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "#f87171", letterSpacing: 2, marginBottom: 10 }}>WEAK AREAS</div>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 7 }}>
+                      {agent.weakTopics.map((t, i) => (
+                        <span key={i} style={{ background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.2)", color: "#f87171", padding: "4px 10px", borderRadius: 8, fontSize: 12 }}>{t}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <button className="action-btn" onClick={() => setNudgeModal(agent.id)} style={{ padding: "12px", background: nudgeSent[agent.id] ? "rgba(0,200,150,0.1)" : "rgba(245,158,11,0.1)", border: `1px solid ${nudgeSent[agent.id] ? "rgba(0,200,150,0.3)" : "rgba(245,158,11,0.3)"}`, borderRadius: 10, color: nudgeSent[agent.id] ? "#00c896" : "#f59e0b", fontSize: 14, fontWeight: 600, fontFamily: "'Syne'" }}>
+                  {nudgeSent[agent.id] ? "✓ Nudge Sent" : "📧 Send Nudge Email"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── COMPLIANCE TAB ── */}
+        {tab === "compliance" && (
+          <div className="fade-in">
+            <div style={{ marginBottom: 24 }}>
+              <h2 style={{ fontFamily: "'Syne'", fontSize: 22, fontWeight: 800, letterSpacing: -0.5, marginBottom: 4 }}>OCI Compliance Tracker</h2>
+              <p style={{ fontSize: 14, color: "rgba(255,255,255,0.4)" }}>Wisconsin OCI requires 20 hours of seat time before exam. Tracked per agent.</p>
+            </div>
+
+            <div style={{ background: "#0d0d14", borderRadius: 14, overflow: "hidden", border: "1px solid rgba(255,255,255,0.06)" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "2fr 1.5fr 1fr 1fr 100px", padding: "10px 18px", background: "rgba(255,255,255,0.03)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                {["Agent", "Seat Time Progress", "Hours", "Certificate", "Status"].map(h => (
+                  <div key={h} style={{ fontFamily: "'JetBrains Mono'", fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: 2, textTransform: "uppercase" }}>{h}</div>
+                ))}
+              </div>
+              {AGENTS.map((a, i) => {
+                const hoursPct = Math.min(100, (a.hoursLogged / a.hoursRequired) * 100);
+                const certIssued = a.hoursLogged >= 20 || a.certificateIssued;
+                return (
+                  <div key={a.id} style={{ display: "grid", gridTemplateColumns: "2fr 1.5fr 1fr 1fr 100px", padding: "14px 18px", borderBottom: i < AGENTS.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none", alignItems: "center" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <div style={{ width: 30, height: 30, borderRadius: "50%", background: `${a.color}20`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Syne'", fontSize: 10, fontWeight: 800, color: a.color, flexShrink: 0 }}>{a.avatar}</div>
+                      <span style={{ fontSize: 13, fontWeight: 500 }}>{a.name}</span>
+                    </div>
+                    <div style={{ paddingRight: 16 }}>
+                      <div style={{ height: 6, background: "rgba(255,255,255,0.06)", borderRadius: 4, overflow: "hidden" }}>
+                        <div style={{ height: "100%", width: `${hoursPct}%`, background: hoursPct >= 100 ? "#00c896" : hoursPct >= 60 ? "#38bdf8" : "#f59e0b", borderRadius: 4, transition: "width 0.8s ease" }} />
+                      </div>
+                    </div>
+                    <div style={{ fontFamily: "'Syne'", fontSize: 14, fontWeight: 700, color: hoursPct >= 100 ? "#00c896" : "rgba(255,255,255,0.7)" }}>
+                      {a.hoursLogged}h / 20h
+                    </div>
+                    <div>
+                      {certIssued ? (
+                        <span style={{ background: "rgba(0,200,150,0.1)", border: "1px solid rgba(0,200,150,0.25)", color: "#00c896", padding: "3px 9px", borderRadius: 7, fontSize: 10, fontFamily: "'JetBrains Mono'" }}>📜 Issued</span>
+                      ) : (
+                        <span style={{ background: "rgba(255,255,255,0.04)", color: "rgba(255,255,255,0.3)", padding: "3px 9px", borderRadius: 7, fontSize: 10, fontFamily: "'JetBrains Mono'" }}>Pending</span>
+                      )}
+                    </div>
+                    <div>
+                      {hoursPct >= 100 ? (
+                        <span style={{ color: "#00c896", fontSize: 11, fontFamily: "'JetBrains Mono'" }}>✓ Complete</span>
+                      ) : (
+                        <span style={{ color: "#f59e0b", fontSize: 11, fontFamily: "'JetBrains Mono'" }}>{(20 - a.hoursLogged).toFixed(1)}h left</span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* ── ACTIVITY TAB ── */}
+        {tab === "activity" && (
+          <div className="fade-in">
+            <div style={{ marginBottom: 24 }}>
+              <h2 style={{ fontFamily: "'Syne'", fontSize: 22, fontWeight: 800, letterSpacing: -0.5, marginBottom: 4 }}>Team Activity Feed</h2>
+              <p style={{ fontSize: 14, color: "rgba(255,255,255,0.4)" }}>Real-time updates across your entire team.</p>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {activityFeed.map((item, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 14, padding: "14px 18px", background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderLeft: `3px solid ${item.color}`, borderRadius: 10 }}>
+                  <span style={{ fontSize: 20, flexShrink: 0 }}>{item.icon}</span>
+                  <div style={{ flex: 1, fontSize: 14, color: "rgba(255,255,255,0.75)" }}>{item.text}</div>
+                  <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "rgba(255,255,255,0.25)", flexShrink: 0 }}>{item.time}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* ── NUDGE MODAL ── */}
+      {nudgeModal && (() => {
+        const a = AGENTS.find(ag => ag.id === nudgeModal);
+        const tmpl = nudgeTemplates.find(t => t.id === nudgeTemplate);
+        const body = tmpl?.body
+          .replace("[Name]", a?.name?.split(" ")[0])
+          .replace("[ExamDate]", a?.examDate)
+          .replace("[DaysLeft]", a?.daysLeft)
+          .replace("[Readiness]", a?.readiness)
+          .replace("[HoursLeft]", (20 - (a?.hoursLogged || 0)).toFixed(1));
+        return (
+          <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100, padding: 24 }} onClick={() => setNudgeModal(null)}>
+            <div style={{ background: "#0f1018", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 16, padding: 28, width: "100%", maxWidth: 500 }} onClick={e => e.stopPropagation()}>
+              <div style={{ fontFamily: "'Syne'", fontSize: 18, fontWeight: 800, marginBottom: 4 }}>Send Nudge Email</div>
+              <div style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", marginBottom: 20 }}>To: {a?.name} · {a?.email}</div>
+              <div style={{ display: "flex", gap: 6, marginBottom: 16 }}>
+                {nudgeTemplates.map(t => (
+                  <button key={t.id} onClick={() => setNudgeTemplate(t.id)} style={{ padding: "6px 12px", borderRadius: 8, background: nudgeTemplate === t.id ? "rgba(0,200,150,0.12)" : "rgba(255,255,255,0.04)", border: `1px solid ${nudgeTemplate === t.id ? "rgba(0,200,150,0.3)" : "rgba(255,255,255,0.07)"}`, color: nudgeTemplate === t.id ? "#00c896" : "rgba(255,255,255,0.45)", fontSize: 12, cursor: "pointer", fontFamily: "'DM Sans'" }}>{t.label}</button>
+                ))}
+              </div>
+              <div style={{ background: "#060609", borderRadius: 10, padding: 16, marginBottom: 20, fontSize: 13, color: "rgba(255,255,255,0.6)", lineHeight: 1.7 }}>
+                <div style={{ fontFamily: "'JetBrains Mono'", fontSize: 10, color: "rgba(255,255,255,0.25)", marginBottom: 6 }}>SUBJECT: {tmpl?.subject}</div>
+                {body}
+              </div>
+              <div style={{ display: "flex", gap: 10 }}>
+                <button onClick={() => sendNudge(nudgeModal)} style={{ flex: 1, background: "#00c896", border: "none", borderRadius: 10, padding: "12px", color: "#000", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: "'Syne'" }}>Send Email →</button>
+                <button onClick={() => setNudgeModal(null)} style={{ padding: "12px 20px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, color: "rgba(255,255,255,0.5)", fontSize: 14, cursor: "pointer", fontFamily: "'DM Sans'" }}>Cancel</button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(AgencyDashboard));
+</script>
+</body>
+</html>
