@@ -117,31 +117,18 @@ const [activeModule, setActiveModule] = useState(studyModules[0] || null)
 
       <AriaReadinessWidget onOpenAria={openAria} />
 
-<<<<<<< Updated upstream
-      {activeModule && (
-        <div className="h-[450px] my-4">
-          <AriaChat currentModuleId={activeModule.id} />
-        </div>
-      )}
+      <AudioBriefButton topics={['HMO Gatekeepers', 'Wisconsin Replacement Rules']} />
+
       <LedgerSection
         emptyMessage="No study modules found in Supabase yet."
         eyebrow="Study plan"
         rows={studyModules.map((module, i) => ({
           code: `M-${String(i + 1).padStart(2, '0')}`,
-          title: (
-            <button
-              type="button"
-              onClick={() => setActiveModule(module)}
-              className={`text-left hover:text-gold-500 transition-colors ${
-                activeModule?.id === module.id ? 'text-gold-500 font-bold' : 'text-paper'
-              }`}
-            >
-              {module.title}
-            </button>
-          ),
+          title: module.title,
           value: `${module.estimatedMinutes} min`,
         }))}
       />
+>>>>>>> Stashed changes
 =======
       <AudioBriefButton topics={['HMO Gatekeepers', 'Wisconsin Replacement Rules']} />
 
