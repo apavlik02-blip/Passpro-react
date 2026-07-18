@@ -172,21 +172,13 @@ Deno.serve(async (req) => {
 
     let userId: string
     try {
+const body = await req.json()
 const { messages, action, payload, context } = body as {
   messages?: Message[]
   action?: string
   payload?: { quizResult: { overall_score: number; domain_scores: Record<string, number> } }
-  context?: string // <--- Add this line here
+  context?: string
 }
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
-    )
-
-    const body = await req.json()
-    const { messages, action, payload } = body as {
-      messages?: Message[]
-      action?: string
-      payload?: { quizResult: { overall_score: number; domain_scores: Record<string, number> } }
-    }
 
     if (action === 'submit_quiz_result' && payload) {
       const progress = await getOrCreateProgress(supabase, userId)
