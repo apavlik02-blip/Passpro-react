@@ -261,3 +261,11 @@ const { messages, action, payload, context } = body as {
   if (context) {
     systemPrompt += ` The student is currently studying the module: ${context}. Direct your primary guidance, definitions, and analogies to match this specific topic blueprint.`
   }
+const result = await callClaude(messages, systemPrompt)
+    return json(result)
+
+  } catch (error) {
+    console.error('ARIA function error:', error)
+    return json({ type: 'error', message: error instanceof Error ? error.message : 'Internal Server Error' }, 500)
+  }
+})
