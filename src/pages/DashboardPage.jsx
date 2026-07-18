@@ -128,20 +128,7 @@ const [activeModule, setActiveModule] = useState(studyModules[0] || null)
           value: `${module.estimatedMinutes} min`,
         }))}
       />
->>>>>>> Stashed changes
 =======
-      <AudioBriefButton topics={['HMO Gatekeepers', 'Wisconsin Replacement Rules']} />
-
-      <LedgerSection
-        emptyMessage="No study modules found in Supabase yet."
-        eyebrow="Study plan"
-        rows={studyModules.map((module, i) => ({
-          code: `M-${String(i + 1).padStart(2, '0')}`,
-          title: module.title,
-          value: `${module.estimatedMinutes} min`,
-        }))}
-      />
->>>>>>> Stashed changes
 
       <LedgerSection
         emptyMessage="No question categories found in Supabase yet."
