@@ -231,39 +231,33 @@ const { messages, action, payload, context } = body as {
             new Date(Date.now() + 45 * 86400000).toISOString().split('T')[0],
             userProgress.current_readiness || 50,
             userProgress.weak_domains || ['policy_provisions'],
-            45,
-          )
-          message = 'Personalized study schedule created based on your progress.'
-          break
-        }
-        case 'get_insurance_regulation': {
-          toolData = getInsuranceRegulation(intent.params?.state ?? '', intent.params?.topic ?? '')
-          message = `Wisconsin regulation for ${intent.params?.topic}.`
-          break
-        }
+     45,
+        )
+        message = 'Personalized study schedule created based on your progress.'
+        break
       }
+      case 'get_insurance_regulation': {
+        toolData = getInsuranceRegulation(intent.params?.state ?? '', intent.params?.topic ?? '')
+        message = `Wisconsin regulation for ${intent.params?.topic}.`
+        break // <-- Missing break statement
+      } // <-- Missing closing case bracket
+    } // <-- Missing closing switch statement bracket
 
-      return json({
-        type: 'tool_result',
-        tool: intent.tool,
-        data: toolData,
-        message,
-        current_progress: {
-          readiness: userProgress.current_readiness,
-let systemPrompt = `You are ARIA, an expert AI coach for the Wisconsin life and health insurance licensing exam. You help students prepare with practice questions, study strategies, concept explanations, and encouragement. Keep responses concise and focused on exam prep. The student's current readiness is ${userProgress.current_readiness}% and their weak areas are: ${userProgress.weak_domains?.join(', ') || 'none identified yet'}.`
+    return json({
+      type: 'tool_result',
+      tool: intent.tool,
+      data: toolData,
+      message,
+      current_progress: {
+        readiness: userProgress.current_readiness,
+        weak_domains: userProgress.weak_domains,
+        study_streak: userProgress.study_streak,
+      },
+    })
+  } // <-- Missing closing block bracket for the tool block
 
-if (context) {
-  systemPrompt += ` The student is currently studying the module: ${context}. Direct your primary guidance, definitions, and analogies to match this specific topic blueprint.`
-}
-      })
-    }
+  let systemPrompt = `You are ARIA, an expert AI coach for the Wisconsin life and health insurance licensing exam. You help students prepare with practice questions, study strategies, concept explanations, and encouragement. Keep responses concise and focused on exam prep. The student's current readiness is ${userProgress.current_readiness}% and their weak areas are: ${userProgress.weak_domains?.join(', ') || 'none identified yet'}.`
 
-    const systemPrompt = `You are ARIA, an expert AI coach for the Wisconsin life and health insurance licensing exam. You help students prepare with practice questions, study strategies, concept explanations, and encouragement. Keep responses concise and focused on exam prep. The student's current readiness is ${userProgress.current_readiness}% and their weak areas are: ${userProgress.weak_domains?.join(', ') || 'none identified yet'}.`
-
-    const result = await callClaude(messages, systemPrompt)
-    return json(result)
-  } catch (error) {
-    console.error('ARIA function error:', error)
-    return json({ type: 'error', message: error instanceof Error ? error.message : 'Unknown error' }, 500)
+  if (context) {
+    systemPrompt += ` The student is currently studying the module: ${context}. Direct your primary guidance, definitions, and analogies to match this specific topic blueprint.`
   }
-})
