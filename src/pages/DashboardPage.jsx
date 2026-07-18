@@ -59,7 +59,8 @@ export function DashboardPage({
   error,
 }) {
   const { openAria } = useOutletContext()
-
+const [activeModule, setActiveModule] = useState(studyModules[0] || null)
+  
   if (loading) {
     return (
       <section className="flex flex-col gap-6">
@@ -115,15 +116,28 @@ export function DashboardPage({
 
       <AriaReadinessWidget onOpenAria={openAria} />
 
-      <LedgerSection
-        emptyMessage="No study modules found in Supabase yet."
-        eyebrow="Study plan"
-        rows={studyModules.map((module, i) => ({
-          code: `M-${String(i + 1).padStart(2, '0')}`,
-          title: module.title,
-          value: `${module.estimatedMinutes} min`,
-        }))}
-      />
+      {activeModule && (
+  <div className="h-[450px] my-4">
+    <AriaChat currentModuleId={activeModule.id} />
+  </div>
+)}
+      <LedgerSection 
+  emptyMessage="No study modules found in Supabase yet." 
+  eyebrow="Study plan" 
+  rows={studyModules.map((module, i) => ({
+    code: `M-${String(i + 1).padStart(2, '0')}`, 
+    title: (
+      <button 
+        type="button"
+        onClick={() => setActiveModule(module)}
+        className={`text-left hover:text-gold-500 transition-colors ${activeModule?.id === module.id ? 'text-gold-500 font-bold' : 'text-paper'}`}
+      >
+        {module.title}
+      </button>
+    ), 
+    value: `${module.estimatedMinutes} min`, 
+  }))} 
+/>
 
       <LedgerSection
         emptyMessage="No question categories found in Supabase yet."
