@@ -1,4 +1,4 @@
-import { serve } from "https://deno.land/x/sift@0.6.0/mod.ts";
+import { serve } from "https://esm.sh/sift@0.6.0";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.0.0";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
