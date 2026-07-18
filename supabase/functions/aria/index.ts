@@ -172,13 +172,12 @@ Deno.serve(async (req) => {
 
     let userId: string
     try {
-      userId = await verifyClerkToken(token)
-    } catch {
-      return json({ type: 'error', message: 'Invalid or expired session' }, 401)
-    }
-
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL')!,
+const { messages, action, payload, context } = body as {
+  messages?: Message[]
+  action?: string
+  payload?: { quizResult: { overall_score: number; domain_scores: Record<string, number> } }
+  context?: string // <--- Add this line here
+}
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
     )
 
@@ -259,9 +258,11 @@ Deno.serve(async (req) => {
         message,
         current_progress: {
           readiness: userProgress.current_readiness,
-          weak_domains: userProgress.weak_domains,
-          streak: userProgress.study_streak,
-        },
+let systemPrompt = `You are ARIA, an expert AI coach for the Wisconsin life and health insurance licensing exam. You help students prepare with practice questions, study strategies, concept explanations, and encouragement. Keep responses concise and focused on exam prep. The student's current readiness is ${userProgress.current_readiness}% and their weak areas are: ${userProgress.weak_domains?.join(', ') || 'none identified yet'}.`
+
+if (context) {
+  systemPrompt += ` The student is currently studying the module: ${context}. Direct your primary guidance, definitions, and analogies to match this specific topic blueprint.`
+}
       })
     }
 
