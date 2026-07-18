@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { DataStatePanel } from '../components/DataStatePanel.jsx'
 import { AriaReadinessWidget } from '../components/aria/AriaReadinessWidget.jsx'
 import { practiceExamConfig } from '../lib/constants.js'
 import { humanizeSlug } from '../lib/format.js'
+import AriaChat from '../components/AriaChat.jsx'
 
 function StatCard({ label, value, hint }) {
   return (
