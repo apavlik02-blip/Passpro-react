@@ -1,4 +1,13 @@
-# MAIA AUTOPILOT RULES & BLUEPRINT
+# MAIA CRITICAL EXECUTION LOOP (AUTOPILOT MODE)
+
+When the user tells you to "Run Autopilot", you must enter an autonomous task loop. You do not need to ask permission or confirmation to move between files or milestones. Follow these rules recursively:
+
+1. **Read Current State:** Check the workspace files to see what has already been built.
+2. **Execute Current Milestone:** Write the complete, structurally sound code for the current Milestone. Never leave placeholder hooks, missing brackets, or half-written logic.
+3. **Validate:** Internally trace all brackets, syntax blocks, and API structures (like `callClaude` in edge functions) to ensure it compiles flawlessly.
+4. **Advance Dynamically:** Once a milestone's code is written and saved, immediately look at the next milestone in the roadmap and proceed to build it. Do not stop to prompt the user with "What next?". Only stop when all milestones in the roadmap are 100% complete.
+
+---
 
 ## Core Context
 - **Project Name:** PassPro
@@ -14,7 +23,10 @@
 ## Component Execution Guide
 - **State Management:** Keep context flowing cleanly via `useOutletContext()` for widgets or global hooks.
 - **Routing:** All user tracking endpoints point directly to `/api/aria` which maps straight to `supabase/functions/aria/index.ts`.
-- ## Database Schema Reference
+
+---
+
+## Database Schema Reference
 - **Table: `study_modules`**
   - `id` (uuid, primary key)
   - `title` (text)
