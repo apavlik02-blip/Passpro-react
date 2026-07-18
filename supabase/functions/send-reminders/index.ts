@@ -1,4 +1,4 @@
-import { serve } from "https://esm.sh/sift@0.6.0";
+import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.0.0";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
@@ -50,7 +50,7 @@ async function sendReminders() {
 }
 
 serve(async (req) => {
-  if (req.method === "POST") {
+  if (req.method === "POST" && req.url === "/") {
     await sendReminders();
     return new Response("Reminders sent successfully!", { status: 200 });
   }
