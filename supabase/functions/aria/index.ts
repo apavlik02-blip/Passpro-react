@@ -254,7 +254,7 @@ const { messages, action, payload, context } = body as {
         study_streak: userProgress.study_streak,
       },
     })
-  } // <-- Missing closing block bracket for the tool block
+  }
 
   let systemPrompt = `You are ARIA, an expert AI coach for the Wisconsin life and health insurance licensing exam. You help students prepare with practice questions, study strategies, concept explanations, and encouragement. Keep responses concise and focused on exam prep. The student's current readiness is ${userProgress.current_readiness}% and their weak areas are: ${userProgress.weak_domains?.join(', ') || 'none identified yet'}.`
 
