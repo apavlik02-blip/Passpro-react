@@ -15,6 +15,9 @@ import { MissingSupabaseConfiguration } from './components/config/MissingSupabas
 import { HomePage } from './pages/HomePage.jsx'
 import { BlogIndexPage } from './pages/BlogIndexPage.jsx'
 import { BlogPostPage } from './pages/BlogPostPage.jsx'
+import { TermsPage } from './pages/TermsPage.jsx'
+import { PrivacyPage } from './pages/PrivacyPage.jsx'
+import { RefundPage } from './pages/RefundPage.jsx'
 import { DashboardPage } from './pages/DashboardPage.jsx'
 import { StudyPage } from './pages/StudyPage.jsx'
 import { PracticeExamPage } from './pages/PracticeExamPage.jsx'
@@ -106,6 +109,9 @@ function App({ clerkEnabled, stripePaymentLinkUrl }) {
         />
         <Route path="/blog" element={<BlogIndexPage />} />
         <Route path="/blog/:slug" element={<BlogPostPage />} />
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/refunds" element={<RefundPage />} />
         <Route element={<ProtectedRoute clerkEnabled={clerkEnabled} />}>
           <Route element={<SupabaseRoute supabaseConfigured={supabaseConfigured} />}>
             <Route

@@ -7,6 +7,7 @@ import {
 } from '@clerk/clerk-react'
 import { NavLink } from 'react-router-dom'
 import { CheckoutButton } from '../components/CheckoutButton.jsx'
+import { SiteFooter } from '../components/layout/SiteFooter.jsx'
 import { subscriptionPrice } from '../lib/constants.js'
 
 const included = [
@@ -34,7 +35,7 @@ export function HomePage({
   }
 
   return (
-    <main className="min-h-screen bg-ink-950 text-paper">
+    <main className="flex min-h-screen flex-col bg-ink-950 text-paper">
       <div className="flex items-center justify-between border-b border-line px-6 py-3 font-mono text-[11px] tracking-widest text-muted uppercase sm:px-10">
         <span>PassPro</span>
         <div className="flex items-center gap-5">
@@ -113,6 +114,10 @@ export function HomePage({
         </div>
         <p className="mt-4 font-mono text-xs text-muted">{homeStatus}</p>
       </section>
+
+      <div className="mt-auto">
+        <SiteFooter />
+      </div>
     </main>
   )
 }

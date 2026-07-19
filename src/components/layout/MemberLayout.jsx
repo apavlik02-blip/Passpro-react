@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import { useUser } from '@clerk/clerk-react'
 import { Sidebar } from './Sidebar.jsx'
+import { SiteFooter } from './SiteFooter.jsx'
 import { AriaModal } from '../aria/AriaModal.jsx'
 
 export function MemberLayout({ stripePaymentLinkUrl }) {
@@ -67,6 +68,7 @@ export function MemberLayout({ stripePaymentLinkUrl }) {
         <main className="mx-auto max-w-6xl px-6 py-8 sm:px-10">
           <Outlet context={{ openAria }} />
         </main>
+        <SiteFooter />
       </div>
 
       <AriaModal onClose={() => setAriaOpen(false)} open={ariaOpen} />
