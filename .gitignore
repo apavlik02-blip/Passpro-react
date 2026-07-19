@@ -25,3 +25,10 @@ npm-debug.log
 
 # Supabase CLI local state
 supabase/.temp
+.vercel
+.aider*
+
+# Agent tooling (local only)
+.agents/
+.claude/
+skills-lock.json

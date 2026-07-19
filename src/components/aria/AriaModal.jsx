@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useAriaChat } from '../../hooks/useAriaChat.js'
 import { AriaQuiz } from './AriaQuiz.jsx'
+import { StudyScheduleRenderer } from './StudyScheduleRenderer.jsx'
 
 function TypingDots() {
   return (
@@ -66,22 +67,26 @@ export function AriaModal({ open, onClose }) {
             </div>
           ) : null}
 
-          {messages.map((message, i) => (
-            <div
-              className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-              key={i}
-            >
+          {messages.map((message, i) => {
+            const isSchedule = message.tool === 'create_study_schedule' && message.toolData
+            return (
               <div
-                className={`max-w-[82%] px-4 py-2.5 text-sm leading-relaxed ${
-                  message.role === 'user'
-                    ? 'bg-gold-500 text-ink-950'
-                    : 'border border-line bg-ink-900 text-paper'
-                }`}
+                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                key={i}
               >
-                {message.content}
+                <div
+                  className={`${isSchedule ? 'w-full' : 'max-w-[82%]'} px-4 py-2.5 text-sm leading-relaxed ${
+                    message.role === 'user'
+                      ? 'bg-gold-500 text-ink-950'
+                      : 'border border-line bg-ink-900 text-paper'
+                  }`}
+                >
+                  {message.content}
+                  {isSchedule ? <StudyScheduleRenderer schedule={message.toolData} /> : null}
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
 
           {quiz ? (
             <AriaQuiz

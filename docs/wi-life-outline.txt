@@ -1,0 +1,480 @@
+                                         Wisconsin Life: General and State
+                                                      Series 22-01
+
+                                         100 questions ­ 2-hour time limit
+                                                     July 15, 2022
+
+1.0 Insurance Regulation 35% (35 Items)
+1.1 Licensing
+
+  Purpose (ch. 628 )
+  Persons required to be licensed
+
+        Ref: s. 618.41, ch. 628, s. 628.02(1),
+        s. 628.02(3), s. 628.02(4), s. 628.02(4g), s. 628.02 (4m), s. 628.02 (4p), s. 628.02(5),
+        s. 628.03, s. 628.04, s. 628.49,
+        s. 632.69(1)(b) and (c),
+        s. 632.69(2), s. Ins 6.58, s. Ins 42.01, s. Ins 42.03, s. Ins 47
+  License Requirements
+        Ref: ch. 26, s. 628.03, s. 628.04, s. 628.04(2), s. 628.34, s. 628.51,632.69(1)(b) and (c), 632.69
+        (2), s. Ins 6.59, s. Ins 6.59(4)(a),
+        s. Ins 6.59(4)(c)
+  Record keeping, maintenance, and duration
+    Renewal
+    Continuing education requirements
+    Reinstatement
+    Assumed name
+    Change of address or telephone number
+    Reporting of actions
+        Ref: s. 601.42, s. 628.04, s. 628.08, s. 628.09, s. 628.09(6), s. 628.11, s. Ins 6.57, s. Ins 6.61, s.
+        Ins 6.63(3), s. Ins 28.04(1)(a),
+        s. Ins 28.04(1)(f), s. Ins 28.04(2)(a),
+        s. Ins 28.04(2)(b), s. Ins 28.06(6)
+  Disciplinary actions
+    License termination, suspension, or revocation
+    Monetary forfeiture (fines)
+        Ref: s. 601.31, s. 601.64, s. 628.10(1),
+        s. 628.10(2), s. 628.10(3), s. 628.345(1)(b), s. 628.345(2), s. 628.345(3)(a),
+        s. 628.345(3)(d), s. 628.345(3)(e),
+        s. 628.345(3)(f), s. Ins 6.63
+1.2 State Regulation
+Commissioner's general duties and powers
+    Duties
+        Ref: s. 601.41, s. 601.42
+    Hearings
+        Ref: ch. 227, s. 227.12, s. 601.41, s. 601.62, s. 601.64, s. 628.10, s. Ins 6.59
+    Penalties
+        Ref: s. 601.64, s. 601.65
+    Wisconsin Insurance Security Fund
+        Ref: ch. 227, s. 227.12, s. 601.41, s. 601.41(4), s. 601.42, s. 601.42(4), s. 601.62, s. 601.62(5),
+        s. 601.64, s. 601.64(2), s. 601.64(3),
+        s. 601.64(3)(d), s. 601.64(4), s. 601.65,
+        s. 628.10, s. 628.10(2)(b), s. Ins 6.59, ch. 646
+Company regulation
+
+    Solvency
+    Responsibilities of the insurer
+    Rates
+    Use of Policy forms
+    Readability
+    Producer appointments/terminations
+    Unfair claims, methods, and practices
+    Notice of right to file complaint
+
+        Ref: s. 628.11, s. 628.40, s. 631.20,
+        s. 631.20(3), s. 631.22, s. 631.28, s. Ins 6.07, s. Ins 6.11, s. Ins 6.11(3), s. Ins 6.55,
+        s. Ins 6.55(4)(b), s. Ins 6.57, s. Ins 6.85
+Producer regulation
+    Fiduciary and trust account responsibilities
+    Place of business/records maintenance
+    Compensation of agents
+        Ref: ch. 626 subch. IV
+    Controlled business
+        Ref: s. 628.51
+    Shared commissions
+        Ref: s. 628.61
+    Proper exchange of business
+        Ref: s. 628.32, s. 628.51, s. 628.61, s. Ins 6.66
+Marketing practices
+    Misrepresentation
+        Ref: s. 628.34 (1)
+    False advertising
+        Ref: s. 628.34 (1)
+    Rebating
+        Ref: s. 628.34 (2)
+    Unfair discrimination
+        Ref: s. 628.34 (3)
+    Boycott, coercion, or intimidation
+        Ref: s. 628.34 (4)
+    Illegal inducement
+        Ref: ch. 20, s. 628.34,
+        s. Ins 6.54, s. Ins 6.55,
+        s. Ins 6.67, s. Ins 6.68
+Examination of records
+        Ref: s. 601.43, s. 601.43(1)(b), s. 601.43(1)(c), s. 601.43(2)(a), s. 601.45, s. 601.49,
+        s. Ins 16.01, s. Ins 26.10, s. Ins 26.10(3),
+        s. Ins 28.10, s. Ins 28.10(3)
+General statutes, rules, and regulations affecting insurance contracts
+    Definitions
+    Specific knowledge
+    Misrepresentation/Warranties
+        Ref: s. 628.34
+    Knowledge and acts of the agent
+
+        Ref: s. 628.40
+    Certificates of Insurance
+
+        Ref: s. 628.34, ch. 631, s. 631.08, s. 631.09,
+        s. 631.11, s. 631.28, ch. 632
+Regulation of specific clauses in insurance contracts
+    Cancellation
+        Ref: s. 631.36
+    Renewal/Nonrenewal
+        Ref: s. 631.36
+    Notice of proof of loss
+        Ref: s.631.81
+    Payment of claims
+
+        Ref s. 628.46, s. 631.36, s. 631.43, s. 631.48, s. 631.81, s. 632.36(1 -2), s. Ins 6.11, s. Ins 6.77
+Privacy of Consumer Information
+
+        Ref: s. 610.70, s. Ins 25
+1.3 Federal Regulation
+Fair Credit Reporting Act (15 USC 1681­1681d)
+Fraud and false statements (18 USC 1033, 1034)
+1.4 Wisconsin statutes, rules, and regulations pertinent to life insurance and annuities
+Policy provisions
+
+    Required provisions
+    Variable contract
+    Contestability
+    Assignment
+    Designation of beneficiary
+
+        Ref: s. 632.44, s. 632.45, s. 632.46,
+        s. 632.46(3), s. 632.47, s. 632.48, s. 632.56,
+        s. Ins 2.13(12m)
+Marketing methods and practices
+    Policy replacement
+    Disclosure
+    Unfair practices
+    Life insurance and annuities
+    Proposal
+    Policy summary
+    Advertising
+    Suitability of annuity sales to consumers
+        Ref: s. 601.42, s. 628.34, s. 628.34(1)
+        s. 628.34(9), s. 628.347(1)(e),
+        s. 628.347(2)(a), s. 628.347(2)(b),
+        s. 628.347(2)(dm),
+        s. 628.347(3m), s. 628.347(4), s. 628.347(4m),
+        s. 628.347(5), s. 628.347(7), s. 628.347(8),
+        s. 631.95, s. 632.41 ­ s. 632.695,
+        s. 632.69(1)(j), s. Ins 2.03, s. Ins 2.07,
+        s. Ins 2.07(3)(i), s. Ins 2.07(4), s. Ins 2.07(5), s. Ins 2.07(6), s. Ins 2.07(7), s. Ins 2.09,
+        s. Ins 2.09(6), s. Ins 2.13(12m), s. Ins 2.14,
+        s. Ins 2.15, s. Ins 2.16, s. Ins 2.17,
+        s. Ins 6.54, s. Ins 6.55, s. Ins 6.60(2),
+        s. Ins 6.61, s. Ins 6.67, s. Ins 6.68, s. Ins 6.90, ch. 20
+Life insurance illustration
+        Ref: s. Ins 2.14, s. Ins 2.17
+Interstate insurance product regulation compact
+        Ref: s. 601.58
+2.0 General Insurance 10% (10 Items)
+2.1 Concepts
+Risk management key terms
+    Risk
+    Exposure
+    Hazard
+    Peril
+    Loss
+Methods of handling risk
+    Avoidance
+    Retention
+    Sharing
+    Reduction
+    Transfer
+Elements of insurable risks
+Adverse selection
+Law of large numbers
+Reinsurance
+2.2 Insurers
+Types of insurers
+    Stock companies
+    Mutual companies
+    Fraternal benefit societies
+    Reciprocals
+    Lloyd's associations
+    Risk retention groups
+Private versus government insurers
+Admitted versus nonadmitted insurers
+Domestic, foreign and alien insurers
+Financial status (independent rating services)
+Marketing (distribution) systems
+2.3 Producers and general rules of the agency
+Insurer as principal
+Producer/insurer relationship
+Authority and powers of producer
+    Express
+    Implied
+    Apparent
+    The law of agency
+Responsibilities to the applicant/insured
+2.4 Contracts
+Elements of a legal contract
+    Offer and acceptance
+    Consideration
+    Competent parties
+    Legal purpose
+Distinct characteristics of an insurance contract
+    Contract of adhesion
+    Aleatory contract
+    Personal contract
+    Unilateral contract
+    Conditional contract
+Legal interpretations affecting contracts
+    Ambiguities in a contract of adhesion
+    Reasonable expectations
+    Indemnity
+    Utmost good faith
+    Representations/misrepresentations
+    Warranties
+    Concealment
+    Fraud
+    Waiver and estoppel
+3.0 Life Insurance Basics 10% (10 Items)
+3.1 Insurable Interest
+3.2 Personal uses of life insurance
+    Survivor protection
+    Estate creation
+    Cash accumulation
+    Liquidity
+    Estate conservation
+3.3 Life settlements (including stranger originated life insurance) Ref: s. 632.69
+3.4 Determining amount of personal life insurance
+Human life value approach
+Needs approach
+    Types of information gathered
+    Determining lump-sum needs
+    Planning for income needs
+3.5 Business uses of life insurance
+Buy-sell funding
+Key person
+Executive bonuses
+Deferred compensation funding
+Split dollar plans
+Change of insured provision
+3.6 Classes of life insurance policies
+Group versus individual
+Ordinary versus industrial (home service)
+Permanent versus term
+Participating versus nonparticipating
+
+        Ref: s. 632.62(1), 632.62(2), 632.62(4)
+
+Fixed versus variable life insurance and annuities including regulation of variable products
+3.7 Premiums
+Factors in premium determination
+
+    Mortality
+    Interest
+    Expense
+Premium concepts
+    Net single premium
+    Gross annual premium
+Premium payment mode
+3.8 Licensee responsibilities
+Solicitation and sales presentations
+    Advertising
+    Wisconsin Insurance Security Fund
+    Illustrations
+    Policy summary
+    Buyer's guide
+    Need for variable license to recommend termination
+    Suitability
+    Life insurance policy cost comparison methods
+    Replacement
+    Use and disclosure of insurance information
+Field underwriting
+    Notice of information practices
+    Application procedures
+    Warranties and Representatons
+Policy Delivery
+    Policy review
+    Effective date of coverage
+    Premium collection
+    Statement of good health
+3.9 Individual underwriting by the insurer
+Information sources and regulation
+    Application
+    Licensee report
+    Attending physician statement
+    Investigative consumer (inspection) report
+    Medical Information Bureau (MIB)
+    Medical examinations and lab tests (including HIV consent)
+
+        Ref: s. 631.90, s. Ins 3.53
+Selection criteria and unfair discrimination
+Classification of risks
+
+    Preferred
+    Standard
+    Substandard
+    Declined
+4.0 Life Insurance Policies 12% (12 Items)
+4.1 Term life insurance
+Level term
+    Annual renewable term
+    Level premium term
+Decreasing term
+Increasing term
+4.2 Whole life insurance
+Continuous premium (straight life)
+Limited payment
+Single premium
+4.3 Flexible premium policies
+Adjustable life
+Universal life
+4.4 Specialized policies
+Joint life (first-to-die)
+Juvenile life
+4.5 Group life insurance
+Characteristics of group plans
+Types of plan sponsors
+Group underwriting requirements
+Conversion to individual policy
+5.0 Life Insurance Policy Provisions, Options and Riders 14% (14 Items)
+5.1 Standard provisions
+Ownership
+Assignment
+Entire contract
+Modifications
+Right to examine (free look)
+Payment of premiums
+Grace period
+Reinstatement
+Incontestability
+Misstatement of age and gender
+Policy Exclusions
+Suicide exclusion
+Medical examination; autopsy
+Prohibited provisions including backdating
+5.2 Beneficiaries
+Designation options
+    Individuals
+    Classes
+    Estates
+    Minors
+    Trusts
+    Primary
+    Contingent
+Beneficiary-Related Clauses
+Revocation at Divorce 30-3-5
+Succession
+Revocable versus irrevocable
+Common disaster clause
+Spendthrift clause
+5.3 Settlement options
+Cash payment
+Interest only
+Fixed-period installments
+Fixed-amount installments
+Life income
+    Single life
+    Joint and survivor
+5.4 Nonforfeiture options
+Cash surrender value
+Extended term
+Reduced paid-up insurance
+5.5 Policy loan and withdrawal options
+Cash loans
+Automatic premium loans
+Withdrawals or partial surrenders
+5.6 Dividend options
+Cash payment
+Reduction of premium payments
+Accumulation at interest
+One-year term option
+Paid-up additions
+5.7 Disability riders
+Waiver of premium
+Waiver of cost of insurance
+Disability income benefit
+Payor benefit life/disability (juvenile insurance)
+5.8 Accelerated (living) benefit provision/rider
+Qualifying events
+Disclosure
+Effect of benefit payment
+Long-Term Care Rider
+5.9 Riders covering additional insureds
+Spouse/other-insured term rider
+Children's term rider
+Family term rider
+5.10 Riders affecting the death benefit amount
+Accidental death
+Guaranteed insurability
+Cost of living
+Return of premium
+6.0 Annuities 10% (10 Items)
+6.1 Annuity principles and concepts
+Accumulation period versus annuity period
+Owner, annuitant and beneficiary
+Insurance aspects of annuities
+6.2 Immediate versus deferred annuities
+Single premium immediate annuities (SPIAs)
+Deferred annuities
+
+    Premium payment options
+    Nonforfeiture
+    Surrender charges
+    Death benefits
+6.3 Annuity (benefit) payment options
+Ref: s.632.435(1)(a)
+Life contingency options
+    Pure life versus life with guaranteed minimum
+    Single life versus multiple life
+Annuities certain (types)
+6.4 Annuity products
+Fixed annuities
+    General account assets
+    Interest rate guarantees (minimum versus current)
+    Level benefit payment amount
+Indexed annuities
+Market value adjusted annuities
+Guaranteed living benefit riders
+Variable annuities
+6.5 Uses of annuities
+Lump-sum settlements
+Qualified retirement plans including group versus individual annuities
+Personal uses
+    Individual retirement annuities (IRAs)
+    Tax-deferred growth
+    Retirement income
+    Education funds
+Long-Term Care Rider
+7.0 Federal Tax Considerations for Life Insurance and Annuities 5% (5 items)
+7.1 Taxation of personal life insurance
+Amounts available to policyowner
+    Cash value increases
+    Premiums
+    Dividends
+    Policy loans
+    Surrenders
+Amounts received by beneficiary
+    General rule and exceptions
+    Settlement options
+Values included in insured's estate
+7.2 Modified endowment contracts (MECs)
+Modified endowment versus life insurance
+Seven-pay test
+Distributions
+7.3 Taxation of non-qualified annuities
+Individually-owned
+    Accumulation phase (tax issues related to withdrawals)
+    Annuity phase and the exclusion ratio
+    Distributions at death
+
+      Values included in the annuitant's estate
+      Amounts received by beneficiary
+Corporate-owned
+7.6 Section 1035 exchanges
+7.4 Taxation of individual retirement accounts (IRAs)
+Traditional IRAs
+    Contributions and deductible amounts
+    Premature distributions (including taxation issues)
+Roth IRAs
+    Contributions and limits
+    Distributions
+7.5 Rollovers and transfers (IRAs and qualified plans)
+8.0 Qualified Plans 4% (4 Items)
+8.1 General requirements
+8.2 Federal tax considerations
+Tax advantages for employers and employees
+Taxation of distributions (age-related)
+8.3 Plan types, characteristics and purchasers
+Simplified employee pensions (SEPs)
+Self-employed plans (HR 10 or Keogh plans)
+Profit-sharing and 401(k) plans
+SIMPLE plans
+403(b) tax-sheltered annuities (TSAs)
+

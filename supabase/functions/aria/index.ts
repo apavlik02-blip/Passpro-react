@@ -18,6 +18,7 @@ import {
   getDefaultProgress,
   updateStudyStreak,
   updateWeakDomains,
+  type OnboardingData,
   type UserProgress,
 } from './progress.ts'
 import {
@@ -75,6 +76,42 @@ function detectIntent(message: string): { tool?: string; params?: Record<string,
   }
 
   return {}
+}
+
+const ONBOARDING_EXAM_TYPES = ['life', 'health', 'both']
+
+function sanitizeOnboarding(raw: Record<string, unknown>): OnboardingData {
+  const examType =
+    typeof raw.exam_type === 'string' && ONBOARDING_EXAM_TYPES.includes(raw.exam_type)
+      ? (raw.exam_type as OnboardingData['exam_type'])
+      : null
+  const examDate =
+    typeof raw.exam_date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(raw.exam_date)
+      ? raw.exam_date
+      : null
+  const hours = Number(raw.hours_per_week)
+  const hoursPerWeek = Number.isFinite(hours) && hours > 0 ? Math.min(40, Math.round(hours)) : null
+  const conf = Number(raw.confidence)
+  const confidence = Number.isFinite(conf) ? Math.max(0, Math.min(100, Math.round(conf))) : null
+
+  return {
+    exam_type: examType,
+    exam_date: examDate,
+    hours_per_week: hoursPerWeek,
+    confidence,
+    skipped: raw.skipped === true,
+    completed_at: new Date().toISOString(),
+  }
+}
+
+function isMissingColumnError(error: { code?: string; message?: string } | null): boolean {
+  if (!error) return false
+  // PGRST204: column not found in schema cache (PostgREST); 42703: undefined column (Postgres).
+  return (
+    error.code === 'PGRST204' ||
+    error.code === '42703' ||
+    /onboarding/i.test(error.message ?? '')
+  )
 }
 
 async function getOrCreateProgress(
@@ -172,15 +209,28 @@ Deno.serve(async (req) => {
 
     let userId: string
     try {
-const body = await req.json()
-const { messages, action, payload, context } = body as {
-  messages?: Message[]
-  action?: string
-  payload?: { quizResult: { overall_score: number; domain_scores: Record<string, number> } }
-  context?: string
-}
+      userId = await verifyClerkToken(token)
+    } catch {
+      return json({ type: 'error', message: 'Invalid or expired session' }, 401)
+    }
 
-    if (action === 'submit_quiz_result' && payload) {
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    )
+
+    const body = await req.json()
+    const { messages, action, payload, context } = body as {
+      messages?: Message[]
+      action?: string
+      payload?: {
+        quizResult?: { overall_score: number; domain_scores: Record<string, number> }
+        onboarding?: Record<string, unknown>
+      }
+      context?: string
+    }
+
+    if (action === 'submit_quiz_result' && payload?.quizResult) {
       const progress = await getOrCreateProgress(supabase, userId)
       const updated = await updateProgressAfterQuiz(supabase, userId, progress, payload.quizResult)
       return json({
@@ -188,6 +238,36 @@ const { messages, action, payload, context } = body as {
         data: updated,
         message: `Great job! Your new readiness is ${updated.new_readiness}%.`,
       })
+    }
+
+    if (action === 'save_onboarding' && payload?.onboarding) {
+      const progress = await getOrCreateProgress(supabase, userId)
+      const onboarding = sanitizeOnboarding(payload.onboarding)
+
+      const updates: Record<string, unknown> = { onboarding }
+      if (!onboarding.skipped) {
+        if (onboarding.exam_type) updates.exam_type = onboarding.exam_type
+        if (onboarding.confidence !== null) updates.current_readiness = onboarding.confidence
+      }
+
+      let { error } = await supabase.from('aria_progress').update(updates).eq('user_id', userId)
+      if (error && isMissingColumnError(error)) {
+        // The `onboarding jsonb` column hasn't been migrated yet (see README).
+        // Persist the fields that fit the current schema so nothing hard-fails;
+        // the client also keeps a local completion flag for show-once behavior.
+        const fallback = { ...updates }
+        delete fallback.onboarding
+        if (Object.keys(fallback).length > 0) {
+          ;({ error } = await supabase.from('aria_progress').update(fallback).eq('user_id', userId))
+        } else {
+          error = null
+        }
+      }
+      if (error) {
+        return json({ type: 'error', message: 'Could not save onboarding' }, 500)
+      }
+
+      return json({ type: 'progress', data: { ...progress, ...updates, onboarding } })
     }
 
     if (action === 'get_progress') {
@@ -227,45 +307,57 @@ const { messages, action, payload, context } = body as {
           break
         }
         case 'create_study_schedule': {
+          // Prefer the exam date / weekly hours captured during onboarding;
+          // fall back to the historical defaults (45 days out, 45 min/day).
+          const onboarding = userProgress.onboarding
+          const today = new Date().toISOString().split('T')[0]
+          const fallbackExamDate = new Date(Date.now() + 45 * 86400000).toISOString().split('T')[0]
+          const examDate =
+            onboarding?.exam_date && onboarding.exam_date > today
+              ? onboarding.exam_date
+              : fallbackExamDate
+          const dailyMinutes = onboarding?.hours_per_week
+            ? Math.max(20, Math.min(120, Math.round((onboarding.hours_per_week * 60) / 7 / 5) * 5))
+            : 45
           toolData = createStudySchedule(
-            new Date(Date.now() + 45 * 86400000).toISOString().split('T')[0],
+            examDate,
             userProgress.current_readiness || 50,
             userProgress.weak_domains || ['policy_provisions'],
-     45,
-        )
-        message = 'Personalized study schedule created based on your progress.'
-        break
+            dailyMinutes,
+          )
+          message = 'Personalized study schedule created based on your progress.'
+          break
+        }
+        case 'get_insurance_regulation': {
+          toolData = getInsuranceRegulation(intent.params?.state ?? '', intent.params?.topic ?? '')
+          message = `Wisconsin regulation for ${intent.params?.topic}.`
+          break
+        }
       }
-      case 'get_insurance_regulation': {
-        toolData = getInsuranceRegulation(intent.params?.state ?? '', intent.params?.topic ?? '')
-        message = `Wisconsin regulation for ${intent.params?.topic}.`
-        break // <-- Missing break statement
-      } // <-- Missing closing case bracket
-    } // <-- Missing closing switch statement bracket
 
-    return json({
-      type: 'tool_result',
-      tool: intent.tool,
-      data: toolData,
-      message,
-      current_progress: {
-        readiness: userProgress.current_readiness,
-        weak_domains: userProgress.weak_domains,
-        study_streak: userProgress.study_streak,
-      },
-    })
-  }
+      return json({
+        type: 'tool_result',
+        tool: intent.tool,
+        data: toolData,
+        message,
+        current_progress: {
+          readiness: userProgress.current_readiness,
+          weak_domains: userProgress.weak_domains,
+          streak: userProgress.study_streak,
+        },
+      })
+    }
 
-  let systemPrompt = `You are ARIA, an expert AI coach for the Wisconsin life and health insurance licensing exam. You help students prepare with practice questions, study strategies, concept explanations, and encouragement. Keep responses concise and focused on exam prep. The student's current readiness is ${userProgress.current_readiness}% and their weak areas are: ${userProgress.weak_domains?.join(', ') || 'none identified yet'}.`
+    let systemPrompt = `You are ARIA, an expert AI coach for the Wisconsin life and health insurance licensing exam. You help students prepare with practice questions, study strategies, concept explanations, and encouragement. Keep responses concise and focused on exam prep. The student's current readiness is ${userProgress.current_readiness}% and their weak areas are: ${userProgress.weak_domains?.join(', ') || 'none identified yet'}.`
 
-  if (context) {
-    systemPrompt += ` The student is currently studying the module: ${context}. Direct your primary guidance, definitions, and analogies to match this specific topic blueprint.`
-  }
-const result = await callClaude(messages, systemPrompt)
+    if (context) {
+      systemPrompt += ` The student is currently studying the module: ${context}. Direct your primary guidance, definitions, and analogies to match this specific topic blueprint.`
+    }
+
+    const result = await callClaude(messages, systemPrompt)
     return json(result)
-
   } catch (error) {
     console.error('ARIA function error:', error)
-    return json({ type: 'error', message: error instanceof Error ? error.message : 'Internal Server Error' }, 500)
+    return json({ type: 'error', message: error instanceof Error ? error.message : 'Unknown error' }, 500)
   }
 })

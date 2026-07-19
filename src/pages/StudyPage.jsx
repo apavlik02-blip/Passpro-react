@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { DataStatePanel } from '../components/DataStatePanel.jsx'
 import { humanizeSlug } from '../lib/format.js'
 
@@ -32,9 +33,10 @@ export function StudyPage({ studyModules, loading, error }) {
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
         {studyModules.map((module) => (
-          <article
-            className="border border-line bg-ink-900 p-6 transition hover:border-gold-500/40"
+          <Link
+            className="block border border-line bg-ink-900 p-6 transition hover:border-gold-500/40"
             key={module.id}
+            to={`/study/${module.id}`}
           >
             <p className="mb-2 font-mono text-[11px] font-bold tracking-widest text-gold-500 uppercase">
               {humanizeSlug(module.category)}
@@ -49,7 +51,7 @@ export function StudyPage({ studyModules, loading, error }) {
                 <li key={objective}>{objective}</li>
               ))}
             </ul>
-          </article>
+          </Link>
         ))}
       </div>
 

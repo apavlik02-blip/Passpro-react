@@ -8,11 +8,166 @@ const secondaryButtonClass =
 const primaryButtonClass =
   'inline-flex min-w-[180px] items-center justify-center rounded-sm bg-gold-500 px-5 py-3 text-sm font-semibold text-ink-950 transition hover:bg-gold-400'
 
+function WrongAnswerReview({ questions, answers }) {
+  const wrongAnswers = questions.filter((q) => answers[q.id] !== q.correctOption)
+
+  if (!wrongAnswers.length) {
+    return (
+      <div>
+        <p className="mb-2 font-mono text-[11px] font-bold tracking-widest text-gold-500 uppercase">
+          Incorrect answers
+        </p>
+        <p className="text-muted">Perfect score! No wrong answers to review.</p>
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      <p className="mb-4 font-mono text-[11px] font-bold tracking-widest text-gold-500 uppercase">
+        {wrongAnswers.length} incorrect answers
+      </p>
+      <div className="space-y-4">
+        {wrongAnswers.map((question) => {
+          const givenAnswer = answers[question.id]
+          return (
+            <article className="border border-line bg-ink-900 p-6" key={question.id}>
+              <p className="mb-2 font-mono text-[11px] font-bold tracking-widest text-gold-500 uppercase">
+                {humanizeSlug(question.category)}
+              </p>
+              <h3 className="mb-3 font-serif text-lg font-medium">{question.prompt}</h3>
+
+              <div className="mb-3 space-y-2 border-t border-line/40 pt-3">
+                <p className="text-muted">
+                  <span className="font-mono text-[11px] font-bold tracking-widest uppercase">
+                    Your answer:{' '}
+                  </span>
+                  <span className="text-red-400">{givenAnswer ?? 'Not answered'}</span>
+                </p>
+                <p className="text-muted">
+                  <span className="font-mono text-[11px] font-bold tracking-widest uppercase">
+                    Correct answer:{' '}
+                  </span>
+                  <span className="text-emerald-400">{question.correctOption}</span>
+                </p>
+              </div>
+
+              {question.knowThis && (
+                <div className="mb-3 border-l-2 border-gold-500/50 bg-ink-950 px-4 py-3">
+                  <p className="font-mono text-[11px] font-bold tracking-widest text-gold-500 uppercase">
+                    Key concept
+                  </p>
+                  <p className="text-paper">{question.knowThis}</p>
+                </div>
+              )}
+
+              {question.explanation && (
+                <p className="text-muted text-sm">{question.explanation}</p>
+              )}
+            </article>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+function DomainScoreBreakdown({ questions, answers, blueprint }) {
+  const scoresByDomain = {}
+  const weights = blueprint.weights
+
+  questions.forEach((q) => {
+    const domain = q.category
+    if (!scoresByDomain[domain]) {
+      scoresByDomain[domain] = { correct: 0, total: 0 }
+    }
+    scoresByDomain[domain].total += 1
+    if (answers[q.id] === q.correctOption) {
+      scoresByDomain[domain].correct += 1
+    }
+  })
+
+  const domainRows = Object.entries(weights)
+    .map(([domain, weight]) => {
+      const scores = scoresByDomain[domain] || { correct: 0, total: 0 }
+      const percentScore = scores.total > 0 ? Math.round((scores.correct / scores.total) * 100) : 0
+      const performanceDelta = percentScore - weight
+      return {
+        domain,
+        weight,
+        ...scores,
+        percentScore,
+        performanceDelta,
+      }
+    })
+    .sort((a, b) => b.weight - a.weight)
+
+  return (
+    <div>
+      <p className="mb-4 font-mono text-[11px] font-bold tracking-widest text-gold-500 uppercase">
+        Performance by domain
+      </p>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse border border-line text-sm">
+          <thead>
+            <tr className="border-b border-line bg-ink-900">
+              <th className="border-r border-line px-4 py-3 text-left font-serif text-paper">
+                Domain
+              </th>
+              <th className="border-r border-line px-4 py-3 text-center font-mono text-paper">
+                Score
+              </th>
+              <th className="border-r border-line px-4 py-3 text-center font-mono text-paper">
+                Weight
+              </th>
+              <th className="px-4 py-3 text-left font-mono text-paper">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {domainRows.map((row) => {
+              const isUnderperforming = row.performanceDelta < -10
+              const statusColor = isUnderperforming ? 'text-red-400' : 'text-emerald-400'
+              const statusLabel = isUnderperforming
+                ? `Underperforming (${row.performanceDelta}%)`
+                : `On pace (+${row.performanceDelta}%)`
+
+              return (
+                <tr key={row.domain} className="border-b border-line/40 hover:bg-ink-900/40">
+                  <td className="border-r border-line/40 px-4 py-3 text-paper">
+                    <span className="font-serif">{humanizeSlug(row.domain)}</span>
+                  </td>
+                  <td className="border-r border-line/40 px-4 py-3 text-center font-mono">
+                    <span className={row.percentScore >= row.weight ? 'text-emerald-400' : 'text-muted'}>
+                      {row.correct}/{row.total} ({row.percentScore}%)
+                    </span>
+                  </td>
+                  <td className="border-r border-line/40 px-4 py-3 text-center font-mono text-muted">
+                    {row.weight}%
+                  </td>
+                  <td className={`px-4 py-3 font-mono text-[11px] font-bold ${statusColor}`}>
+                    {statusLabel}
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )
+}
+
 export function ExamRunner({ blueprint, questionBank, onExit }) {
   const exam = useMemo(() => buildExam(blueprint, questionBank), [blueprint, questionBank])
   const [index, setIndex] = useState(0)
   const [answers, setAnswers] = useState({})
   const [submitted, setSubmitted] = useState(false)
+
+  const handleRetake = () => {
+    setIndex(0)
+    setAnswers({})
+    setSubmitted(false)
+  }
 
   const questions = exam.questions
   const currentQuestion = questions[index]
@@ -63,28 +218,43 @@ export function ExamRunner({ blueprint, questionBank, onExit }) {
           />
         ) : null}
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-          {questions.map((question, questionIndex) => {
-            const givenAnswer = answers[question.id]
-            const isCorrect = givenAnswer === question.correctOption
+        <div className="border border-line bg-ink-900 p-6">
+          <DomainScoreBreakdown questions={questions} answers={answers} blueprint={blueprint} />
+        </div>
 
-            return (
-              <article className="border border-line bg-ink-900 p-6" key={question.id}>
-                <p className="mb-2 font-mono text-[11px] font-bold tracking-widest text-gold-500 uppercase">
-                  Question {questionIndex + 1} - {humanizeSlug(question.category)}
-                </p>
-                <h3 className="mb-2 font-serif text-lg font-medium">{question.prompt}</h3>
-                <p className={isCorrect ? 'mb-2 text-emerald-400' : 'mb-2 text-muted'}>
-                  Your answer: {givenAnswer ?? 'Not answered'}{' '}
-                  {isCorrect ? '(correct)' : `(correct answer: ${question.correctOption})`}
-                </p>
-                <p className="text-muted">{question.explanation}</p>
-              </article>
-            )
-          })}
+        <div className="border border-line bg-ink-900 p-6">
+          <WrongAnswerReview questions={questions} answers={answers} />
+        </div>
+
+        <div className="border border-line bg-ink-900 p-6">
+          <p className="mb-4 font-mono text-[11px] font-bold tracking-widest text-gold-500 uppercase">
+            All questions review
+          </p>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            {questions.map((question, questionIndex) => {
+              const givenAnswer = answers[question.id]
+              const isCorrect = givenAnswer === question.correctOption
+
+              return (
+                <article className="border border-line bg-ink-950 p-4" key={question.id}>
+                  <p className="mb-2 font-mono text-[11px] font-bold tracking-widest text-gold-500 uppercase">
+                    Q{questionIndex + 1} - {humanizeSlug(question.category)}
+                  </p>
+                  <h3 className="mb-2 font-serif text-sm font-medium">{question.prompt}</h3>
+                  <p className={isCorrect ? 'text-emerald-400' : 'text-muted'}>
+                    <span className="font-mono text-[10px]">Your answer:</span> {givenAnswer ?? 'Not answered'}{' '}
+                    {isCorrect ? '(correct)' : `(correct: ${question.correctOption})`}
+                  </p>
+                </article>
+              )
+            })}
+          </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
+          <button className={primaryButtonClass} onClick={handleRetake} type="button">
+            Retake exam with fresh questions
+          </button>
           <button className={secondaryButtonClass} onClick={onExit} type="button">
             Back to exam picker
           </button>

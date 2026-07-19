@@ -1,6 +1,15 @@
 // Pure helpers for aria_progress — ported from ARIA-AI-Agent's lib/progress.ts,
 // unchanged in logic (no Next.js/Supabase-Auth coupling to strip).
 
+export interface OnboardingData {
+  exam_type: 'life' | 'health' | 'both' | null
+  exam_date: string | null // YYYY-MM-DD
+  hours_per_week: number | null
+  confidence: number | null // 0-100 self-reported baseline
+  skipped: boolean
+  completed_at: string
+}
+
 export interface UserProgress {
   user_id: string
   exam_type?: string
@@ -15,6 +24,9 @@ export interface UserProgress {
   study_streak: number
   last_study_date?: string
   updated_at?: string
+  // Stored in an `onboarding jsonb` column (see README — requires a one-line
+  // migration). Absent/undefined on databases that haven't added the column.
+  onboarding?: OnboardingData | null
 }
 
 export interface QuizResult {

@@ -4,6 +4,7 @@ import { useUser } from '@clerk/clerk-react'
 import { Sidebar } from './Sidebar.jsx'
 import { SiteFooter } from './SiteFooter.jsx'
 import { AriaModal } from '../aria/AriaModal.jsx'
+import { OnboardingFlow } from '../aria/OnboardingFlow.jsx'
 
 export function MemberLayout({ stripePaymentLinkUrl }) {
   const { user } = useUser()
@@ -72,6 +73,7 @@ export function MemberLayout({ stripePaymentLinkUrl }) {
       </div>
 
       <AriaModal onClose={() => setAriaOpen(false)} open={ariaOpen} />
+      <OnboardingFlow />
     </div>
   )
 }

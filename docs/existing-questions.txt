@@ -1,0 +1,163 @@
+Existing questions in public.questions as of 2026-07-18 (domain: question).
+New questions MUST NOT duplicate these concepts verbatim; testing the same topic from a different angle is fine.
+NOTE: several exact duplicates exist in this list — they also exist in the DB and should be deduplicated.
+
+aca_hipaa: Contributions to a Flexible Spending Account (FSA) are generally subject to which rule regarding unused funds at year-end?
+aca_hipaa: HIPAA's guaranteed issue and creditable coverage provisions were primarily designed to:
+aca_hipaa: Premium tax credits under the ACA marketplace are designed to:
+aca_hipaa: Under the Affordable Care Act, "guaranteed issue" in the individual market means insurers must generally:
+aca_hipaa: Under the Affordable Care Act, health plans sold on the exchange are categorized into which coverage levels based on actuarial value?
+annuities: A joint and survivor annuity settlement option:
+annuities: An annuity purchased with a single premium that begins making payments within one year of purchase is called a(n):
+annuities: An indexed annuity credits interest based on:
+annuities: The accumulation period of a deferred annuity ends and payments begin at:
+annuities: The period during which an annuity owner makes payments into the contract before income begins is the:
+annuities: Under Wisconsin suitability rules, before recommending an annuity purchase or exchange, a producer must primarily consider:
+annuities: Which annuity feature allows the owner to withdraw a limited percentage of the contract value each year without incurring a surrender charge?
+annuities: Which annuity guarantees both a minimum interest rate and fixed periodic payments at annuitization?
+annuities: Which settlement option continues payments for as long as the annuitant lives, but stops at death?
+dental: A dental plan requiring pre-approval of a treatment plan and estimated benefit amount before major work begins uses:
+dental: Braces and other treatments to correct teeth alignment fall under:
+dental: Root canal treatment falls under which category of dental care?
+dental: Routine cleanings, exams, and X-rays fall under which category of dental treatment?
+dental: Treatment of the gums and supporting structures of the teeth is classified as:
+disability_income: A "residual disability" benefit is designed to pay a partial benefit when the insured:
+disability_income: A business disability policy that reimburses fixed business expenses (like rent and utilities) while the owner is disabled is called:
+disability_income: A disability income policy that pays benefits only if the insured cannot perform the duties of their own occupation uses which definition of disability?
+disability_income: A disability income rider allowing the insured to purchase additional coverage in the future without new medical evidence is the:
+disability_income: A disability income rider that adjusts monthly benefits upward over time to keep pace with inflation is the:
+disability_income: A disability policy's "presumptive disability" provision typically provides full benefits automatically upon:
+disability_income: An "own occupation" disability definition is generally considered more favorable to the insured than an "any occupation" definition because:
+disability_income: Social Security disability benefits require the applicant to be unable to perform:
+disability_income: The waiting period between the onset of disability and when benefits begin is called the:
+general_insurance: A characteristic increasing the probability of loss, such as a smoker's habit, is called a:
+general_insurance: A contract provision that is ambiguous will generally be interpreted against the party who drafted it. In insurance, this favors the insured because insurance contracts are: [DUPLICATED IN DB]
+general_insurance: A fraternal benefit society differs from a mutual insurer primarily because it:
+general_insurance: A producer who exceeds their express authority but whose actions are reasonably necessary to carry out that express authority is acting under: [DUPLICATED IN DB]
+general_insurance: A producer's authority that arises because the public reasonably believes the producer has authority, based on the insurer's actions, is called:
+general_insurance: An insurance contract in which only the insurer makes a legally enforceable promise is best described as:
+general_insurance: An insurer licensed and domiciled in Wisconsin, doing business only in Wisconsin, is classified for that state as a: [DUPLICATED IN DB]
+general_insurance: An insurer owned by its policyholders, who may receive dividends, is a:
+general_insurance: An insurer that transfers part of the risk it has assumed to another insurer is engaging in: [DUPLICATED IN DB]
+general_insurance: An insurer's deliberate concealment of a material fact when issuing a policy could constitute grounds for the insured to claim:
+general_insurance: The characteristic of an insurance contract where the dollar values exchanged are unequal is called:
+general_insurance: The statistical principle that predicting losses becomes more accurate as the number of similar exposure units increases is the: [DUPLICATED IN DB]
+general_insurance: The tendency of higher-risk individuals to seek insurance more often than lower-risk individuals is called: [DUPLICATED IN DB]
+general_insurance: What is insurable interest in life insurance generally required to exist?
+general_insurance: What is the term for the cause of loss, such as fire, accident, or illness?
+group_health: A group health plan's "no-loss, no-gain" provision when changing insurers is intended to:
+group_health: A Multiple Employer Trust (MET) or Multiple Employer Welfare Arrangement (MEWA) is used to:
+group_health: A small employer group health plan is generally defined, for state regulation purposes, based on which characteristic?
+group_health: Experience rating, as opposed to community rating, sets group health premiums based primarily on:
+group_health: Under COBRA, a qualified beneficiary who loses coverage due to divorce from the covered employee may generally continue group coverage for up to:
+group_health: Under ERISA, a group health plan sponsor's fiduciary responsibility primarily requires the sponsor to:
+group_health: Under federal COBRA rules, a qualified beneficiary who loses group coverage due to termination of employment may generally continue coverage for up to how many months?
+health_basics: A "statement of good health" required at policy delivery is used to confirm:
+health_basics: A common exclusion found in individual health policies is:
+health_basics: A health insurance policy that pays benefits only for a specifically named illness, such as cancer, is a:
+health_basics: Blanket accident insurance is most commonly used to cover:
+health_basics: Under most individual health policies, how long can an insurer typically contest a claim based on misstatements after the policy has been in force, absent fraud?
+health_basics: What is the fixed dollar amount an insured pays for a covered service at the time of care called?
+health_basics: Which provision prevents an insured from collecting more than the actual loss when covered by multiple health plans?
+health_plan_types: A "point of service" (POS) plan combines features of which two plan types?
+health_plan_types: A dental plan that pays a fixed dollar amount for each covered procedure regardless of the dentist's actual charge is a:
+health_plan_types: An EPO (Exclusive Provider Organization) health plan is best described as:
+health_plan_types: To be eligible to contribute to a Health Savings Account, an individual must be enrolled in what type of plan?
+health_plan_types: Under a defined contribution health plan arrangement, the employer's primary role is to:
+health_plan_types: Which category of dental treatment includes fillings and crowns to repair damaged teeth?
+health_plan_types: Which health plan generally requires members to select a primary care physician and obtain referrals for specialist care?
+health_plan_types: Which plan type allows members to see out-of-network providers at a higher cost without a referral?
+insurance_regulation: A producer who fails to maintain a separate fiduciary account for premiums collected on behalf of an insurer has violated:
+insurance_regulation: A producer who shares commissions on an accident and health policy with an unlicensed referral source has likely violated:
+insurance_regulation: HIPAA's federal privacy and security rules for health information are enforced primarily through requirements on:
+insurance_regulation: How many hours of continuing education must a Wisconsin resident producer complete biennially, including ethics? [DUPLICATED IN DB]
+insurance_regulation: How often must a Wisconsin resident intermediary license generally be renewed? [DUPLICATED IN DB]
+insurance_regulation: Sharing commissions with an unlicensed individual for referring insurance business is generally:
+insurance_regulation: The Fair Credit Reporting Act primarily regulates:
+insurance_regulation: Under 18 USC 1033/1034, a person convicted of a felony involving dishonesty generally may not engage in the business of insurance unless:
+insurance_regulation: Under Wisconsin law, an insurer's use of an outline of coverage for individual health policies is intended primarily to:
+insurance_regulation: Under Wisconsin law, an insurer's use of policy forms and rates is primarily reviewed to ensure:
+insurance_regulation: Under Wisconsin's independent review provisions for health insurance, a policyholder who disagrees with a denied claim based on medical necessity may generally:
+life_basics: "Estate conservation" as a personal use of life insurance primarily refers to using policy proceeds to:
+life_basics: A life settlement involves:
+life_basics: Executive bonus plans (Section 162 plans) provide life insurance to a key executive by:
+life_basics: In a split-dollar life insurance arrangement between an employer and employee, the parties typically share:
+life_basics: The "human life value" approach to determining life insurance needs primarily estimates:
+life_basics: Under the "needs approach" to determining life insurance amounts, an agent primarily gathers information about:
+life_basics: Which concept requires that a person purchasing life insurance on another person have a financial or emotional stake in that person's continued life?
+life_basics: Which underwriting classification is typically assigned to an applicant with a health condition that increases risk but does not warrant decline?
+life_types: A business purchases life insurance on a key employee to protect against financial loss from that employee's death. This is an example of:
+life_types: A joint life ("first-to-die") policy pays the death benefit:
+life_types: A juvenile life insurance policy is characterized by:
+life_types: A policy combining term insurance with a side fund resembling an increasing whole life design is best known as:
+life_types: A term life policy in which the death benefit decreases over the policy period, often used to cover a mortgage balance, is:
+life_types: Group life insurance master contracts are typically issued to:
+life_types: When a group life insurance certificate holder leaves employment, they generally have the right to convert their group coverage to:
+life_types: Which factor most directly affects group life underwriting requirements compared to individual underwriting?
+life_types: Which life insurance policy builds cash value and has level premiums?
+life_types: Which life insurance rider accelerates a portion of the death benefit if the insured is diagnosed with a terminal illness?
+life_types: Which policy feature is most closely associated with universal life insurance?
+life_types: Which policy is designed primarily for temporary protection over a stated number of years?
+life_types: Which whole life premium structure requires premiums to be paid for a limited number of years, after which the policy is fully paid-up?
+ltc: A tax-qualified long-term care insurance policy generally must use which standard for triggering benefit eligibility?
+ltc: Adult day care, as an LTC benefit, is designed to:
+ltc: An inflation protection rider on a long-term care policy is designed to:
+ltc: Custodial care, as a level of long-term care, primarily involves:
+ltc: Long-term care policy benefits are most commonly triggered by the inability to perform a certain number of which of the following?
+ltc: Respite care, as a long-term care insurance benefit, is intended to:
+medicaid: A person who qualifies for both Medicare and Medicaid is often referred to as:
+medicaid: Medicaid eligibility and funding are primarily based on which factor, unlike Medicare?
+medicaid: Medicaid eligibility is primarily determined based on:
+medicaid: Medicaid is jointly funded by which two levels of government?
+medical_plans: A "usual, customary, and reasonable" (UCR) charge basis is used primarily to:
+medical_plans: A defined contribution health plan arrangement most closely resembles which retirement plan concept?
+medical_plans: A Health Reimbursement Arrangement (HRA) differs from a Health Savings Account (HSA) primarily because an HRA is:
+medical_plans: A stop-loss provision in a major medical plan primarily limits:
+medical_plans: Under a PPO plan, choosing an out-of-network provider typically results in:
+medical_plans: Under HIPAA, "creditable coverage" refers to:
+medical_plans: Utilization management techniques such as prospective and concurrent review are primarily used to:
+medicare: A Medicare beneficiary's Medigap open enrollment period, during which they cannot be medically underwritten, generally begins when they:
+medicare: Medicare Advantage plans are also known as which part of Medicare?
+medicare: Medicare Part D primarily provides coverage for:
+medicare: Medicare Supplement (Medigap) policies are standardized into lettered plans by which entity?
+medicare: When an individual is covered by both an employer group health plan and Medicare due to continued active employment, which plan usually pays primary for a large employer group?
+medicare: Which part of Medicare is administered directly by private insurance companies approved by Medicare, bundling Parts A and B and often adding extra benefits?
+medicare: Which part of Medicare primarily covers inpatient hospital care?
+policy_provisions: A dividend option in which dividends purchase small amounts of additional whole life coverage is called:
+policy_provisions: A guaranteed insurability rider allows the policyowner to:
+policy_provisions: A settlement option that pays a fixed dollar amount each period until the proceeds and interest are exhausted is the:
+policy_provisions: The clause preventing an insurer from denying a claim based on statements in the application after a policy has been in force for a specified period (absent fraud) is the:
+policy_provisions: The provision giving a new policyowner a limited time to review and return a policy for a full premium refund is the:
+policy_provisions: The provision voiding a life insurance claim if the insured dies by suicide within a specified period, typically refunding only premiums paid, is the:
+policy_provisions: The rider that waives the requirement to pay premiums if the policyowner becomes totally disabled is the:
+policy_provisions: What is the standard grace period for Wisconsin life insurance policies?
+policy_provisions: Which clause states that the policy, application, and any attached riders make up the entire agreement between insurer and insured?
+policy_provisions: Which nonforfeiture option provides extended term coverage using the existing cash value as a single premium?
+policy_provisions: Which option allows a lapsed life policy to be restored after proof of insurability and payment of overdue premiums?
+qualified_plans: A 403(b) tax-sheltered annuity plan is typically available to employees of:
+qualified_plans: A Keogh (HR-10) plan is designed primarily for:
+qualified_plans: A key requirement for a retirement plan to receive favorable tax-qualified status is that it must:
+qualified_plans: A retirement plan funded solely by employer contributions on a discretionary basis, allowing contribution amounts to vary year to year, is most likely a:
+qualified_plans: A Simplified Employee Pension (SEP) plan allows:
+qualified_plans: Contributions to a traditional IRA are generally made with which type of dollars, assuming full deductibility?
+qualified_plans: Required minimum distributions (RMDs) from a traditional IRA must generally begin by what age under current federal rules?
+taxation: A life insurance policy that fails the 7-pay test and becomes a Modified Endowment Contract (MEC) loses which favorable tax treatment?
+taxation: A tax-free exchange of one life insurance policy or annuity for another, without triggering current taxation of gain, is permitted under:
+taxation: Employer-paid premiums for group long-term disability insurance are generally:
+taxation: If a life insurance policy is transferred for valuable consideration to a party without an insurable interest exception, the death benefit may become:
+taxation: If an employee pays their own disability income premiums with after-tax dollars, benefits received during a claim are generally:
+taxation: Life insurance death benefits paid to a named beneficiary are generally:
+taxation: Under the 7-pay test, a life insurance policy becomes a Modified Endowment Contract (MEC) if:
+taxation: What tax concept determines the portion of each annuity payment that is received income-tax free?
+wisconsin_health_regulation: Under Wisconsin insurance law, coverage for treatment of temporomandibular joint (TMJ) disorders is:
+wisconsin_health_regulation: Under Wisconsin law, insurers offering individual health policies must generally provide coverage for which mandated benefit related to childhood health?
+wisconsin_health_regulation: Which of the following is a Wisconsin-mandated health insurance benefit that must generally be included in group health policies?
+wisconsin_health_regulation: Wisconsin law generally requires small employers offering group health coverage to make continuation coverage available to employees for how many months after group eligibility ends, when the employee is not eligible for COBRA?
+wisconsin_regulation: An insurance company using its position to force a client to buy insurance from a particular producer in order to get a loan approved is committing:
+wisconsin_regulation: In Wisconsin, an insurance producer who deliberately induces a policyholder to lapse or surrender a policy through misrepresentation is engaged in:
+wisconsin_regulation: Under Wisconsin insurance law, an insurer's license to transact business can be revoked by which entity?
+wisconsin_regulation: Under Wisconsin law, an insurer's decision to nonrenew an individual life insurance policy is generally subject to which requirement?
+wisconsin_regulation: Under Wisconsin law, rebating in life insurance is generally:
+wisconsin_regulation: What is the standard free-look period for a new Wisconsin life insurance policy?
+wisconsin_regulation: Which item is NOT covered by the Wisconsin Insurance Security Fund?
+wisconsin_regulation: Wisconsin's Interstate Insurance Product Regulation Compact primarily affects which type of products?

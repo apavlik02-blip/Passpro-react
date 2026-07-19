@@ -20,6 +20,7 @@ import { PrivacyPage } from './pages/PrivacyPage.jsx'
 import { RefundPage } from './pages/RefundPage.jsx'
 import { DashboardPage } from './pages/DashboardPage.jsx'
 import { StudyPage } from './pages/StudyPage.jsx'
+import { StudyLessonPage } from './pages/StudyLessonPage.jsx'
 import { PracticeExamPage } from './pages/PracticeExamPage.jsx'
 import { ProgressPage } from './pages/ProgressPage.jsx'
 import { AccountPage } from './pages/AccountPage.jsx'
@@ -135,6 +136,16 @@ function App({ clerkEnabled, stripePaymentLinkUrl }) {
                   path="/study"
                   element={
                     <StudyPage
+                      error={error}
+                      loading={loading}
+                      studyModules={studyModules}
+                    />
+                  }
+                />
+                <Route
+                  path="/study/:moduleId"
+                  element={
+                    <StudyLessonPage
                       error={error}
                       loading={loading}
                       studyModules={studyModules}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useAuth } from '@clerk/clerk-react'
 import { supabaseFunctionUrl } from '../lib/supabaseFunctions.js'
 
@@ -42,5 +42,28 @@ export function useAriaProgress() {
     }
   }, [getToken])
 
-  return { progress, loading, configured: Boolean(ariaFunctionUrl()) }
+  // Persists first-run onboarding answers (target exam, exam date, hours/week,
+  // confidence) through the aria Edge Function — service-role writes only, the
+  // browser never touches aria_progress directly.
+  const saveOnboarding = useCallback(
+    async (onboarding) => {
+      const url = ariaFunctionUrl()
+      if (!url) return null
+      const token = await getToken()
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ action: 'save_onboarding', payload: { onboarding } }),
+      })
+      const data = await res.json()
+      if (data.type !== 'progress') {
+        throw new Error(data.message || 'Could not save onboarding')
+      }
+      setProgress(data.data)
+      return data.data
+    },
+    [getToken],
+  )
+
+  return { progress, loading, configured: Boolean(ariaFunctionUrl()), saveOnboarding }
 }

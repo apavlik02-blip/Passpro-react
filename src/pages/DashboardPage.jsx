@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import PremiumRouteGuard from '../../components/PremiumRouteGuard.jsx'
+import PremiumRouteGuard from '../components/PremiumRouteGuard.jsx'
 import { useOutletContext } from 'react-router-dom'
-import AudioBriefButton from '../../components/AudioBriefButton.tsx'
 import { DataStatePanel } from '../components/DataStatePanel.jsx'
 import { AriaReadinessWidget } from '../components/aria/AriaReadinessWidget.jsx'
 import { practiceExamConfig } from '../lib/constants.js'
@@ -120,8 +119,6 @@ const [activeModule, setActiveModule] = useState(studyModules[0] || null)
 
       <AriaReadinessWidget onOpenAria={openAria} />
 
-      <AudioBriefButton topics={['HMO Gatekeepers', 'Wisconsin Replacement Rules']} />
-
       <LedgerSection
         emptyMessage="No study modules found in Supabase yet."
         eyebrow="Study plan"
@@ -131,7 +128,6 @@ const [activeModule, setActiveModule] = useState(studyModules[0] || null)
           value: `${module.estimatedMinutes} min`,
         }))}
       />
-=======
 
       <LedgerSection
         emptyMessage="No question categories found in Supabase yet."
