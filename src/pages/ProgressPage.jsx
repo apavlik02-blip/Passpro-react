@@ -1,5 +1,4 @@
 import { DataStatePanel } from '../components/DataStatePanel.jsx'
-import { practiceExamConfig } from '../lib/constants.js'
 
 function StatCard({ label, value, hint }) {
   return (
@@ -69,16 +68,6 @@ export function ProgressPage({
         />
       </div>
 
-      <article className="border border-line bg-ink-900 p-6">
-        <p className="mb-3 font-mono text-[11px] font-bold tracking-widest text-gold-500 uppercase">
-          Next milestones
-        </p>
-        <ul className="space-y-2 text-paper">
-          <li>Expand the question bank toward {practiceExamConfig.questionCount}+ prompts</li>
-          <li>Add a `user_progress` table for saved scores, attempts, and streaks</li>
-          <li>Sync Stripe access state with Supabase user records</li>
-        </ul>
-      </article>
     </section>
   )
 }
