@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { buildExam } from '../../lib/examBlueprints.js'
 import { humanizeSlug } from '../../lib/format.js'
+import { useAriaProgress } from '../../hooks/useAriaProgress.js'
 import { DataStatePanel } from '../DataStatePanel.jsx'
 
 const secondaryButtonClass =
@@ -162,11 +163,39 @@ export function ExamRunner({ blueprint, questionBank, onExit }) {
   const [index, setIndex] = useState(0)
   const [answers, setAnswers] = useState({})
   const [submitted, setSubmitted] = useState(false)
+  const { submitQuizResult } = useAriaProgress()
 
   const handleRetake = () => {
     setIndex(0)
     setAnswers({})
     setSubmitted(false)
+  }
+
+  const handleSubmit = () => {
+    setSubmitted(true)
+
+    const totals = {}
+    let correctCount = 0
+    exam.questions.forEach((question) => {
+      const domain = question.category
+      totals[domain] ??= { correct: 0, total: 0 }
+      totals[domain].total += 1
+      if (answers[question.id] === question.correctOption) {
+        totals[domain].correct += 1
+        correctCount += 1
+      }
+    })
+    const domainScores = Object.fromEntries(
+      Object.entries(totals).map(([domain, { correct, total }]) => [
+        domain,
+        Math.round((correct / total) * 100),
+      ]),
+    )
+
+    submitQuizResult({
+      overall_score: Math.round((correctCount / exam.questions.length) * 100),
+      domain_scores: domainScores,
+    })
   }
 
   const questions = exam.questions
@@ -319,7 +348,7 @@ export function ExamRunner({ blueprint, questionBank, onExit }) {
             Next
           </button>
         ) : (
-          <button className={primaryButtonClass} onClick={() => setSubmitted(true)} type="button">
+          <button className={primaryButtonClass} onClick={handleSubmit} type="button">
             Submit exam
           </button>
         )}

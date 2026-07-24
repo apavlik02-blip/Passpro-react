@@ -159,19 +159,7 @@ function App({ clerkEnabled }) {
                     />
                   }
                 />
-                <Route
-                  path="/progress"
-                  element={
-                    <ProgressPage
-                      categories={categories}
-                      error={error}
-                      loading={loading}
-                      questionBank={questionBank}
-                      studyModules={studyModules}
-                      totalEstimatedMinutes={totalEstimatedMinutes}
-                    />
-                  }
-                />
+                <Route path="/progress" element={<ProgressPage />} />
               </Route>
               <Route path="/account" element={<AccountPage />} />
             </Route>

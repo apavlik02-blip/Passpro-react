@@ -65,5 +65,46 @@ export function useAriaProgress() {
     [getToken],
   )
 
-  return { progress, loading, configured: Boolean(ariaFunctionUrl()), saveOnboarding }
+  // Records a finished practice exam (or ARIA quiz) so readiness, weak
+  // domains, streak, and attempt history update server-side. Fire-and-forget
+  // friendly: resolves null on any failure so exam results still render.
+  const submitQuizResult = useCallback(
+    async (quizResult) => {
+      const url = ariaFunctionUrl()
+      if (!url) return null
+      try {
+        const token = await getToken()
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ action: 'submit_quiz_result', payload: { quizResult } }),
+        })
+        const data = await res.json()
+        if (data.type !== 'progress_updated') return null
+        setProgress((prev) =>
+          prev
+            ? {
+                ...prev,
+                current_readiness: data.data.new_readiness,
+                weak_domains: data.data.weak_domains,
+                study_streak: data.data.study_streak,
+                last_quiz_score: quizResult.overall_score,
+              }
+            : prev,
+        )
+        return data.data
+      } catch {
+        return null
+      }
+    },
+    [getToken],
+  )
+
+  return {
+    progress,
+    loading,
+    configured: Boolean(ariaFunctionUrl()),
+    saveOnboarding,
+    submitQuizResult,
+  }
 }
