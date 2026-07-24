@@ -41,7 +41,8 @@ Deno.serve(async (req) => {
   let userId: string
   try {
     userId = await verifyClerkToken(token)
-  } catch {
+  } catch (err) {
+    console.error('clerk verification failed:', err instanceof Error ? err.message : String(err))
     return json({ error: 'Invalid or expired session' }, 401)
   }
 
