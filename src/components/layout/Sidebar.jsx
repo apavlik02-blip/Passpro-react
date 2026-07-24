@@ -24,6 +24,16 @@ const navItems = [
     ),
   },
   {
+    to: '/flashcards',
+    label: 'Flashcards',
+    icon: (
+      <>
+        <rect height="12" width="14" x="3" y="9" />
+        <path d="M7 5h14v12" />
+      </>
+    ),
+  },
+  {
     to: '/progress',
     label: 'Progress',
     icon: <path d="M3 3v18h18M7 15l4-4 3 3 5-6" />,

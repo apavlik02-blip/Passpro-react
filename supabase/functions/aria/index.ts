@@ -27,6 +27,11 @@ import {
   generatePracticeQuestions,
   getInsuranceRegulation,
 } from './tools.ts'
+import {
+  FLASHCARD_RATINGS,
+  scheduleNextReview,
+  type FlashcardRating,
+} from './flashcards.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -226,8 +231,48 @@ Deno.serve(async (req) => {
       payload?: {
         quizResult?: { overall_score: number; domain_scores: Record<string, number> }
         onboarding?: Record<string, unknown>
+        cardId?: string
+        rating?: string
       }
       context?: string
+    }
+
+    if (action === 'get_flashcards') {
+      const { data, error } = await supabase
+        .from('flashcard_reviews')
+        .select('card_id, interval_days, ease, reps, next_review')
+        .eq('user_id', userId)
+      if (error) {
+        console.error('get_flashcards failed:', error)
+        return json({ type: 'error', message: 'Could not load flashcard progress' }, 500)
+      }
+      return json({ type: 'flashcards', data: data ?? [] })
+    }
+
+    if (action === 'rate_flashcard' && payload?.cardId) {
+      const rating = payload.rating as FlashcardRating
+      if (!FLASHCARD_RATINGS.includes(rating)) {
+        return json({ type: 'error', message: 'Invalid rating' }, 400)
+      }
+      const { data: previous } = await supabase
+        .from('flashcard_reviews')
+        .select('interval_days, ease, reps')
+        .eq('user_id', userId)
+        .eq('card_id', payload.cardId)
+        .maybeSingle()
+      const next = scheduleNextReview(previous, rating)
+      const row = {
+        user_id: userId,
+        card_id: payload.cardId,
+        ...next,
+        updated_at: new Date().toISOString(),
+      }
+      const { error } = await supabase.from('flashcard_reviews').upsert(row)
+      if (error) {
+        console.error('rate_flashcard upsert failed:', error)
+        return json({ type: 'error', message: 'Could not save your rating' }, 500)
+      }
+      return json({ type: 'flashcard_rated', data: { card_id: payload.cardId, ...next } })
     }
 
     if (action === 'submit_quiz_result' && payload?.quizResult) {

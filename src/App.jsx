@@ -22,6 +22,7 @@ import { DashboardPage } from './pages/DashboardPage.jsx'
 import { StudyPage } from './pages/StudyPage.jsx'
 import { StudyLessonPage } from './pages/StudyLessonPage.jsx'
 import { PracticeExamPage } from './pages/PracticeExamPage.jsx'
+import { FlashcardsPage } from './pages/FlashcardsPage.jsx'
 import { ProgressPage } from './pages/ProgressPage.jsx'
 import { AccountPage } from './pages/AccountPage.jsx'
 
@@ -157,6 +158,12 @@ function App({ clerkEnabled }) {
                       loading={loading}
                       questionBank={questionBank}
                     />
+                  }
+                />
+                <Route
+                  path="/flashcards"
+                  element={
+                    <FlashcardsPage error={error} loading={loading} questionBank={questionBank} />
                   }
                 />
                 <Route path="/progress" element={<ProgressPage />} />
