@@ -7,7 +7,7 @@
 // https://your-app.clerk.accounts.dev or a custom domain — found in the
 // Clerk dashboard under API Keys / Advanced).
 //
-// Shared across functions (aria, entitlement) — do not duplicate.
+// Shared across functions (aria, entitlement, access) — do not duplicate.
 
 import { createRemoteJWKSet, jwtVerify } from 'https://esm.sh/jose@5.9.6'
 

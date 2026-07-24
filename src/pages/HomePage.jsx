@@ -6,9 +6,7 @@ import {
   UserButton,
 } from '@clerk/clerk-react'
 import { NavLink } from 'react-router-dom'
-import { CheckoutButton } from '../components/CheckoutButton.jsx'
 import { SiteFooter } from '../components/layout/SiteFooter.jsx'
-import { subscriptionPrice } from '../lib/constants.js'
 
 const included = [
   'Guided study modules covering every exam topic',
@@ -17,7 +15,6 @@ const included = [
 ]
 
 export function HomePage({
-  stripePaymentLinkUrl,
   studyModuleCount,
   questionCount,
   supabaseConfigured,
@@ -69,7 +66,7 @@ export function HomePage({
         </h1>
         <p className="mb-9 max-w-[60ch] text-lg leading-relaxed text-muted">
           Study guided modules, practice with real exam-style questions, and track your progress
-          until you're ready to sit — full access for {subscriptionPrice}.
+          until you're ready to sit.
         </p>
 
         <div className="mb-14 flex flex-wrap items-center gap-3">
@@ -98,7 +95,6 @@ export function HomePage({
             >
               Open member dashboard
             </NavLink>
-            <CheckoutButton stripePaymentLinkUrl={stripePaymentLinkUrl} />
           </SignedIn>
         </div>
 

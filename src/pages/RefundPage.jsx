@@ -5,23 +5,21 @@ import { SiteFooter } from '../components/layout/SiteFooter.jsx'
 
 const sections = [
   {
-    title: '7-day money-back guarantee',
+    title: 'PassPro is currently free to use',
     body: [
-      // TODO(Alex): confirm refund terms (window length + usage threshold) before launch.
-      'If PassPro is not the right fit, you can request a full refund within 7 days of purchase, provided you have completed less than one full practice exam.',
-      'To request a refund, email us with the address associated with your account. Refunds are issued to the original payment method via Stripe and typically appear within 5–10 business days.',
+      'Access to PassPro is currently granted by access code, free of charge. Because no payment is collected, there is nothing to refund.',
     ],
   },
   {
-    title: 'When refunds are not available',
+    title: 'If we introduce paid access',
     body: [
-      'Refunds are not available more than 7 days after purchase, after one or more full practice exams have been completed, or for accounts terminated for violating our Terms of Service (for example, account sharing).',
+      'If PassPro moves to paid access in the future, this page will be updated with the refund terms that apply before any purchase is offered. Any change will not affect access you were already granted by code.',
     ],
   },
   {
     title: 'Questions',
     body: [
-      'If you have a question about a charge or believe you were billed in error, contact us at support@passpro.example.com and we will sort it out.', // TODO: replace placeholder contact email before launch
+      'If you believe you were charged in connection with PassPro, contact us at agilifesolutions@gmail.com and we will sort it out.',
     ],
   },
 ]
@@ -30,7 +28,7 @@ export function RefundPage() {
   useDocumentMeta({
     title: 'Refund Policy — PassPro',
     description:
-      'Refund Policy for PassPro — 7-day money-back guarantee details and how to request a refund.',
+      'Refund Policy for PassPro — the service is currently free, access-code based, and collects no payment.',
   })
 
   return (

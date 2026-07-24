@@ -9,21 +9,20 @@ const sections = [
     body: [
       'Account information — your name, email address, and authentication details are collected and managed by Clerk, our authentication provider, when you create an account.',
       'Study progress — your module completion, practice exam scores, readiness metrics, and study activity are stored with Supabase so the app can track your preparation over time.',
-      'Payment information — payments are processed by Stripe. Your card number and payment credentials are handled entirely by Stripe and never touch PassPro servers. We receive only confirmation that a purchase was completed.',
       'AI coaching messages — messages you send to the ARIA study coach are processed via Anthropic’s API to generate responses, and related progress data is stored so coaching can reflect your study history.',
     ],
   },
   {
     title: '2. How we use your information',
     body: [
-      'We use your information to provide the service: authenticating you, saving your study progress, generating personalized coaching, and confirming your purchase.',
-      'We do not sell your personal data. We do not share your personal data with third parties except the service providers named above (Clerk, Supabase, Stripe, Anthropic), each of which processes data on our behalf to operate the service.',
+      'We use your information to provide the service: authenticating you, saving your study progress, generating personalized coaching, and verifying your access to the platform.',
+      'We do not sell your personal data. We do not share your personal data with third parties except the service providers named above (Clerk, Supabase, Anthropic), each of which processes data on our behalf to operate the service.',
     ],
   },
   {
     title: '3. Cookies and local storage',
     body: [
-      'PassPro uses cookies and browser localStorage for essential functionality: keeping you signed in (session management via Clerk) and remembering onboarding state, such as whether you have completed the initial setup flow.',
+      'PassPro uses cookies and browser localStorage for essential functionality: keeping you signed in (session management via Clerk) and remembering onboarding state, such as whether you have completed the initial setup flow. When you unlock the platform with an access code, that unlock is recorded on our servers against your account, not in your browser.',
       'We do not use advertising or cross-site tracking cookies.',
     ],
   },
@@ -36,7 +35,7 @@ const sections = [
   {
     title: '5. Security',
     body: [
-      'We rely on established providers — Clerk for authentication, Supabase for data storage, and Stripe for payments — each of which maintains industry-standard security practices. No method of transmission or storage is completely secure, but we take reasonable measures to protect your information.',
+      'We rely on established providers — Clerk for authentication and Supabase for data storage — each of which maintains industry-standard security practices. No method of transmission or storage is completely secure, but we take reasonable measures to protect your information.',
     ],
   },
   {
@@ -48,7 +47,7 @@ const sections = [
   {
     title: '7. Contact',
     body: [
-      'Questions about this policy or your data? Email us at support@passpro.example.com.', // TODO: replace placeholder contact email before launch
+      'Questions about this policy or your data? Email us at agilifesolutions@gmail.com.',
     ],
   },
 ]

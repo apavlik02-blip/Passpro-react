@@ -5,14 +5,10 @@ import App from './App.jsx'
 import './index.css'
 
 const clerkPublishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
-const stripePaymentLinkUrl = import.meta.env.VITE_STRIPE_PAYMENT_LINK_URL ?? ''
 
 const app = (
   <React.StrictMode>
-    <App
-      clerkEnabled={Boolean(clerkPublishableKey)}
-      stripePaymentLinkUrl={stripePaymentLinkUrl}
-    />
+    <App clerkEnabled={Boolean(clerkPublishableKey)} />
   </React.StrictMode>
 )
 

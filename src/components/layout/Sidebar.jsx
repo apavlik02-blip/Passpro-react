@@ -1,6 +1,5 @@
 import { NavLink } from 'react-router-dom'
 import { UserButton } from '@clerk/clerk-react'
-import { CheckoutButton } from '../CheckoutButton.jsx'
 
 const navItems = [
   {
@@ -57,7 +56,7 @@ function NavIcon({ children }) {
   )
 }
 
-export function Sidebar({ stripePaymentLinkUrl, onNavigate, onOpenAria }) {
+export function Sidebar({ onNavigate, onOpenAria }) {
   return (
     <div className="flex h-full flex-col border-r border-line bg-ink-950">
       <div className="border-b border-line px-6 py-6">
@@ -103,7 +102,12 @@ export function Sidebar({ stripePaymentLinkUrl, onNavigate, onOpenAria }) {
       </nav>
 
       <div className="space-y-3 border-t border-line px-4 py-5">
-        <CheckoutButton stripePaymentLinkUrl={stripePaymentLinkUrl} />
+        <a
+          className="block px-1 font-mono text-[11px] tracking-wide text-muted uppercase transition hover:text-gold-400"
+          href="mailto:agilifesolutions@gmail.com?subject=PassPro%20feedback"
+        >
+          Send feedback
+        </a>
         <div className="flex items-center gap-2 px-1">
           <UserButton afterSignOutUrl={import.meta.env.BASE_URL} />
           <span className="font-mono text-[11px] text-muted">Manage account</span>

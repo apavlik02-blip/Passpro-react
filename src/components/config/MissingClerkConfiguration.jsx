@@ -31,7 +31,7 @@ export function MissingClerkConfiguration() {
             </li>
             <li>
               <code className="bg-white/10 px-1.5 py-0.5 font-mono">
-                VITE_STRIPE_PAYMENT_LINK_URL
+                VITE_SUPABASE_URL
               </code>
             </li>
           </ul>

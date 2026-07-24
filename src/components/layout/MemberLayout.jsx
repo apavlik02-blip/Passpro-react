@@ -6,7 +6,7 @@ import { SiteFooter } from './SiteFooter.jsx'
 import { AriaModal } from '../aria/AriaModal.jsx'
 import { OnboardingFlow } from '../aria/OnboardingFlow.jsx'
 
-export function MemberLayout({ stripePaymentLinkUrl }) {
+export function MemberLayout() {
   const { user } = useUser()
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [ariaOpen, setAriaOpen] = useState(false)
@@ -16,7 +16,7 @@ export function MemberLayout({ stripePaymentLinkUrl }) {
     <div className="min-h-screen bg-ink-950 text-paper md:flex">
       <aside className="hidden w-64 shrink-0 md:block">
         <div className="fixed h-screen w-64">
-          <Sidebar onOpenAria={openAria} stripePaymentLinkUrl={stripePaymentLinkUrl} />
+          <Sidebar onOpenAria={openAria} />
         </div>
       </aside>
 
@@ -32,7 +32,6 @@ export function MemberLayout({ stripePaymentLinkUrl }) {
             <Sidebar
               onNavigate={() => setMobileNavOpen(false)}
               onOpenAria={openAria}
-              stripePaymentLinkUrl={stripePaymentLinkUrl}
             />
           </div>
         </div>

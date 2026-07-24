@@ -1,20 +1,21 @@
+import { Link } from 'react-router-dom'
 import { useUser } from '@clerk/clerk-react'
-import { CheckoutButton } from '../components/CheckoutButton.jsx'
-import { useEntitlement } from '../hooks/useEntitlement.js'
-import { subscriptionPrice } from '../lib/constants.js'
+import { AccessGate } from '../components/AccessGate.jsx'
+import { useAccess } from '../hooks/useAccess.js'
 
-export function AccountPage({ stripePaymentLinkUrl }) {
+export function AccountPage() {
   const { user } = useUser()
-  const { hasPaid, paidAt, loading, refetch, configured } = useEntitlement()
+  const { hasAccess, grantedAt, loading, redeemCode, configured } = useAccess()
+  const open = !configured || hasAccess
 
-  let billingStatus = `Stripe checkout is configured at ${subscriptionPrice}.`
+  let accessStatus = 'The access service is not configured — the platform is open.'
   if (configured) {
     if (loading) {
-      billingStatus = 'Checking your access...'
-    } else if (hasPaid) {
-      billingStatus = `Access active${paidAt ? ` since ${new Date(paidAt).toLocaleDateString()}` : ''}.`
+      accessStatus = 'Checking your access...'
+    } else if (hasAccess) {
+      accessStatus = `Access active${grantedAt ? ` since ${new Date(grantedAt).toLocaleDateString()}` : ''} — it follows your account on every device.`
     } else {
-      billingStatus = `No active access yet. Full access is ${subscriptionPrice}, one time.`
+      accessStatus = 'Enter the access code you were given to unlock the study platform.'
     }
   }
 
@@ -25,7 +26,9 @@ export function AccountPage({ stripePaymentLinkUrl }) {
           Account
         </p>
         <h2 className="font-serif text-3xl font-medium">
-          {hasPaid ? "You're all set." : 'One purchase unlocks the full study platform.'}
+          {open && !loading
+            ? "You're all set."
+            : 'One access code unlocks the full study platform.'}
         </h2>
       </div>
 
@@ -51,27 +54,26 @@ export function AccountPage({ stripePaymentLinkUrl }) {
         <article className="border border-line bg-ink-900 p-6">
           <div className="mb-3 flex items-center justify-between">
             <p className="font-mono text-[11px] font-bold tracking-widest text-gold-500 uppercase">
-              Billing
+              Access
             </p>
-            {configured && hasPaid ? (
+            {configured && hasAccess ? (
               <span className="border border-line px-2.5 py-1 font-mono text-[11px] text-gold-400">
-                PAID
+                UNLOCKED
               </span>
             ) : null}
           </div>
-          <p className="mb-4 text-lg text-paper">{billingStatus}</p>
-          <div className="flex flex-wrap items-center gap-3">
-            {!hasPaid ? <CheckoutButton stripePaymentLinkUrl={stripePaymentLinkUrl} /> : null}
-            {configured ? (
-              <button
-                className="rounded-sm border border-line px-4 py-2.5 text-sm font-semibold text-paper transition hover:border-gold-500/60"
-                onClick={refetch}
-                type="button"
-              >
-                {hasPaid ? 'Refresh status' : "I just paid, check again"}
-              </button>
-            ) : null}
-          </div>
+          <p className="mb-4 text-lg text-paper">{accessStatus}</p>
+          {configured && !loading && !hasAccess ? (
+            <AccessGate onRedeem={redeemCode} />
+          ) : null}
+          {open && !loading ? (
+            <Link
+              className="inline-flex items-center justify-center rounded-sm bg-gold-500 px-5 py-3 text-sm font-semibold text-ink-950 transition hover:bg-gold-400"
+              to="/dashboard"
+            >
+              Go to dashboard
+            </Link>
+          ) : null}
         </article>
       </div>
     </section>

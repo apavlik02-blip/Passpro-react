@@ -8,7 +8,7 @@ import {
   useOutletContext,
 } from 'react-router-dom'
 import { useLearningContent } from './hooks/useLearningContent.js'
-import { useEntitlement } from './hooks/useEntitlement.js'
+import { useAccess } from './hooks/useAccess.js'
 import { MemberLayout } from './components/layout/MemberLayout.jsx'
 import { MissingClerkConfiguration } from './components/config/MissingClerkConfiguration.jsx'
 import { MissingSupabaseConfiguration } from './components/config/MissingSupabaseConfiguration.jsx'
@@ -46,8 +46,8 @@ function SupabaseRoute({ supabaseConfigured }) {
   return supabaseConfigured ? <Outlet /> : <MissingSupabaseConfiguration />
 }
 
-function PaywallRoute() {
-  const { hasPaid, loading, configured } = useEntitlement()
+function AccessRoute() {
+  const { hasAccess, loading, configured } = useAccess()
   // Outlet resets context unless explicitly forwarded — MemberLayout passes
   // `openAria` down via outlet context, and DashboardPage reads it.
   const outletContext = useOutletContext()
@@ -58,14 +58,14 @@ function PaywallRoute() {
     )
   }
 
-  if (configured && !hasPaid) {
+  if (configured && !hasAccess) {
     return <Navigate to="/account" replace />
   }
 
   return <Outlet context={outletContext} />
 }
 
-function App({ clerkEnabled, stripePaymentLinkUrl }) {
+function App({ clerkEnabled }) {
   const { studyModules, questionBank, loading, error, supabaseConfigured } =
     useLearningContent()
 
@@ -102,7 +102,6 @@ function App({ clerkEnabled, stripePaymentLinkUrl }) {
               error={error}
               loading={loading}
               questionCount={questionBank.length}
-              stripePaymentLinkUrl={stripePaymentLinkUrl}
               studyModuleCount={studyModules.length}
               supabaseConfigured={supabaseConfigured}
             />
@@ -115,10 +114,8 @@ function App({ clerkEnabled, stripePaymentLinkUrl }) {
         <Route path="/refunds" element={<RefundPage />} />
         <Route element={<ProtectedRoute clerkEnabled={clerkEnabled} />}>
           <Route element={<SupabaseRoute supabaseConfigured={supabaseConfigured} />}>
-            <Route
-              element={<MemberLayout stripePaymentLinkUrl={stripePaymentLinkUrl} />}
-            >
-              <Route element={<PaywallRoute />}>
+            <Route element={<MemberLayout />}>
+              <Route element={<AccessRoute />}>
                 <Route
                   path="/dashboard"
                   element={
@@ -176,10 +173,7 @@ function App({ clerkEnabled, stripePaymentLinkUrl }) {
                   }
                 />
               </Route>
-              <Route
-                path="/account"
-                element={<AccountPage stripePaymentLinkUrl={stripePaymentLinkUrl} />}
-              />
+              <Route path="/account" element={<AccountPage />} />
             </Route>
           </Route>
         </Route>

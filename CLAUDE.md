@@ -29,8 +29,20 @@ npx supabase functions deploy aria --no-verify-jwt         # --no-verify-jwt is 
 ## Architecture
 
 **Stack**: Vite + React 19 SPA (no server-side rendering, no Next.js). Auth via
-Clerk (`@clerk/clerk-react`), content + ARIA persistence via Supabase, one-time
-purchases via a static Stripe payment link (no backend checkout flow).
+Clerk (`@clerk/clerk-react`), content + ARIA persistence via Supabase. Member
+access is gated by an access code validated **server-side** by the `access`
+Edge Function (`supabase/functions/access/`) against the service-role-only
+`public.access_codes` table — codes never ship in the client bundle. A
+successful redemption is recorded per Clerk user in `public.user_access`, so
+access follows the account across devices; deactivating a code
+(`access_codes.active = false`) revokes its users. Frontend:
+`src/hooks/useAccess.js` (same shape as the retired `useEntitlement`) +
+`src/components/AccessGate.jsx`; `AccessRoute` in `App.jsx` redirects locked
+users to `/account`. The function also honors legacy
+`user_entitlements.has_paid` rows from the retired Stripe payment-link flow —
+the dormant `stripe-webhook`/`entitlement` Edge Functions and payments-ledger
+migration are leftovers from it. Deploy the function like `aria`:
+`npx supabase functions deploy access --no-verify-jwt`.
 
 ### Routing / layout shape
 

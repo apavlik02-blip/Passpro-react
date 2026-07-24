@@ -15,8 +15,8 @@ const sections = [
   {
     title: '2. Your account and access',
     body: [
-      'Access to PassPro study materials is sold as a one-time purchase. Your purchase grants a personal, non-transferable license to access the service for the named account holder only.',
-      'You may not share your account credentials, resell access, or allow any other person to use your account. We may suspend or terminate accounts that show evidence of sharing or resale, without refund.',
+      'Access to PassPro study materials is currently granted by access code, free of charge. An access code grants a personal, non-transferable license to access the service for the named account holder only.',
+      'You may not share your account credentials or your access code, resell access, or allow any other person to use your account. We may suspend or terminate accounts, and deactivate access codes, that show evidence of sharing or resale.',
       'You are responsible for maintaining the confidentiality of your login credentials and for all activity that occurs under your account.',
     ],
   },
@@ -35,15 +35,15 @@ const sections = [
     ],
   },
   {
-    title: '5. Payments',
+    title: '5. Fees',
     body: [
-      'Payments are processed by Stripe. Your card details are handled by Stripe and never touch PassPro servers. Refunds are governed by our Refund Policy.',
+      'PassPro is currently free to use — access is granted by access code and no payment is collected. If we introduce paid access in the future, payment and refund terms will be posted here and in our Refund Policy before any purchase is offered.',
     ],
   },
   {
     title: '6. Limitation of liability',
     body: [
-      'To the maximum extent permitted by law, PassPro and its operators will not be liable for indirect, incidental, special, or consequential damages arising from your use of the service, including exam results, licensing outcomes, or lost income. Our total liability for any claim will not exceed the amount you paid for the service.',
+      'To the maximum extent permitted by law, PassPro and its operators will not be liable for indirect, incidental, special, or consequential damages arising from your use of the service, including exam results, licensing outcomes, or lost income. Our total liability for any claim will not exceed the amount (if any) you paid for the service.',
     ],
   },
   {

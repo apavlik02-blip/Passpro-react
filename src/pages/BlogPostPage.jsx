@@ -2,7 +2,6 @@ import { Link, Navigate, useParams } from 'react-router-dom'
 import { SignedIn, SignedOut, SignUpButton } from '@clerk/clerk-react'
 import { useDocumentMeta } from '../hooks/useDocumentMeta.js'
 import { getPostBySlug } from '../lib/blogPosts.js'
-import { subscriptionPrice } from '../lib/constants.js'
 
 export function BlogPostPage() {
   const { slug } = useParams()
@@ -47,7 +46,9 @@ export function BlogPostPage() {
         <Content />
 
         <div className="mt-12 border border-line bg-ink-900 p-7 text-center">
-          <p className="mb-4 text-paper">Full access is {subscriptionPrice}, one time.</p>
+          <p className="mb-4 text-paper">
+            Guided modules, a full practice exam, and progress tracking — all in one place.
+          </p>
           <SignedOut>
             <SignUpButton mode="modal">
               <button
