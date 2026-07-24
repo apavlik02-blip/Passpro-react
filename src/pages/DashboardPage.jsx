@@ -1,11 +1,8 @@
-import { useState } from 'react'
-import PremiumRouteGuard from '../components/PremiumRouteGuard.jsx'
 import { useOutletContext } from 'react-router-dom'
 import { DataStatePanel } from '../components/DataStatePanel.jsx'
 import { AriaReadinessWidget } from '../components/aria/AriaReadinessWidget.jsx'
 import { practiceExamConfig } from '../lib/constants.js'
 import { humanizeSlug } from '../lib/format.js'
-import AriaChat from '../components/AriaChat.jsx'
 
 function StatCard({ label, value, hint }) {
   return (
@@ -59,10 +56,8 @@ export function DashboardPage({
   loading,
   error,
 }) {
-  const { user } = useOutletContext()
   const { openAria } = useOutletContext()
-const [activeModule, setActiveModule] = useState(studyModules[0] || null)
-  
+
   if (loading) {
     return (
       <section className="flex flex-col gap-6">
@@ -83,8 +78,7 @@ const [activeModule, setActiveModule] = useState(studyModules[0] || null)
   }
 
   return (
-    <PremiumRouteGuard>
-      <section className="flex flex-col gap-6">
+    <section className="flex flex-col gap-6">
       <div>
         <p className="mb-2 font-mono text-[11px] font-bold tracking-widest text-gold-500 uppercase">
           Dashboard
@@ -138,7 +132,6 @@ const [activeModule, setActiveModule] = useState(studyModules[0] || null)
           value: `${category.questionCount} Q`,
         }))}
       />
-      </section>
-    </PremiumRouteGuard>
+    </section>
   )
 }
