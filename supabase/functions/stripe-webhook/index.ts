@@ -34,7 +34,7 @@ function getStripe(): Stripe | null {
   return stripe
 }
 
-const PRICE_USD_CENTS = 1999
+const PRICE_USD_CENTS = 3999
 
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {

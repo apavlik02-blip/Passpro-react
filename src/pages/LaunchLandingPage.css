@@ -221,6 +221,11 @@
   max-width: 56ch;
   color: rgba(246, 241, 233, 0.85);
 }
+.launch-landing .guarantee p.disclosure {
+  margin-top: 24px;
+  font-size: 0.85rem;
+  color: rgba(246, 241, 233, 0.55);
+}
 
 /* Final CTA */
 .launch-landing .final {

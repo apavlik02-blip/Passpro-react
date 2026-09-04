@@ -157,6 +157,11 @@ export function LaunchLandingPage() {
             your money back. No fine print, no list of conditions to qualify
             for it.
           </p>
+          <p className="disclosure">
+            PassPro is independent exam-prep material, not a state-approved
+            pre-licensing education provider — completing it doesn&rsquo;t
+            fulfill Wisconsin&rsquo;s required pre-licensing coursework hours.
+          </p>
         </div>
       </section>
 
