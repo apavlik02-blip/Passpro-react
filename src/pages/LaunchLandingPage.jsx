@@ -2,26 +2,43 @@ import { useId, useState } from 'react'
 import { useDocumentMeta } from '../hooks/useDocumentMeta.js'
 import './LaunchLandingPage.css'
 
+// PassPro's Kit (formerly ConvertKit) lead-capture form — Kit dashboard:
+// Grow -> Landing Pages & Forms -> "PassPro cheat sheet". Posting directly
+// to Kit's own subscribe endpoint (rather than loading Kit's embed script)
+// keeps this on our own styling and lets React own the success/error UI.
+const KIT_FORM_ACTION = 'https://app.kit.com/forms/9880772/subscriptions'
+
 function EmailCaptureForm({ formId, ctaLabel = 'Get the free cheat sheet' }) {
   const emailFieldId = useId()
   const [email, setEmail] = useState('')
-  const [submitted, setSubmitted] = useState(false)
+  const [status, setStatus] = useState('idle') // idle | submitting | success | error
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault()
-    if (!email) return
+    if (!email || status === 'submitting') return
 
-    // TODO: point this at the real lead-capture endpoint (Kit form embed,
-    // another ESP, or the PayFlow backend) instead of only flipping local
-    // state. Kit's own embed handles delivery + sequence enrollment once
-    // wired in, so this handler may end up being replaced entirely.
-    setSubmitted(true)
+    setStatus('submitting')
+
+    try {
+      const response = await fetch(KIT_FORM_ACTION, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          Accept: 'application/json',
+        },
+        body: new URLSearchParams({ email_address: email }).toString(),
+      })
+
+      setStatus(response.ok ? 'success' : 'error')
+    } catch {
+      setStatus('error')
+    }
   }
 
-  if (submitted) {
+  if (status === 'success') {
     return (
       <p className="success" data-success-for={formId}>
-        Check your inbox — your cheat sheet is on its way.
+        Check your inbox to confirm — your cheat sheet is on its way right after.
       </p>
     )
   }
@@ -38,10 +55,16 @@ function EmailCaptureForm({ formId, ctaLabel = 'Get the free cheat sheet' }) {
         placeholder="you@email.com"
         value={email}
         onChange={(event) => setEmail(event.target.value)}
+        disabled={status === 'submitting'}
       />
-      <button type="submit" className="btn">
-        {ctaLabel}
+      <button type="submit" className="btn" disabled={status === 'submitting'}>
+        {status === 'submitting' ? 'Sending…' : ctaLabel}
       </button>
+      {status === 'error' && (
+        <p className="form-error" role="alert">
+          Something went wrong — try again, or email us directly.
+        </p>
+      )}
     </form>
   )
 }
@@ -131,8 +154,8 @@ export function LaunchLandingPage() {
           <h2>The pass guarantee</h2>
           <p>
             If you complete the PassPro program and don&rsquo;t pass, you get
-            [a free extra month / your money back]. We&rsquo;re confident
-            enough in the method to put it in writing.
+            your money back. No fine print, no list of conditions to qualify
+            for it.
           </p>
         </div>
       </section>

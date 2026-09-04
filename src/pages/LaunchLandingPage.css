@@ -78,6 +78,7 @@
 .launch-landing .capture-form {
   margin-top: 40px;
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
   max-width: 440px;
 }
@@ -98,6 +99,9 @@
   outline: 2px solid var(--copper-light);
   outline-offset: 2px;
 }
+.launch-landing .capture-form input:disabled {
+  opacity: 0.6;
+}
 .launch-landing .btn {
   padding: 14px 26px;
   background: var(--copper);
@@ -117,6 +121,17 @@
 .launch-landing .btn:focus-visible {
   outline: 2px solid var(--ivory);
   outline-offset: 2px;
+}
+.launch-landing .btn:disabled {
+  background: var(--copper);
+  opacity: 0.6;
+  cursor: default;
+}
+.launch-landing .form-error {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 0.85rem;
+  color: #e0a98c;
 }
 
 .launch-landing .fine {
