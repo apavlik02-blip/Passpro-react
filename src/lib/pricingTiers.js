@@ -5,20 +5,27 @@
 // in sync by hand, same pattern as examBlueprints.js / the ARIA Edge
 // Function's DOMAIN_WEIGHTS documented in CLAUDE.md.
 //
-// PRICING NOTE — needs a human decision before this goes live with real
-// Stripe Prices: every tier's stated "annual" price below is roughly
-// monthly x 2.5, not monthly x 12 minus the stated discount. E.g. Essential
-// is priced at $39/mo but $99/yr — that's a ~79% discount, not the "27%
-// savings" the source pricing doc claims (27% off $39 x 12 would be
-// ~$342/yr). Same pattern on every other tier. This looks like a unit
-// error in the source document (quarterly price mislabeled annual?) rather
-// than an intentional loss-leader. Shipped here exactly as given so nothing
-// is silently "corrected" into a number nobody actually decided on — flag
-// this to whoever owns pricing before creating real Stripe annual Prices.
+// PRICING NOTE — the source doc's annual dollar figures didn't match its
+// own stated discounts (e.g. "$39/mo or $99/yr (27% savings)" is actually a
+// ~79% discount; $342/yr is what 27% off $39 x 12 actually comes to). The
+// annual prices below are recomputed from monthly x 12 x (1 - stated
+// discount) instead — the discount percentage is treated as the real
+// business decision and the dollar figure as the error, since a ~79%
+// discount isn't a plausible annual-commitment incentive and 27%/34% is
+// exactly the range the doc's own rationale argues for ("matches competitor
+// annual pricing strategies"). Still worth a second pair of eyes before
+// these become real Stripe annual Prices — this is a recomputation of what
+// the doc most likely meant, not a figure anyone explicitly confirmed:
+//   Essential:    $39/mo  x12 = $468/yr,  27% off -> $341.64 -> $342/yr
+//   Professional: $79/mo  x12 = $948/yr,  34% off -> $625.68 -> $626/yr
+//   Premium:      $149/mo x12 = $1788/yr, 38% off -> $1108.56 -> $1109/yr
+//     (Premium's 38% isn't from the source doc at all — it has no stated
+//     discount for this tier — it's extrapolated from Essential's 27% and
+//     Professional's 34% escalating by tier. Confirm independently.)
 //
-// Premium tier is reconstructed from the source doc's rationale/revenue
-// sections, not from a fully-specified tier block (that block appears to
-// have been cut off in the pasted document) — price, annual price, and
+// Premium tier overall is reconstructed from the source doc's
+// rationale/revenue sections, not from a fully-specified tier block (that
+// block appears to have been cut off in the pasted document) — price and
 // feature list here are inferred and need explicit confirmation.
 
 export const PRICING_TIERS = [
@@ -43,7 +50,7 @@ export const PRICING_TIERS = [
     name: 'Essential',
     tagline: 'Self-directed exam prep with full ARIA access.',
     priceMonthlyCents: 3900,
-    priceAnnualCents: 9900,
+    priceAnnualCents: 34200,
     features: [
       'Unlimited practice questions (full question bank)',
       '3 full-length practice exams',
@@ -58,7 +65,7 @@ export const PRICING_TIERS = [
     name: 'Professional',
     tagline: 'For serious candidates who want premium support.',
     priceMonthlyCents: 7900,
-    priceAnnualCents: 19900,
+    priceAnnualCents: 62600,
     features: [
       'Everything in Essential',
       'Unlimited full-length practice exams',
@@ -74,7 +81,7 @@ export const PRICING_TIERS = [
     tagline: 'Personalized guidance for candidates and teams.',
     // INFERRED — not fully specified in the source doc. Confirm before use.
     priceMonthlyCents: 14900,
-    priceAnnualCents: 39900,
+    priceAnnualCents: 110900,
     isPlaceholder: true,
     features: [
       'Everything in Professional',
