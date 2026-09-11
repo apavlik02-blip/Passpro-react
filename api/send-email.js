@@ -7,8 +7,8 @@
 // to confirm it landed in Production, not just Preview).
 
 import { Resend } from 'resend';
-import { signupConfirmationEmail } from '../lib/email-templates/signup-confirmation.js';
-import { receiptEmail } from '../lib/email-templates/receipt.js';
+import { signupConfirmationEmail } from '../src/lib/email-templates/signup-confirmation.js';
+import { receiptEmail } from '../src/lib/email-templates/receipt.js';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
