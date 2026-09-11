@@ -13,6 +13,7 @@ import { MemberLayout } from './components/layout/MemberLayout.jsx'
 import { MissingClerkConfiguration } from './components/config/MissingClerkConfiguration.jsx'
 import { MissingSupabaseConfiguration } from './components/config/MissingSupabaseConfiguration.jsx'
 import { HomePage } from './pages/HomePage.jsx'
+import { LaunchLandingPage } from './pages/LaunchLandingPage.jsx'
 import { BlogIndexPage } from './pages/BlogIndexPage.jsx'
 import { BlogPostPage } from './pages/BlogPostPage.jsx'
 import { TermsPage } from './pages/TermsPage.jsx'
@@ -25,6 +26,7 @@ import { PracticeExamPage } from './pages/PracticeExamPage.jsx'
 import { FlashcardsPage } from './pages/FlashcardsPage.jsx'
 import { ProgressPage } from './pages/ProgressPage.jsx'
 import { AccountPage } from './pages/AccountPage.jsx'
+import { PricingPage } from './pages/PricingPage.jsx'
 
 function ProtectedRoute({ clerkEnabled }) {
   if (!clerkEnabled) {
@@ -108,6 +110,8 @@ function App({ clerkEnabled }) {
             />
           }
         />
+        <Route path="/exam-prep" element={<LaunchLandingPage />} />
+        <Route path="/pricing" element={<PricingPage />} />
         <Route path="/blog" element={<BlogIndexPage />} />
         <Route path="/blog/:slug" element={<BlogPostPage />} />
         <Route path="/terms" element={<TermsPage />} />
