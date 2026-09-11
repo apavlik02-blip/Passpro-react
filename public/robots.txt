@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://passpro-react.vercel.app/sitemap.xml
+Sitemap: https://passpro.company/sitemap.xml
