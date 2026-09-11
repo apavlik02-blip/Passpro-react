@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Manually maintained — add a <url> entry here whenever a new post is
-     added to src/lib/blogPosts.js. -->
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<!-- Manually maintained - add a <url> entry here 
+     whenever a new post is added to src/lib/blogPosts.js. -->
+<urlset xmlns="http://sitemaps.org">
   <url>
-    <loc>https://passpro-react.vercel.app/</loc>
+    <loc>https://passpro.company</loc>
   </url>
   <url>
-    <loc>https://passpro-react.vercel.app/blog</loc>
+    <loc>https://passpro.companyblog</loc>
   </url>
   <url>
-    <loc>https://passpro-react.vercel.app/blog/wisconsin-life-health-exam-study-guide</loc>
+    <loc>https://passpro.companyblog/wisconsin-life-health-exam-study-guide</loc>
   </url>
   <url>
-    <loc>https://passpro-react.vercel.app/blog/wisconsin-life-insurance-grace-period</loc>
+    <loc>https://passpro.companyblog/wisconsin-life-insurance-grace-period</loc>
   </url>
   <url>
-    <loc>https://passpro-react.vercel.app/blog/wisconsin-free-look-period</loc>
+    <loc>https://passpro.companyblog/wisconsin-free-look-period</loc>
   </url>
   <url>
-    <loc>https://passpro-react.vercel.app/blog/wisconsin-twisting-churning-rebating</loc>
+    <loc>https://passpro.companyblog/wisconsin-twisting-churning-rebating</loc>
   </url>
   <url>
-    <loc>https://passpro-react.vercel.app/blog/wisconsin-incontestability-period</loc>
+    <loc>https://passpro.companyblog/wisconsin-incontestability-period</loc>
   </url>
 </urlset>
+
