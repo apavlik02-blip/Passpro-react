@@ -1,0 +1,10 @@
+{
+  "title": "Quiz — Wisconsin cancellation notice",
+  "fps": 30,
+  "scenes": [
+    {"type": "hook", "eyebrow": "Property · Casualty · Personal Lines", "text": "10 days or 60 days?", "accent": "Know which is which.", "seconds": 3},
+    {"type": "quiz", "question": "A Wisconsin insurer nonrenews a property policy. Minimum notice before expiration:", "options": ["10 days", "30 days", "60 days", "No notice required"], "answer": 2, "explain": "Nonrenewal = 60 days. Midterm cancellation = 10 days after notice.", "seconds": 8},
+    {"type": "list", "title": "s. 631.36 in one screen", "items": ["First 60 days: midterm limits don't apply", "Midterm cancel: listed reasons, 10 days", "Nonrenewal: 60 days", "Worse renewal terms, personal lines: 45 days"], "seconds": 5},
+    {"type": "cta", "text": "35% of the exam is regulation.", "url": "passpro.company", "sub": "Wisconsin insurance exam prep", "seconds": 3}
+  ]
+}

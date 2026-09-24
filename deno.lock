@@ -1,0 +1,33 @@
+{
+  "version": "5",
+  "remote": {
+    "https://esm.sh/@supabase/supabase-js@2.45.4": "1108d69216995335d057dbd15907caaf514a4d1ef082f097050573b9d589a57c",
+    "https://esm.sh/jose@5.9.6": "8c535558ee938997693933217d3f71cdbb97f968cc9b5385ab442664458aa576"
+  },
+  "workspace": {
+    "packageJson": {
+      "dependencies": [
+        "npm:@anthropic-ai/sdk@0.111",
+        "npm:@clerk/clerk-react@^5.61.8",
+        "npm:@eslint/js@^10.0.1",
+        "npm:@supabase/supabase-js@^2.110.1",
+        "npm:@tailwindcss/vite@^4.3.2",
+        "npm:@types/react-dom@^19.2.3",
+        "npm:@types/react@^19.2.14",
+        "npm:@vercel/node@^5.8.23",
+        "npm:@vitejs/plugin-react@^6.0.1",
+        "npm:eslint-plugin-react-hooks@^7.1.1",
+        "npm:eslint-plugin-react-refresh@~0.5.2",
+        "npm:eslint@^10.3.0",
+        "npm:globals@^17.6.0",
+        "npm:openai@^6.46.0",
+        "npm:react-dom@^19.2.6",
+        "npm:react-router-dom@^7.18.1",
+        "npm:react@^19.2.6",
+        "npm:resend@^6.28.0",
+        "npm:tailwindcss@^4.3.2",
+        "npm:vite@^8.0.12"
+      ]
+    }
+  }
+}

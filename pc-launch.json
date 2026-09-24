@@ -1,0 +1,11 @@
+{
+  "title": "P&C launch — five Wisconsin licenses",
+  "fps": 30,
+  "scenes": [
+    {"type": "hook", "eyebrow": "New on PassPro", "text": "Property. Casualty. Personal Lines.", "accent": "Now on PassPro.", "seconds": 3.2},
+    {"type": "list", "title": "Five Wisconsin licenses, one study system", "items": ["Life (22-01)", "Accident & Health (22-03)", "Property (22-05)", "Casualty (22-07)", "Personal Lines (22-09)"], "seconds": 5},
+    {"type": "stat", "label": "Every PSI exam", "value": "100 Qs", "caption": "2 hours. 70% to pass. 35% of it is insurance regulation.", "seconds": 3.4},
+    {"type": "list", "title": "Built on the official outline", "items": ["Lessons in exam-weight order", "Full-length mock exams", "10-question weak-spot drills", "Flashcards with spaced repetition"], "seconds": 5},
+    {"type": "cta", "text": "Pick your license and start studying.", "url": "passpro.company", "sub": "Wisconsin insurance exam prep", "seconds": 3.4}
+  ]
+}

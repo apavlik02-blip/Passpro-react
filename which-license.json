@@ -1,0 +1,11 @@
+{
+  "title": "Personal Lines vs P&C",
+  "fps": 30,
+  "scenes": [
+    {"type": "hook", "eyebrow": "Getting licensed in Wisconsin?", "text": "Personal Lines or Property & Casualty?", "accent": "Here's the 20-second answer.", "seconds": 3.4},
+    {"type": "list", "title": "Personal Lines (22-09)", "items": ["One PSI exam", "Homeowners, dwelling, personal auto", "Flood, umbrella, boats", "No commercial lines"], "seconds": 4.6},
+    {"type": "list", "title": "Property (22-05) + Casualty (22-07)", "items": ["Two PSI exams", "Everything in Personal Lines", "Plus BOP, CGL, commercial auto", "Plus crime and workers comp"], "seconds": 4.6},
+    {"type": "hook", "eyebrow": "Rule of thumb", "text": "Will you ever quote a business?", "accent": "Take Property and Casualty.", "seconds": 3.4},
+    {"type": "cta", "text": "Study for either on PassPro.", "url": "passpro.company", "sub": "Official PSI outline weights", "seconds": 3}
+  ]
+}

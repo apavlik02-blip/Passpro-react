@@ -1,0 +1,10 @@
+{
+  "title": "Quiz — Wisconsin UM requirement",
+  "fps": 30,
+  "scenes": [
+    {"type": "hook", "eyebrow": "Casualty exam · 22-07", "text": "Most people miss this Wisconsin auto question.", "seconds": 2.8},
+    {"type": "quiz", "question": "Uninsured motorist coverage in Wisconsin is:", "options": ["Optional, if requested in writing", "Required, at least $25,000 / $50,000 bodily injury", "Required for commercial vehicles only", "Property damage only"], "answer": 1, "explain": "UM is mandatory in WI: 25/50, bodily injury only. UIM is the optional one.", "seconds": 8},
+    {"type": "stat", "label": "Wisconsin liability minimum", "value": "25/50/10", "caption": "$25K per person, $50K per accident, $10K property damage.", "seconds": 3.4},
+    {"type": "cta", "text": "Want 279 more like this?", "url": "passpro.company", "sub": "Property · Casualty · Personal Lines · Life · A&H", "seconds": 3}
+  ]
+}

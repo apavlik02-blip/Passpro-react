@@ -1,0 +1,10 @@
+{
+  "title": "Quiz — Wisconsin life grace period",
+  "fps": 30,
+  "scenes": [
+    {"type": "hook", "eyebrow": "Life exam · 22-01", "text": "National study guides get this Wisconsin number wrong.", "seconds": 3},
+    {"type": "quiz", "question": "A Wisconsin life insurance policy's grace period is:", "options": ["30 days", "31 days", "60 days", "10 days"], "answer": 1, "explain": "Wisconsin: 31 days. The policy stays in force; unpaid premium comes out of the death benefit.", "seconds": 8},
+    {"type": "list", "title": "Wisconsin life numbers to know", "items": ["Grace period: 31 days", "Free look: 10 days", "Replacement free look: 20–30 days", "Incontestability: 2 years"], "seconds": 4.6},
+    {"type": "cta", "text": "Study the Wisconsin version first.", "url": "passpro.company", "sub": "Life · A&H · Property · Casualty · Personal Lines", "seconds": 3}
+  ]
+}

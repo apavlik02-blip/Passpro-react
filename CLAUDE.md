@@ -97,12 +97,32 @@ Real `questions.domain` values (also the taxonomy used by
 `health_plan_types`, `disability_income`, `ltc`, `medicare`, `medicaid`,
 `group_health`, `wisconsin_health_regulation`, `qualified_plans`,
 `aca_hipaa`, `insurance_regulation`, `life_basics`, `medical_plans`, `dental`.
+P&C domains (Property 22-05, Casualty 22-07, Personal Lines 22-09) are listed
+in `docs/WI-OCI-STANDARDS.md` §6. Which modules and domains belong to each
+license lives in `src/lib/licenses.js`; the member's selected license is held
+by `src/hooks/useLicense.jsx` (localStorage) and filters Dashboard, Study,
+Flashcards, and Practice Exam.
 There is no `riders` or generic `health_insurance` domain — don't reintroduce
 those (they came from ARIA's original, unrelated 8-bucket model and don't
 exist in the seeded data).
 
 `humanizeSlug()` (`src/lib/format.js`) turns these snake/kebab-case domain
 values into display labels app-wide — reuse it rather than hand-formatting.
+
+### Licensed in 30 Days (agency layer)
+
+B2B layer for agencies/IMOs. Public pages: `/agencies` (pitch, pricing from
+`src/lib/agencyPlans.js`, pilot form) and `/join/:code` (invite accept).
+Member pages outside `AccessRoute`: `/journey` (recruit's 30-day license path,
+steps in `src/lib/journeySteps.js`) and `/agency` (owner dashboard, invites,
+weekly report/CSV from `src/lib/weeklyReport.js`).
+
+Backend: `supabase/functions/agency/` is a thin Clerk-verifying wrapper; the
+rules live in SQL functions (`supabase/migrations/20260925090100_agency_functions.sql`),
+executable only by service_role. Tables are RLS-on/zero-policy. Accepting an
+invite grants study access via the agency's own row in `access_codes`
+(no change to the `access` function). Step keys in `journeySteps.js` must
+match `public.journey_step_keys()`. Deploy: `npx supabase functions deploy agency --no-verify-jwt`.
 
 ### ARIA (Claude-powered study coach)
 
