@@ -1,13 +1,15 @@
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import { useUser } from '@clerk/clerk-react'
 import { Sidebar } from './Sidebar.jsx'
 import { SiteFooter } from './SiteFooter.jsx'
 import { AriaModal } from '../aria/AriaModal.jsx'
 import { OnboardingFlow } from '../aria/OnboardingFlow.jsx'
+import { useLicense } from '../../hooks/useLicense.jsx'
 
 export function MemberLayout() {
   const { user } = useUser()
+  const { license } = useLicense()
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [ariaOpen, setAriaOpen] = useState(false)
   const openAria = () => setAriaOpen(true)
@@ -40,7 +42,12 @@ export function MemberLayout() {
       <div className="flex-1 md:min-w-0">
         <header className="flex items-center justify-between border-b border-line bg-ink-950 px-6 py-4 md:hidden">
           <div>
-            <p className="font-serif text-sm font-medium">PassPro</p>
+            <p className="font-serif text-sm font-medium">
+              PassPro{' '}
+              <span className="font-mono text-[10px] tracking-widest text-gold-500 uppercase">
+                {license.name} · {license.series}
+              </span>
+            </p>
             <p className="font-mono text-[11px] text-muted">
               Welcome back{user?.firstName ? `, ${user.firstName}` : ''}.
             </p>
@@ -66,7 +73,11 @@ export function MemberLayout() {
         </header>
 
         <main className="mx-auto max-w-6xl px-6 py-8 sm:px-10">
-          <Outlet context={{ openAria }} />
+          <Suspense
+            fallback={<p className="font-mono text-[11px] tracking-widest text-muted uppercase">Loading…</p>}
+          >
+            <Outlet context={{ openAria }} />
+          </Suspense>
         </main>
         <SiteFooter />
       </div>

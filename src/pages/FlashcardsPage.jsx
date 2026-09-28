@@ -2,6 +2,8 @@ import { useMemo, useState } from 'react'
 import { DataStatePanel } from '../components/DataStatePanel.jsx'
 import { humanizeSlug } from '../lib/format.js'
 import { useFlashcards } from '../hooks/useFlashcards.js'
+import { useLicense } from '../hooks/useLicense.jsx'
+import { questionsForLicense } from '../lib/licenses.js'
 
 const secondaryButtonClass =
   'inline-flex items-center justify-center rounded-sm border border-line px-5 py-3 text-sm font-semibold text-paper transition hover:border-gold-500/70'
@@ -52,17 +54,26 @@ export function FlashcardsPage({ questionBank, loading, error }) {
     [questionBank],
   )
 
-  const deck = useMemo(
-    () =>
-      domainFilter === 'all'
-        ? questionBank
-        : questionBank.filter((question) => question.category === domainFilter),
-    [questionBank, domainFilter],
+  const { license } = useLicense()
+  const licenseBank = useMemo(
+    () => questionsForLicense(questionBank, license),
+    [questionBank, license],
   )
 
   const domains = useMemo(
-    () => [...new Set(questionBank.map((question) => question.category))].sort(),
-    [questionBank],
+    () => [...new Set(licenseBank.map((question) => question.category))].sort(),
+    [licenseBank],
+  )
+
+  // A filter left over from another license track falls back to "all".
+  const activeFilter = domains.includes(domainFilter) ? domainFilter : 'all'
+
+  const deck = useMemo(
+    () =>
+      activeFilter === 'all'
+        ? licenseBank
+        : licenseBank.filter((question) => question.category === activeFilter),
+    [licenseBank, activeFilter],
   )
 
   const reviewMap = reviews ?? new Map()
@@ -162,7 +173,7 @@ export function FlashcardsPage({ questionBank, loading, error }) {
     <>
       <div>
         <p className="mb-2 font-mono text-[11px] font-bold tracking-widest text-gold-500 uppercase">
-          Flashcards
+          Flashcards · {license.name} ({license.series})
         </p>
         <h2 className="font-serif text-3xl font-medium">Key concepts on spaced repetition.</h2>
       </div>
@@ -173,9 +184,9 @@ export function FlashcardsPage({ questionBank, loading, error }) {
           <select
             className="border border-line bg-ink-900 px-3 py-2 font-sans text-sm normal-case text-paper focus:border-gold-500/70 focus:outline-none"
             onChange={handleFilterChange}
-            value={domainFilter}
+            value={activeFilter}
           >
-            <option value="all">All domains</option>
+            <option value="all">All {license.name} domains</option>
             {domains.map((domain) => (
               <option key={domain} value={domain}>
                 {humanizeSlug(domain)}

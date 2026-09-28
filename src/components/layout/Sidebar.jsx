@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import { UserButton } from '@clerk/clerk-react'
+import { LicenseSwitcher } from '../license/LicenseSwitcher.jsx'
 
 const navItems = [
   {
@@ -30,6 +31,21 @@ const navItems = [
       <>
         <rect height="12" width="14" x="3" y="9" />
         <path d="M7 5h14v12" />
+      </>
+    ),
+  },
+  {
+    to: '/journey',
+    label: 'License Path',
+    icon: <path d="M4 20V4M4 5h11l-2 4 2 4H4M18 20v-6" />,
+  },
+  {
+    to: '/agency',
+    label: 'Agency',
+    icon: (
+      <>
+        <path d="M3 21h18M5 21V7l7-4 7 4v14" />
+        <path d="M9 21v-6h6v6" />
       </>
     ),
   },
@@ -69,11 +85,12 @@ function NavIcon({ children }) {
 export function Sidebar({ onNavigate, onOpenAria }) {
   return (
     <div className="flex h-full flex-col border-r border-line bg-ink-950">
-      <div className="border-b border-line px-6 py-6">
-        <p className="font-serif text-lg font-medium">PassPro</p>
-        <p className="mt-1 font-mono text-[11px] tracking-wide text-muted uppercase">
-          Wisconsin Life &amp; Health
-        </p>
+      <div className="border-b border-line px-4 pt-6 pb-4">
+        <div className="mb-4 flex items-baseline gap-2 px-2">
+          <p className="font-serif text-lg font-medium">PassPro</p>
+          <p className="font-mono text-[10px] tracking-widest text-gold-500 uppercase">Wisconsin</p>
+        </div>
+        <LicenseSwitcher />
       </div>
 
       <nav aria-label="Member navigation" className="flex-1 space-y-1 px-3 py-4">

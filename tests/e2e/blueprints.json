@@ -1,0 +1,91 @@
+[
+  {
+    "key": "life",
+    "name": "Life",
+    "series": "22-01",
+    "weights": {
+      "insurance_regulation": 20,
+      "wisconsin_regulation": 15,
+      "general_insurance": 10,
+      "life_basics": 10,
+      "life_types": 12,
+      "policy_provisions": 14,
+      "annuities": 10,
+      "taxation": 5,
+      "qualified_plans": 4
+    }
+  },
+  {
+    "key": "health",
+    "name": "Accident & Health",
+    "series": "22-03",
+    "weights": {
+      "insurance_regulation": 18,
+      "wisconsin_health_regulation": 12,
+      "general_insurance": 8,
+      "health_basics": 7,
+      "health_plan_types": 7,
+      "disability_income": 8,
+      "medical_plans": 8,
+      "group_health": 8,
+      "dental": 4,
+      "medicare": 8,
+      "ltc": 8,
+      "aca_hipaa": 4
+    }
+  },
+  {
+    "key": "property",
+    "name": "Property",
+    "series": "22-05",
+    "weights": {
+      "pc_regulation": 22,
+      "wi_pc_statutes": 6,
+      "wi_property_regulation": 7,
+      "pc_general_insurance": 8,
+      "property_basics": 13,
+      "dwelling": 4,
+      "homeowners": 18,
+      "commercial_property": 9,
+      "businessowners_property": 9,
+      "personal_other": 4
+    }
+  },
+  {
+    "key": "casualty",
+    "name": "Casualty",
+    "series": "22-07",
+    "weights": {
+      "pc_regulation": 22,
+      "wi_pc_statutes": 5,
+      "wi_auto_regulation": 5,
+      "pc_general_insurance": 8,
+      "casualty_basics": 13,
+      "personal_auto": 9,
+      "commercial_auto": 5,
+      "commercial_liability": 10,
+      "businessowners_liability": 10,
+      "workers_comp": 8,
+      "umbrella": 2,
+      "casualty_other": 3
+    }
+  },
+  {
+    "key": "personal_lines",
+    "name": "Personal Lines",
+    "series": "22-09",
+    "weights": {
+      "pc_regulation": 20,
+      "wi_pc_statutes": 5,
+      "wi_property_regulation": 5,
+      "wi_auto_regulation": 5,
+      "pc_general_insurance": 5,
+      "property_basics": 20,
+      "dwelling": 10,
+      "homeowners": 10,
+      "personal_auto": 10,
+      "personal_other": 7,
+      "umbrella": 3
+    }
+  }
+]

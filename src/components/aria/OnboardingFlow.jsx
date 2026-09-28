@@ -7,13 +7,35 @@
 
 import { useState } from 'react'
 import { useUser } from '@clerk/clerk-react'
-import { HEALTH_EXAM, LIFE_EXAM } from '../../lib/examBlueprints.js'
 import { useAriaProgress } from '../../hooks/useAriaProgress.js'
+import { useLicense } from '../../hooks/useLicense.jsx'
+import { LICENSES } from '../../lib/licenses.js'
 
+// `license` is the study track the choice activates. `ariaExamType` is what
+// the aria Edge Function understands today ('life' | 'health' | 'both');
+// P&C choices send null so ARIA falls back to its general defaults.
 const EXAM_OPTIONS = [
-  { key: LIFE_EXAM.key, label: LIFE_EXAM.label, note: 'PSI Series 22-01' },
-  { key: HEALTH_EXAM.key, label: HEALTH_EXAM.label, note: 'PSI Series 22-03' },
-  { key: 'both', label: 'Both exams', note: 'Life + Accident & Health' },
+  ...LICENSES.map((license) => ({
+    key: license.key,
+    label: license.fullName.replace('Wisconsin ', ''),
+    note: `PSI Series ${license.series}`,
+    license: license.key,
+    ariaExamType: ['life', 'health'].includes(license.key) ? license.key : null,
+  })),
+  {
+    key: 'both',
+    label: 'Life + Accident & Health',
+    note: '22-01 and 22-03',
+    license: 'life',
+    ariaExamType: 'both',
+  },
+  {
+    key: 'property_casualty',
+    label: 'Property + Casualty',
+    note: '22-05 and 22-07',
+    license: 'property',
+    ariaExamType: null,
+  },
 ]
 
 const HOURS_OPTIONS = [3, 5, 7, 10, 15]
@@ -80,6 +102,7 @@ function NavButtons({ onBack, onNext, nextLabel = 'Continue', nextDisabled = fal
 export function OnboardingFlow() {
   const { user } = useUser()
   const { progress, loading, configured, saveOnboarding } = useAriaProgress()
+  const { setLicenseKey } = useLicense()
   const [dismissed, setDismissed] = useState(false)
   const [saving, setSaving] = useState(false)
   const [step, setStep] = useState(1)
@@ -124,7 +147,7 @@ export function OnboardingFlow() {
 
   const handleComplete = () => {
     persist({
-      exam_type: examType || null,
+      exam_type: EXAM_OPTIONS.find((option) => option.key === examType)?.ariaExamType ?? null,
       exam_date: examDate || null,
       hours_per_week: hoursPerWeek,
       confidence,
@@ -175,7 +198,10 @@ export function OnboardingFlow() {
                         : 'border-line bg-ink-900 hover:border-gold-500/40'
                     }`}
                     key={option.key}
-                    onClick={() => setExamType(option.key)}
+                    onClick={() => {
+                      setExamType(option.key)
+                      setLicenseKey(option.license)
+                    }}
                     type="button"
                   >
                     <span

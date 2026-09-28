@@ -7,7 +7,7 @@ const sections = [
   {
     title: '1. What PassPro is — and is not',
     body: [
-      'PassPro is an exam preparation service for candidates preparing for the Wisconsin life and health insurance licensing examination. It provides study modules, practice questions, practice exams, progress tracking, and AI-assisted study coaching.',
+      'PassPro is an exam preparation service for candidates preparing for Wisconsin insurance licensing examinations, including the Life, Accident & Health, Property, Casualty, and Personal Lines exams. It provides study modules, practice questions, practice exams, progress tracking, and AI-assisted study coaching.',
       'PassPro is NOT a prelicensing education provider. It is not the OCI-approved 20-hour prelicensing education course required under Wis. Admin. Code ch. Ins 26, and completing PassPro does not satisfy any prelicensing education requirement imposed by the Wisconsin Office of the Commissioner of Insurance. You are responsible for completing an approved prelicensing course through an approved provider before sitting for the state examination.',
       'PassPro does not guarantee that you will pass the Wisconsin licensing examination or any other examination. Exam outcomes depend on many factors outside our control, including your own preparation.',
     ],
@@ -64,7 +64,7 @@ export function TermsPage() {
   useDocumentMeta({
     title: 'Terms of Service — PassPro',
     description:
-      'Terms of Service for PassPro, the Wisconsin life & health insurance exam prep service.',
+      'Terms of Service for PassPro, the Wisconsin insurance license exam prep service.',
   })
 
   return (

@@ -6,7 +6,7 @@ export function BlogIndexPage() {
   useDocumentMeta({
     title: 'Study Guides — PassPro',
     description:
-      'Wisconsin life & health insurance exam study guides — exam format, content outline, and the state-specific rules candidates miss most.',
+      'Wisconsin insurance exam study guides for Life, Accident & Health, Property, Casualty, and Personal Lines — exam format, content outline, and the state-specific rules candidates miss most.',
   })
 
   return (

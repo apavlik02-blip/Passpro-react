@@ -45,7 +45,7 @@ export function AriaModal({ open, onClose }) {
             <div>
               <p className="font-serif text-base font-medium">ARIA</p>
               <p className="font-mono text-[10px] tracking-widest text-muted uppercase">
-                Wisconsin Life &amp; Health Coach
+                Wisconsin Exam Coach
               </p>
             </div>
           </div>

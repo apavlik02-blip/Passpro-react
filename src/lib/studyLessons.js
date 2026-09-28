@@ -14,6 +14,15 @@ import { Content as GroupLifeBusinessUses } from '../content/study/group-life-bu
 import { Content as DentalInsurance } from '../content/study/dental-insurance.jsx'
 import { Content as AcaHipaaTaxFavoredAccounts } from '../content/study/aca-hipaa-tax-favored-accounts.jsx'
 
+import { Content as PcRegulationWisconsin } from '../content/study/pc-regulation-wisconsin.jsx'
+import { Content as PropertyInsuranceBasics } from '../content/study/property-insurance-basics.jsx'
+import { Content as DwellingHomeowners } from '../content/study/dwelling-homeowners.jsx'
+import { Content as PersonalAutoWisconsin } from '../content/study/personal-auto-wisconsin.jsx'
+import { Content as CommercialPropertyBop } from '../content/study/commercial-property-bop.jsx'
+import { Content as CasualtyLiabilityCommercial } from '../content/study/casualty-liability-commercial.jsx'
+import { Content as WorkersCompUmbrellaSurety } from '../content/study/workers-comp-umbrella-surety.jsx'
+import { Content as FloodOtherPersonalCoverages } from '../content/study/flood-other-personal-coverages.jsx'
+
 // Keyed by study_modules.id — add an entry here whenever a new module needs a lesson.
 export const STUDY_LESSONS = {
   'life-insurance-types': LifeInsuranceTypes,
@@ -31,4 +40,13 @@ export const STUDY_LESSONS = {
   'group-life-business-uses': GroupLifeBusinessUses,
   'dental-insurance': DentalInsurance,
   'aca-hipaa-tax-favored-accounts': AcaHipaaTaxFavoredAccounts,
+  // Property & Casualty (Property 22-05, Casualty 22-07, Personal Lines 22-09)
+  'pc-regulation-wisconsin': PcRegulationWisconsin,
+  'property-insurance-basics': PropertyInsuranceBasics,
+  'dwelling-homeowners': DwellingHomeowners,
+  'personal-auto-wisconsin': PersonalAutoWisconsin,
+  'commercial-property-bop': CommercialPropertyBop,
+  'casualty-liability-commercial': CasualtyLiabilityCommercial,
+  'workers-comp-umbrella-surety': WorkersCompUmbrellaSurety,
+  'flood-other-personal-coverages': FloodOtherPersonalCoverages,
 }

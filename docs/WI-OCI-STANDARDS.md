@@ -127,3 +127,43 @@ this doc or the outlines — flag them for human verification instead.**
 - If/when PassPro seeks OCI provider approval: 4,500 words per credit hour,
   proctored final, certificates, and hour-allocated course outline per
   Appendix 3/4 become hard requirements (see Passpro vault compliance docs).
+
+## 6. Property & Casualty lines (added September 2026)
+
+Sources: PSI content outlines Series 22-05 Property, 22-07 Casualty, 22-09
+Personal Lines (all effective July 15, 2022; 100 questions, 2 hours); OCI
+Prelicensing and Exam Requirements pages; OCI PI-057 auto guide; DWD WKC-7317
+employer facts; s. 631.36; s. 619.01; wisinsplan.com FAQ.
+
+| Exam | Outline (items) | App blueprint (`src/lib/examBlueprints.js`) |
+|---|---|---|
+| Property 22-05 | Reg 35, General 8, Property basics 13, Dwelling 4, Homeowners 18, CPP 9, BOP 9, Other 4 | `PROPERTY_EXAM` |
+| Casualty 22-07 | Reg 35, General 8, Casualty basics 13, Auto 14, CPP 10, BOP 10, WC 5, Other 5 | `CASUALTY_EXAM` |
+| Personal Lines 22-09 | Reg 35, General 5, Property basics 20, Dwelling 10, Homeowners 10, Auto 10, Other 10 | `PERSONAL_LINES_EXAM` |
+
+P&C question domains: `pc_regulation`, `wi_pc_statutes`, `wi_property_regulation`,
+`wi_auto_regulation`, `pc_general_insurance`, `property_basics`, `casualty_basics`,
+`dwelling`, `homeowners`, `commercial_property`, `businessowners_property`,
+`personal_auto`, `commercial_auto`, `commercial_liability`,
+`businessowners_liability`, `workers_comp`, `personal_other`, `umbrella`,
+`casualty_other`. Source questions: `supabase/content/pc-questions/*.json`
+(correct answer listed first); build the migration with
+`node supabase/content/build-pc-migration.mjs`.
+
+Verified Wisconsin P&C facts used in content:
+
+- Prelicensing: 20 hours (8 general + 12 per line), valid 1 year; limited lines exempt.
+- Auto: liability 25/50/10; UM required 25/50 (BI only); UIM optional but must be
+  offered, 50/100 minimum if bought; med pay optional, $1,000 minimum; accident
+  report to DMV within 10 days (injury, death, or PD over $1,000); WAIP = auto residual market.
+- s. 631.36: policies in force under 60 days exempt from midterm-cancellation limits;
+  midterm cancellation only for listed grounds, 10 days' notice; nonrenewal 60 days;
+  less favorable renewal terms 60 days (45 days for personal lines P&C).
+- WIP (property residual market): dwelling, homeowners, commercial; ACV only; max
+  $350,000 dwelling/HO, $500,000 commercial; excludes vacant, farm, manufacturing.
+- Worker's comp: insure with 3+ employees, or $500+ wages in a calendar quarter
+  (by the 10th of the next quarter's first month); farms 6+ workers on any 20 days;
+  WCRB assigns rejected employers; Uninsured Employers Fund; competitive state.
+
+Flag for human review: minors' sponsor liability wording, standard fire policy
+specifics (intentionally not tested), and the lender anti-tying phrasing.

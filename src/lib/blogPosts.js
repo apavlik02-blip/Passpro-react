@@ -12,8 +12,59 @@ import { Content as MedicareVsMedicaidWisconsinExam } from '../content/blog/medi
 import { Content as WisconsinExamNumbersToMemorize } from '../content/blog/wisconsin-insurance-exam-numbers-to-memorize.jsx'
 import { Content as PsiExamDayWisconsinInsurance } from '../content/blog/psi-exam-day-wisconsin-insurance.jsx'
 
+import { Content as WisconsinPropertyCasualtyLicenseGuide } from '../content/blog/wisconsin-property-casualty-license-guide.jsx'
+import { Content as PersonalLinesVsPropertyCasualty } from '../content/blog/wisconsin-personal-lines-vs-property-casualty.jsx'
+import { Content as WisconsinAutoInsuranceMinimumsExam } from '../content/blog/wisconsin-auto-insurance-minimums-exam.jsx'
+import { Content as CoinsuranceFormulaPropertyExam } from '../content/blog/coinsurance-formula-property-exam.jsx'
+import { Content as WisconsinWorkersCompCasualtyExam } from '../content/blog/wisconsin-workers-comp-casualty-exam.jsx'
+
 // Add new posts here — the Content import above and a metadata entry below.
 export const BLOG_POSTS = [
+  {
+    slug: 'wisconsin-property-casualty-license-guide',
+    title: 'How to Get a Wisconsin Property & Casualty License (2026)',
+    description:
+      'Wisconsin issues Property (22-05) and Casualty (22-07) as separate lines. Prelicensing hours, PSI exam format, outline weights, and the order to do it all in.',
+    date: '2026-09-24',
+    readingMinutes: 5,
+    Content: WisconsinPropertyCasualtyLicenseGuide,
+  },
+  {
+    slug: 'wisconsin-personal-lines-vs-property-casualty',
+    title: 'Personal Lines vs. Property & Casualty in Wisconsin: Which License?',
+    description:
+      'One exam or two? What the Wisconsin Personal Lines license (22-09) covers, what it leaves out, and who should take Property and Casualty instead.',
+    date: '2026-09-24',
+    readingMinutes: 4,
+    Content: PersonalLinesVsPropertyCasualty,
+  },
+  {
+    slug: 'wisconsin-auto-insurance-minimums-exam',
+    title: 'Wisconsin Auto Insurance Minimums for the Casualty Exam: 25/50/10, UM and UIM',
+    description:
+      "Wisconsin's required auto limits, mandatory uninsured motorist coverage, optional UIM, med pay, the financial responsibility law, and WAIP, all in one place.",
+    date: '2026-09-24',
+    readingMinutes: 4,
+    Content: WisconsinAutoInsuranceMinimumsExam,
+  },
+  {
+    slug: 'coinsurance-formula-property-exam',
+    title: 'The Coinsurance Formula, Explained With Worked Examples',
+    description:
+      'Did ÷ should × loss − deductible. How to solve every coinsurance question on the Wisconsin Property and Personal Lines exams, with two worked examples.',
+    date: '2026-09-24',
+    readingMinutes: 4,
+    Content: CoinsuranceFormulaPropertyExam,
+  },
+  {
+    slug: 'wisconsin-workers-comp-casualty-exam',
+    title: "Wisconsin Worker's Comp Rules for the Casualty Exam",
+    description:
+      "Which Wisconsin employers must carry worker's comp, how the WCRB pool and Uninsured Employers Fund work, and the WC policy parts the exam tests.",
+    date: '2026-09-24',
+    readingMinutes: 4,
+    Content: WisconsinWorkersCompCasualtyExam,
+  },
   {
     slug: 'how-hard-is-the-wisconsin-insurance-exam',
     title: 'How Hard Is the Wisconsin Insurance License Exam?',

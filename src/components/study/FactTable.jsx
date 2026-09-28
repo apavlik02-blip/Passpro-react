@@ -10,7 +10,7 @@ export function FactTable({ title, rows }) {
           key={row.label}
         >
           <span className="max-w-[42ch] text-[14.5px] text-paper">{row.label}</span>
-          <span className="font-mono text-[13px] font-bold whitespace-nowrap text-gold-400">
+          <span className="max-w-[55%] text-right font-mono text-[13px] font-bold text-gold-400 sm:whitespace-nowrap">
             {row.value}
           </span>
         </div>

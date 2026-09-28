@@ -3,11 +3,17 @@ import { DataStatePanel } from '../components/DataStatePanel.jsx'
 import { useDocumentMeta } from '../hooks/useDocumentMeta.js'
 import { STUDY_LESSONS } from '../lib/studyLessons.js'
 import { humanizeSlug } from '../lib/format.js'
+import { useLicense } from '../hooks/useLicense.jsx'
+import { modulesForLicense } from '../lib/licenses.js'
 
 export function StudyLessonPage({ studyModules, loading, error }) {
   const { moduleId } = useParams()
   const module = studyModules.find((candidate) => candidate.id === moduleId)
   const Content = STUDY_LESSONS[moduleId]
+  const { license } = useLicense()
+  const track = modulesForLicense(studyModules, license)
+  const trackIndex = track.findIndex((candidate) => candidate.id === moduleId)
+  const nextModule = trackIndex >= 0 ? track[trackIndex + 1] : null
 
   useDocumentMeta({
     title: module ? `${module.title} — PassPro` : 'Study — PassPro',
@@ -19,7 +25,7 @@ export function StudyLessonPage({ studyModules, loading, error }) {
       <section className="flex flex-col gap-6">
         <DataStatePanel
           title="Loading lesson"
-          message="Fetching curriculum records from Supabase."
+          message="Fetching your curriculum."
         />
       </section>
     )
@@ -70,6 +76,30 @@ export function StudyLessonPage({ studyModules, loading, error }) {
           />
         )}
       </article>
+
+      <div className="flex max-w-[70ch] flex-wrap items-center justify-between gap-4 border-t border-line pt-6">
+        <Link
+          className="rounded-sm border border-line px-5 py-3 text-sm font-semibold text-paper transition hover:border-gold-500/70"
+          to="/flashcards"
+        >
+          Drill flashcards
+        </Link>
+        {nextModule ? (
+          <Link
+            className="rounded-sm bg-gold-500 px-5 py-3 text-sm font-semibold text-ink-950 transition hover:bg-gold-400"
+            to={`/study/${nextModule.id}`}
+          >
+            Next: {nextModule.title} →
+          </Link>
+        ) : (
+          <Link
+            className="rounded-sm bg-gold-500 px-5 py-3 text-sm font-semibold text-ink-950 transition hover:bg-gold-400"
+            to="/practice-exam"
+          >
+            Take a {license.name} mock exam →
+          </Link>
+        )}
+      </div>
     </section>
   )
 }

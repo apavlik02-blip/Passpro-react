@@ -1,0 +1,26 @@
+{
+  "_note": "Only facts already in PassPro lessons/blog or in a cited source. Bots may not invent numbers.",
+  "exam_facts": [
+    {"id": "life-grace", "line": "Life", "question": "How long is the grace period on an individual life policy in Wisconsin?", "options": ["10 days", "30 days", "31 days", "60 days"], "answer": 2, "explain": "31 days. The policy stays in force; unpaid premium comes out of the death benefit.", "link": "blog/wisconsin-grace-period"},
+    {"id": "life-free-look", "line": "Life", "question": "What is the free-look period on an individual life policy in Wisconsin?", "options": ["7 days", "10 days", "20 days", "31 days"], "answer": 1, "explain": "10 days (longer when the policy replaces another).", "link": "blog/wisconsin-free-look-period"},
+    {"id": "life-incontestable", "line": "Life", "question": "After how long does a life policy's incontestability clause take effect?", "options": ["6 months", "1 year", "2 years", "5 years"], "answer": 2, "explain": "2 years from issue.", "link": "blog/wisconsin-incontestability-period"},
+    {"id": "cancel-notice", "line": "All lines", "question": "How much notice must a Wisconsin insurer give to cancel midterm, and to nonrenew?", "options": ["10 and 30 days", "10 and 60 days", "30 and 60 days", "30 and 90 days"], "answer": 1, "explain": "10 days to cancel midterm, 60 days to nonrenew.", "link": "blog/wisconsin-insurance-exam-numbers-to-memorize"},
+    {"id": "auto-minimums", "line": "Casualty", "question": "Wisconsin auto liability minimums are 25/50/10. Is uninsured motorist coverage required?", "options": ["No", "Yes, 25/50 bodily injury", "Yes, 50/100", "Only for commercial auto"], "answer": 1, "explain": "Yes. UM is required at 25/50, bodily injury only.", "link": "blog/wisconsin-auto-insurance-minimums-exam"},
+    {"id": "workers-comp", "line": "Casualty", "question": "A Wisconsin employer must carry workers comp with how many employees?", "options": ["1", "3", "6", "10"], "answer": 1, "explain": "3 or more, or 1+ if wages reach $500 in a calendar quarter.", "link": "blog/wisconsin-workers-comp-casualty-exam"},
+    {"id": "coinsurance", "line": "Property", "question": "A $500,000 building is insured for $300,000 with 80% coinsurance. A $100,000 loss occurs. What does the insurer pay?", "options": ["$100,000", "$75,000", "$60,000", "$80,000"], "answer": 1, "explain": "$75,000. Required = $400,000. 300 / 400 = 0.75 x $100,000.", "link": "blog/coinsurance-formula-property-exam"}
+  ],
+  "retake_facts": [
+    {"text": "About 4 in 10 first-time Wisconsin insurance exam takers don't pass (58.1% passed in 2024).", "source": "https://tsinational.com/wisconsin-insurance-exam-pass-rates-2024/"},
+    {"text": "Your emailed PSI score report includes a diagnostic of your strengths and weaknesses by topic.", "source": "https://oci.wi.gov/Documents/AgentsAgencies/ALWisconsinCandidateBulletin.pdf"},
+    {"text": "In Wisconsin you can retest as soon as two days after a failed attempt, and there is no limit on attempts.", "source": "https://oci.wi.gov/Documents/AgentsAgencies/ALWisconsinCandidateBulletin.pdf"},
+    {"text": "Your pre-licensing certificate is valid for one year from course completion, so you can retest without retaking the course inside that year.", "source": "https://oci.wi.gov/Pages/Agents/Prelicensing.aspx"},
+    {"text": "You need 70% to pass.", "source": "https://oci.wi.gov/Documents/AgentsAgencies/ALWisconsinCandidateBulletin.pdf"}
+  ],
+  "retake_plan": [
+    "Day 1: read your PSI diagnostic and list your two weakest areas.",
+    "Days 2-6: one weak area a day, 20 practice questions each.",
+    "Days 7-8: two full, timed 100-question practice exams.",
+    "Day 9: Wisconsin law only.",
+    "Day 10: rest, then book the exam."
+  ]
+}

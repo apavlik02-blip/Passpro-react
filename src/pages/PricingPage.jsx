@@ -105,7 +105,7 @@ export function PricingPage() {
   useDocumentMeta({
     title: 'Pricing — PassPro',
     description:
-      'PassPro subscription tiers: a free trial, Essential, Professional, and Premium plans for Wisconsin Life & Health exam prep.',
+      'PassPro subscription tiers: a free trial, Essential, Professional, and Premium plans for Wisconsin insurance license exam prep: Life, Accident & Health, Property, Casualty, and Personal Lines.',
   })
 
   return (

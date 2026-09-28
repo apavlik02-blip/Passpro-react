@@ -1,0 +1,10 @@
+{
+  "title": "Quiz — coinsurance math",
+  "fps": 30,
+  "scenes": [
+    {"type": "hook", "eyebrow": "Property exam · 22-05", "text": "Can you do the coinsurance math in 8 seconds?", "seconds": 2.8},
+    {"type": "quiz", "question": "Building worth $500,000, insured for $300,000, 80% coinsurance, $100,000 loss. The insurer pays:", "options": ["$100,000", "$75,000", "$60,000", "$80,000"], "answer": 1, "explain": "Required = $400K. 300 ÷ 400 = 0.75 × $100K = $75,000.", "seconds": 9},
+    {"type": "stat", "label": "The formula", "value": "Did ÷ Should", "caption": "× Loss − Deductible. Never more than the limit.", "seconds": 3.4},
+    {"type": "cta", "text": "Drill Property math on PassPro.", "url": "passpro.company", "sub": "Wisconsin insurance exam prep", "seconds": 3}
+  ]
+}

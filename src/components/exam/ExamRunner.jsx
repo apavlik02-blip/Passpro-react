@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { buildExam } from '../../lib/examBlueprints.js'
 import { humanizeSlug } from '../../lib/format.js'
+import { recordAttempt } from '../../lib/examHistory.js'
 import { useAriaProgress } from '../../hooks/useAriaProgress.js'
 import { DataStatePanel } from '../DataStatePanel.jsx'
 
@@ -158,7 +159,7 @@ function DomainScoreBreakdown({ questions, answers, blueprint }) {
   )
 }
 
-export function ExamRunner({ blueprint, questionBank, onExit }) {
+export function ExamRunner({ blueprint, questionBank, onExit, onRetake }) {
   const exam = useMemo(() => buildExam(blueprint, questionBank), [blueprint, questionBank])
   const [index, setIndex] = useState(0)
   const [answers, setAnswers] = useState({})
@@ -166,6 +167,11 @@ export function ExamRunner({ blueprint, questionBank, onExit }) {
   const { submitQuizResult } = useAriaProgress()
 
   const handleRetake = () => {
+    // Parent remounts the runner so a retake draws a freshly sampled exam.
+    if (onRetake) {
+      onRetake()
+      return
+    }
     setIndex(0)
     setAnswers({})
     setSubmitted(false)
@@ -192,9 +198,20 @@ export function ExamRunner({ blueprint, questionBank, onExit }) {
       ]),
     )
 
+    const overallScore = Math.round((correctCount / exam.questions.length) * 100)
+
     submitQuizResult({
-      overall_score: Math.round((correctCount / exam.questions.length) * 100),
+      overall_score: overallScore,
       domain_scores: domainScores,
+    })
+
+    recordAttempt({
+      license: blueprint.license ?? blueprint.key,
+      kind: blueprint.isDrill ? 'drill' : 'mock',
+      label: blueprint.label,
+      score: overallScore,
+      passed: overallScore >= blueprint.passingScore,
+      domainScores,
     })
   }
 
@@ -238,11 +255,11 @@ export function ExamRunner({ blueprint, questionBank, onExit }) {
           </h2>
         </div>
 
-        {exam.shortfalls.length ? (
+        {exam.shortfalls.length && !blueprint.isDrill ? (
           <DataStatePanel
             title="Question bank coverage note"
-            message={`Some domains reused questions to reach the target count: ${exam.shortfalls
-              .map((s) => `${s.domain} (${s.available}/${s.target})`)
+            message={`Some domains have fewer practice questions than the blueprint calls for, so this exam is a little shorter: ${exam.shortfalls
+              .map((s) => `${humanizeSlug(s.domain)} (${s.available}/${s.target})`)
               .join(', ')}.`}
           />
         ) : null}

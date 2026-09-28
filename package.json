@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:e2e": "playwright test -c tests/e2e/playwright.config.mjs",
+    "test:smoke": "playwright test -c tests/e2e/playwright.config.mjs --project=api --project=desktop --grep-invert @member"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.111.0",
@@ -22,6 +24,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.56.0",
     "@tailwindcss/vite": "^4.3.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
