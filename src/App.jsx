@@ -34,6 +34,7 @@ const AccountPage = page(() => import('./pages/AccountPage.jsx'), 'AccountPage')
 const PricingPage = page(() => import('./pages/PricingPage.jsx'), 'PricingPage')
 const LicensesPage = page(() => import('./pages/LicensesPage.jsx'), 'LicensesPage')
 const LicenseDetailPage = page(() => import('./pages/LicensesPage.jsx'), 'LicenseDetailPage')
+const RetakePage = page(() => import('./pages/RetakePage.jsx'), 'RetakePage')
 const AgenciesPage = page(() => import('./pages/AgenciesPage.jsx'), 'AgenciesPage')
 const JoinPage = page(() => import('./pages/JoinPage.jsx'), 'JoinPage')
 const JourneyPage = page(() => import('./pages/JourneyPage.jsx'), 'JourneyPage')
@@ -136,6 +137,7 @@ function App({ clerkEnabled }) {
             <Route path="/licenses" element={<LicensesPage />} />
             <Route path="/licenses/:licenseKey" element={<LicenseDetailPage />} />
             <Route path="/agencies" element={<AgenciesPage />} />
+            <Route path="/retake" element={<RetakePage />} />
             <Route path="/join/:code" element={<JoinPage />} />
             <Route path="/blog" element={<BlogIndexPage />} />
             <Route path="/blog/:slug" element={<BlogPostPage />} />

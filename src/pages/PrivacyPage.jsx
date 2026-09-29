@@ -10,6 +10,7 @@ const sections = [
       'Account information — your name, email address, and authentication details are collected and managed by Clerk, our authentication provider, when you create an account.',
       'Study progress — your module completion, practice exam scores, readiness metrics, and study activity are stored with Supabase so the app can track your preparation over time.',
       'AI coaching messages — messages you send to the ARIA study coach are processed via Anthropic’s API to generate responses, and related progress data is stored so coaching can reflect your study history.',
+      'Retake diagnostic signups — if you choose to leave your email on the free retake diagnostic (/retake), we store that email with the exam you picked, your diagnostic score, and your weakest topics, so we can follow up with study help. No account is needed, and you can ask us to delete it or stop emailing you at any time.',
     ],
   },
   {

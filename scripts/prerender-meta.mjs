@@ -29,6 +29,7 @@ const STATIC_PAGES = {
   '/pricing': 'PricingPage.jsx',
   '/licenses': 'LicensesPage.jsx',
   '/agencies': 'AgenciesPage.jsx',
+  '/retake': 'RetakePage.jsx',
   '/blog': 'BlogIndexPage.jsx',
   '/terms': 'TermsPage.jsx',
   '/privacy': 'PrivacyPage.jsx',
