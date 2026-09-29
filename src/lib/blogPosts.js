@@ -1,3 +1,4 @@
+import { Content as FreeWisconsinExamStudyGuide } from '../content/blog/free-wisconsin-insurance-exam-study-guide.jsx'
 import { Content as WisconsinExamStudyGuide } from '../content/blog/wisconsin-exam-study-guide.jsx'
 import { Content as WisconsinGracePeriod } from '../content/blog/wisconsin-grace-period.jsx'
 import { Content as WisconsinFreeLookPeriod } from '../content/blog/wisconsin-free-look-period.jsx'
@@ -20,6 +21,15 @@ import { Content as WisconsinWorkersCompCasualtyExam } from '../content/blog/wis
 
 // Add new posts here — the Content import above and a metadata entry below.
 export const BLOG_POSTS = [
+  {
+    slug: 'free-wisconsin-insurance-exam-study-guide',
+    title: 'Free Wisconsin Insurance Exam Study Guide (PDF)',
+    description:
+      'A free two-page Wisconsin insurance exam cheat sheet: PSI exam format, license steps, Life and P&C numbers, coinsurance worked out, and 2024 pass rates. No signup.',
+    date: '2026-09-29',
+    readingMinutes: 2,
+    Content: FreeWisconsinExamStudyGuide,
+  },
   {
     slug: 'wisconsin-property-casualty-license-guide',
     title: 'How to Get a Wisconsin Property & Casualty License (2026)',
